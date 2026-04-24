@@ -1,0 +1,68 @@
+"""Platform-specific configurations for social media content."""
+
+PLATFORM_CONFIGS: dict[str, dict] = {
+    "twitter": {
+        "name": "Twitter/X",
+        "max_chars": 280,
+        "max_hashtags": 4,
+        "content_types": ["post", "thread"],
+        "optimal_posting_times_utc": ["09:00", "12:00", "17:00", "20:00"],
+        "tone": "conversational, witty, concise, punchy",
+        "best_practices": [
+            "Hook the reader in the first line",
+            "Use threads for longer content — break at natural points",
+            "2-3 hashtags max for best organic reach",
+            "Ask a question or include a poll to drive replies",
+            "End with a call-to-action (RT, reply, follow)",
+        ],
+    },
+    "linkedin": {
+        "name": "LinkedIn",
+        "max_chars": 3000,
+        "ideal_length": "150-300 words",
+        "max_hashtags": 5,
+        "content_types": ["post", "article"],
+        "optimal_posting_times_utc": ["08:00", "12:00", "17:00", "18:00"],
+        "tone": "professional, insightful, thought-leadership, data-driven",
+        "best_practices": [
+            "Open with a bold statement or provocative question",
+            "Share a personal story or hard-won lesson",
+            "Include relevant data points or statistics",
+            "Use short paragraphs and white space for readability",
+            "End with a question that invites professional discussion",
+        ],
+    },
+    "instagram": {
+        "name": "Instagram",
+        "max_chars": 2200,
+        "ideal_caption_chars": 125,
+        "max_hashtags": 30,
+        "recommended_hashtags": 12,
+        "content_types": ["post", "reel", "story", "carousel"],
+        "optimal_posting_times_utc": ["11:00", "14:00", "17:00", "19:00"],
+        "tone": "inspiring, authentic, visual-first, storytelling",
+        "best_practices": [
+            "First 125 characters must hook — rest is hidden behind 'more'",
+            "Use line breaks to improve caption readability",
+            "Mix niche hashtags (10K-100K posts) with broad ones",
+            "Include a clear call-to-action (save, share, comment)",
+            "Describe the visual for context — assume text stands alone",
+        ],
+    },
+    "facebook": {
+        "name": "Facebook",
+        "max_chars": 63206,
+        "ideal_length": "40-80 words for highest engagement",
+        "max_hashtags": 2,
+        "content_types": ["post", "story", "reel", "event"],
+        "optimal_posting_times_utc": ["09:00", "13:00", "16:00", "20:00"],
+        "tone": "community-focused, friendly, informative, conversational",
+        "best_practices": [
+            "Ask questions — Facebook rewards comment-driving posts",
+            "Native video gets 3-5x more reach than links",
+            "Keep text concise; use images/video to expand the story",
+            "Tag relevant pages and people where genuinely appropriate",
+            "Respond to every comment within 24 hours to boost reach",
+        ],
+    },
+}

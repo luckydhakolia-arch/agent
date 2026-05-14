@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WealthMap</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f5f7;--surface:#fff;--surface2:#fafafa;
+  --border:rgba(0,0,0,.08);--border2:rgba(0,0,0,.12);
+  --t1:#1d1d1f;--t2:#6e6e73;--t3:#aeaeb2;
+  --blue:#0071e3;--blue-l:rgba(0,113,227,.1);
+  --red:#ff3b30;--red-l:rgba(255,59,48,.1);
+  --green:#34c759;--green-l:rgba(52,199,89,.1);
+  --orange:#ff9500;--orange-l:rgba(255,149,0,.1);
+  --gold:#f0b429;--gold-l:rgba(240,180,41,.1);
+  --r:18px;--r-sm:10px;--r-xs:8px;
+  --sh:0 2px 16px rgba(0,0,0,.06);--sh2:0 4px 28px rgba(0,0,0,.09);
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--t1);height:100vh;overflow:hidden;display:flex}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:3px}
+
+/* Sidebar */
+#sidebar{width:240px;background:rgba(255,255,255,.92);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.logo-wrap{padding:28px 24px 22px;border-bottom:1px solid var(--border)}
+.logo-mark{display:flex;align-items:center;gap:11px}
+.logo-dot{width:32px;height:32px;background:var(--t1);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;letter-spacing:-1px}
+.logo-name{font-size:17px;font-weight:700;color:var(--t1);letter-spacing:-.5px}
+.logo-sub{font-size:11px;color:var(--t3);margin-top:1px;letter-spacing:.3px}
+#payslip-pill{margin:12px 16px;background:var(--green-l);border-radius:12px;padding:10px 14px;border:1px solid rgba(52,199,89,.2);display:none}
+.pp-label{font-size:10px;color:var(--t3);letter-spacing:.5px;font-weight:600;text-transform:uppercase;margin-bottom:2px}
+.pp-name{font-size:13px;color:var(--t1);font-weight:600}
+.pp-amt{font-size:12px;color:var(--green);font-weight:600}
+#nav{flex:1;padding:10px 12px;overflow-y:auto}
+.nav-section{font-size:10px;color:var(--t3);letter-spacing:1px;font-weight:600;text-transform:uppercase;padding:14px 12px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;transition:all .2s;margin-bottom:1px}
+.nav-item:hover{background:rgba(0,0,0,.04)}
+.nav-item.active{background:var(--t1);color:#fff}
+.nav-item .ni-label{font-size:13px;font-weight:500;color:var(--t2)}
+.nav-item.active .ni-label{color:#fff}
+.nav-item .ni-icon{font-size:13px;width:18px;text-align:center;color:var(--t3)}
+.nav-item.active .ni-icon{color:rgba(255,255,255,.7)}
+.sidebar-foot{padding:16px 20px;border-top:1px solid var(--border)}
+#clear-btn{width:100%;padding:8px;background:var(--red-l);color:var(--red);font-size:12px;border:1px solid rgba(255,59,48,.2);border-radius:9px;cursor:pointer;font-family:inherit;font-weight:600;display:none;margin-bottom:8px;transition:all .2s}
+#clear-btn:hover{background:var(--red);color:#fff}
+.foot-note{font-size:11px;color:var(--t3);text-align:center}
+
+/* Main */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+#header{padding:22px 40px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+#page-title{font-size:24px;font-weight:700;color:var(--t1);letter-spacing:-.5px}
+#page-sub{font-size:13px;color:var(--t2);margin-top:2px}
+#header-btn{padding:9px 20px;background:var(--t1);color:#fff;border:none;border-radius:22px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:-.2px}
+#header-btn:hover{background:#333;transform:scale(1.02)}
+#content{flex:1;overflow-y:auto;padding:40px}
+
+/* Cards */
+.card{background:var(--surface);border-radius:var(--r);padding:24px;box-shadow:var(--sh);border:1px solid var(--border)}
+.card-sm{background:var(--surface);border-radius:var(--r-sm);padding:14px 18px;box-shadow:var(--sh);border:1px solid var(--border)}
+.card-inset{background:var(--surface2);border-radius:var(--r-sm);padding:14px 16px;border:1px solid var(--border)}
+
+/* KPI */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+.kpi{background:var(--surface);border-radius:var(--r);padding:22px 24px;box-shadow:var(--sh);border:1px solid var(--border)}
+.kpi-tag{font-size:11px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
+.kpi-val{font-size:28px;font-weight:700;letter-spacing:-1px;line-height:1}
+.kpi-sub{font-size:12px;color:var(--t2);margin-top:6px}
+
+/* Section */
+.sec-head{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px}
+.sec-title{font-size:20px;font-weight:700;color:var(--t1);letter-spacing:-.4px;margin-bottom:6px}
+.sec-desc{font-size:14px;color:var(--t2);line-height:1.6}
+
+/* Grid */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+
+/* Buttons */
+.btn{cursor:pointer;border:none;border-radius:22px;font-family:inherit;font-weight:600;font-size:13px;transition:all .2s;padding:9px 20px}
+.btn-dark{background:var(--t1);color:#fff}
+.btn-dark:hover{background:#333}
+.btn-outline{background:transparent;color:var(--blue);border:1.5px solid var(--blue)}
+.btn-outline:hover{background:var(--blue-l)}
+.btn-ghost{background:transparent;color:var(--t2);border:1px solid var(--border);padding:8px 16px;border-radius:10px;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
+.btn-ghost:hover{background:rgba(0,0,0,.04);border-color:var(--border2)}
+.add-btn{width:28px;height:28px;border-radius:50%;background:var(--blue-l);border:1.5px solid rgba(0,113,227,.2);color:var(--blue);font-size:16px;font-weight:400;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;font-family:inherit}
+.add-btn:hover{background:var(--blue);color:#fff}
+
+/* Inputs */
+input[type=text],input[type=number],input[type=month],select{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-xs);color:var(--t1);padding:9px 13px;font-family:inherit;font-size:13px;width:100%;transition:border .2s;-moz-appearance:textfield}
+input:focus,select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-l)}
+input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appearance:none}
+select option{background:#fff}
+.amt-input{background:transparent;border:none;text-align:right;font-size:14px;font-weight:600;color:var(--t1);width:100px;padding:4px 0}
+.amt-input:focus{outline:none;color:var(--blue)}
+.amt-input::placeholder{color:var(--t3);font-weight:400}
+
+/* Alert */
+.alert{border-radius:var(--r-sm);padding:16px 20px;display:flex;gap:14px;align-items:flex-start;margin-bottom:20px}
+.alert-red{background:var(--red-l);border:1px solid rgba(255,59,48,.2)}
+.alert-green{background:var(--green-l);border:1px solid rgba(52,199,89,.2)}
+.alert-blue{background:var(--blue-l);border:1px solid rgba(0,113,227,.15)}
+.alert-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+.alert-title{font-size:14px;font-weight:700;margin-bottom:3px}
+.alert-body{font-size:13px;color:var(--t2);line-height:1.6}
+
+/* Upload */
+.uzone{border:2px dashed var(--border2);border-radius:var(--r);padding:60px 40px;text-align:center;cursor:pointer;transition:all .3s;background:var(--surface)}
+.uzone:hover,.uzone.drag{border-color:var(--blue);background:var(--blue-l)}
+.u-icon{width:64px;height:64px;background:var(--surface2);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px;border:1px solid var(--border)}
+.u-title{font-size:18px;font-weight:700;color:var(--t1);letter-spacing:-.4px;margin-bottom:8px}
+.u-sub{font-size:14px;color:var(--t2);margin-bottom:20px;line-height:1.5}
+
+/* Progress */
+.prog-bg{height:4px;background:var(--bg);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;border-radius:2px;transition:width .8s ease}
+
+/* Pill */
+.pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.3px}
+
+/* Section toggle */
+.section{display:none}.section.active{display:block}
+
+/* Expense category */
+.exp-category{margin-bottom:8px;border-radius:var(--r-sm);overflow:hidden;border:1px solid var(--border);background:var(--surface)}
+.exp-cat-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;cursor:pointer;background:var(--surface);transition:background .2s;user-select:none}
+.exp-cat-header:hover{background:var(--surface2)}
+.exp-cat-left{display:flex;align-items:center;gap:10px}
+.exp-cat-icon{font-size:17px;width:22px;text-align:center}
+.exp-cat-name{font-size:14px;font-weight:600;color:var(--t1)}
+.exp-cat-count{font-size:12px;color:var(--t3);font-weight:500}
+.exp-cat-total{font-size:14px;font-weight:700;color:var(--t1)}
+.exp-cat-chevron{font-size:12px;color:var(--t3);transition:transform .25s}
+.exp-cat-body{display:none;padding:0 0 8px}
+.exp-item{display:flex;align-items:center;padding:11px 18px;border-top:1px solid var(--border);gap:12px;transition:background .15s}
+.exp-item:hover{background:var(--surface2)}
+.exp-item.active-item{background:rgba(52,199,89,.04)}
+.exp-item-name{flex:1;font-size:13px;color:var(--t1);font-weight:500}
+.exp-item-emoji{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.exp-check{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--border2);background:transparent;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.exp-check.checked{background:var(--green);border-color:var(--green)}
+.exp-check.checked::after{content:'✓';color:#fff;font-size:10px;font-weight:700}
+.amt-wrap{display:flex;align-items:center;gap:4px}
+.currency-sym{font-size:13px;color:var(--t3);font-weight:500}
+
+/* Summary list */
+.sum-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
+.sum-row:last-child{border:none}
+
+/* Loan card */
+.loan-card{background:var(--surface);border-radius:var(--r);padding:22px 24px;box-shadow:var(--sh);border:1px solid var(--border);margin-bottom:14px}
+
+/* Step */
+.step-num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.step-line{width:1px;background:var(--border);margin:4px 13px;min-height:24px}
+
+/* Chart container */
+.chart-wrap{position:relative;height:180px}
+
+/* Tab */
+.tab-bar{display:flex;background:var(--surface2);border-radius:10px;padding:3px;gap:2px;width:fit-content;margin-bottom:20px;border:1px solid var(--border)}
+.tab-item{padding:7px 18px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;color:var(--t2);transition:all .2s;border:none;background:transparent;font-family:inherit}
+.tab-item.active{background:var(--surface);color:var(--t1);font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+
+/* Month selector */
+.month-sel{display:flex;align-items:center;gap:16px;margin-bottom:24px}
+.month-label{font-size:13px;color:var(--t2);font-weight:500}
+input[type=month]{width:auto}
+
+/* Invest tier */
+.tier{display:flex;gap:14px;padding:18px;background:var(--surface);border-radius:var(--r-sm);border:1px solid var(--border);margin-bottom:10px;box-shadow:var(--sh)}
+.tier-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+
+/* Toast */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 22px;border-radius:22px;font-size:13px;font-weight:600;z-index:9999;display:none;box-shadow:var(--sh2);font-family:inherit;white-space:nowrap}
+
+/* Empty state */
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:55vh;gap:16px;text-align:center}
+.empty-icon{width:72px;height:72px;background:var(--surface2);border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:32px;border:1px solid var(--border);margin-bottom:4px}
+.empty-title{font-size:22px;font-weight:700;color:var(--t1);letter-spacing:-.5px}
+.empty-sub{font-size:14px;color:var(--t2);max-width:320px;line-height:1.6}
+
+/* Divider */
+.divider{height:1px;background:var(--border);margin:20px 0}
+
+/* Scrollable expense picker */
+.exp-scroll{max-height:calc(100vh - 260px);overflow-y:auto;padding-right:2px}
+
+input[type=range]{accent-color:var(--blue);cursor:pointer;height:4px}
+/* Number formatted display */
+.big-num{font-size:36px;font-weight:700;letter-spacing:-1.5px;line-height:1}
+.med-num{font-size:22px;font-weight:700;letter-spacing:-.8px}
+
+/* Reimb card */
+.reimb-row{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--green-l);border-radius:var(--r-xs);margin-bottom:6px;border:1px solid rgba(52,199,89,.15)}
+
+/* AI output */
+#ai-out{background:var(--surface2);border-radius:var(--r-sm);padding:20px;font-size:14px;line-height:1.85;color:var(--t1);border:1px solid var(--border);display:none;white-space:pre-wrap}
+#ai-spin{display:none;text-align:center;padding:30px}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{width:32px;height:32px;border:2.5px solid var(--border2);border-top-color:var(--blue);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeUp .3s ease}
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div id="sidebar">
+  <div class="logo-wrap">
+    <div class="logo-mark">
+      <div class="logo-dot">W</div>
+      <div><div class="logo-name">WealthMap</div><div class="logo-sub">Personal Finance</div></div>
+    </div>
+  </div>
+  <div id="payslip-pill">
+    <div class="pp-label">Active Payslip</div>
+    <div class="pp-name" id="pp-name">—</div>
+    <div class="pp-amt" id="pp-amt">—</div>
+  </div>
+  <div id="nav">
+    <div class="nav-section">Dashboard</div>
+    <div class="nav-item active" data-sec="overview"><span class="ni-icon">○</span><span class="ni-label">Overview</span></div>
+    <div class="nav-item" data-sec="upload"><span class="ni-icon">↑</span><span class="ni-label">Payslip</span></div>
+    <div class="nav-section">Track</div>
+    <div class="nav-item" data-sec="expenses"><span class="ni-icon">≡</span><span class="ni-label">Monthly Expenses</span></div>
+    <div class="nav-item" data-sec="loans"><span class="ni-icon">◇</span><span class="ni-label">Loans & EMIs</span></div>
+    <div class="nav-section">Plan</div>
+    <div class="nav-item" data-sec="strategy"><span class="ni-icon">→</span><span class="ni-label">Debt Strategy</span></div>
+    <div class="nav-item" data-sec="grow"><span class="ni-icon">↗</span><span class="ni-label">Grow Money</span></div>
+  </div>
+  <div class="sidebar-foot">
+    <button id="clear-btn" onclick="clearSalary()">Remove Payslip</button>
+    <div id="sidebar-key-ok" style="display:none;margin-bottom:8px;padding:8px 10px;background:var(--green-l);border-radius:8px;border:1px solid rgba(52,199,89,.2);display:none">
+      <div style="font-size:10px;color:var(--green);font-weight:700;letter-spacing:.5px">● API KEY CONNECTED</div>
+    </div>
+    <div id="sidebar-key-missing" style="margin-bottom:8px;padding:8px 10px;background:rgba(255,149,0,.08);border-radius:8px;border:1px solid rgba(255,149,0,.2);cursor:pointer" onclick="goSec('upload')">
+      <div style="font-size:10px;color:var(--orange);font-weight:700;letter-spacing:.5px">⚠ API KEY NEEDED</div>
+      <div style="font-size:10px;color:var(--t3);margin-top:1px">Tap to set up →</div>
+    </div>
+    <div class="foot-note">All data stays on your device</div>
+  </div>
+</div>
+
+<!-- Main -->
+<div id="main">
+  <div id="header">
+    <div>
+      <div id="page-title">Overview</div>
+      <div id="page-sub">Upload your payslip to get started</div>
+    </div>
+    <button id="header-btn" onclick="goSec('upload')">Upload Payslip</button>
+  </div>
+  <div id="content">
+
+    <!-- OVERVIEW -->
+    <div id="sec-overview" class="section active">
+      <div id="overview-empty" class="empty-state">
+        <div class="empty-icon">₹</div>
+        <div class="empty-title">No payslip loaded</div>
+        <div class="empty-sub">Upload your monthly payslip to see your complete financial picture — income, expenses, debt load and savings potential.</div>
+        <button class="btn btn-dark" onclick="goSec('upload')" style="margin-top:8px">Upload Payslip</button>
+      </div>
+      <div id="overview-data" style="display:none">
+        <div id="ov-alert" style="display:none"></div>
+        <div class="kpi-row">
+          <div class="kpi"><div class="kpi-tag">Net Salary</div><div class="kpi-val" id="ov-net" style="color:var(--t1)">₹0</div><div class="kpi-sub" id="ov-net-sub">—</div></div>
+          <div class="kpi"><div class="kpi-tag">Total Expenses</div><div class="kpi-val" id="ov-exp" style="color:var(--orange)">₹0</div><div class="kpi-sub" id="ov-exp-sub">—</div></div>
+          <div class="kpi"><div class="kpi-tag">Remaining</div><div class="kpi-val" id="ov-rem">₹0</div><div class="kpi-sub" id="ov-rem-sub">after expenses</div></div>
+          <div class="kpi"><div class="kpi-tag">Total Debt</div><div class="kpi-val" id="ov-debt" style="color:var(--red)">₹0</div><div class="kpi-sub" id="ov-debt-sub">—</div></div>
+        </div>
+        <div class="g2" style="margin-bottom:20px">
+          <div class="card"><div class="sec-head">Expense Breakdown</div><div class="chart-wrap"><canvas id="pie-chart"></canvas></div><div id="pie-legend" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px"></div></div>
+          <div class="card"><div class="sec-head">Income vs Outflow</div><div class="chart-wrap"><canvas id="bar-chart"></canvas></div></div>
+        </div>
+        <div class="card" id="comp-card" style="display:none">
+          <div class="sec-head">Salary Components</div>
+          <div id="comp-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px"></div>
+        </div>
+        <div style="height:16px"></div>
+        <div class="alert alert-green fade-in">
+          <div class="alert-icon">💡</div>
+          <div>
+            <div class="alert-title" style="color:var(--green)">Unclaimed Reimbursements — ₹2,45,300/year</div>
+            <div class="alert-body">Your payslip shows large unclaimed tax-free reimbursements. Submit bills monthly to HR for Food Allowance (₹8,800), Fuel (₹5,000), Car Maintenance (₹3,000), Internet (₹3,000) and Health & Wellness (₹2,500). You're leaving ₹20,441/month on the table.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- UPLOAD -->
+    <div id="sec-upload" class="section" style="max-width:580px">
+
+      <!-- API Key Setup Card — shown when key is missing -->
+      <div id="apikey-card" class="card" style="margin-bottom:20px;border-color:rgba(0,113,227,.25);background:rgba(0,113,227,.03)">
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <div style="width:36px;height:36px;background:var(--blue-l);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">🔑</div>
+          <div style="flex:1">
+            <div style="font-size:14px;font-weight:700;color:var(--t1);margin-bottom:4px">Connect your Anthropic API key</div>
+            <div style="font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:14px">Running this file standalone (outside Claude.ai)? Add your Anthropic API key below so the AI features work. Inside Claude.ai, everything works automatically — no key needed.</div>
+            <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
+              <input type="password" id="apikey-input" placeholder="sk-ant-api03-..." style="flex:1;font-family:monospace;font-size:12px;letter-spacing:.5px" oninput="checkKeyInput()">
+              <button class="btn btn-dark" id="save-key-btn" onclick="saveApiKey()" style="white-space:nowrap;padding:9px 18px;opacity:.4;pointer-events:none">Save Key</button>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <a href="https://console.anthropic.com/settings/keys" target="_blank" style="font-size:12px;color:var(--blue);font-weight:600;text-decoration:none">Get a free API key at console.anthropic.com →</a>
+              <div style="font-size:11px;color:var(--t3)">Starts with sk-ant-</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key saved indicator -->
+      <div id="apikey-ok" style="display:none;margin-bottom:16px">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--green-l);border:1px solid rgba(52,199,89,.25);border-radius:10px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="color:var(--green);font-size:14px;font-weight:700">✓</span>
+            <span style="font-size:13px;font-weight:600;color:var(--green)">API key connected</span>
+            <span style="font-size:12px;color:var(--t3)" id="apikey-preview"></span>
+          </div>
+          <button class="btn-ghost" onclick="resetApiKey()" style="font-size:11px;padding:5px 12px;color:var(--t3)">Change</button>
+        </div>
+      </div>
+
+      <div id="ul-loaded" class="alert alert-green" style="display:none">
+        <div class="alert-icon">✓</div>
+        <div><div class="alert-title" style="color:var(--green)" id="ul-loaded-title">—</div><div class="alert-body" id="ul-loaded-sub">—</div></div>
+      </div>
+
+      <!-- Upload zone — disabled style when no API key -->
+      <div class="uzone" id="uzone" onclick="handleUzoneClick()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="dropFile(event)" style="margin-bottom:0">
+        <div id="uzone-inner">
+          <div class="u-icon">📄</div>
+          <div class="u-title">Drop your payslip here</div>
+          <div class="u-sub">Drag & drop a PDF — AI will read and extract all salary details<br>automatically in about 10 seconds</div>
+          <button class="btn btn-dark" onclick="event.stopPropagation();handleUzoneClick()">Choose File</button>
+        </div>
+        <input type="file" id="fpick" accept=".pdf" style="display:none" onchange="handleFile(this.files[0])">
+      </div>
+
+      <div style="text-align:center;margin-top:14px;font-size:13px;color:var(--t2)">No API key? <span style="color:var(--blue);cursor:pointer;font-weight:600" onclick="showManual()">enter salary manually instead →</span></div>
+
+      <div id="manual-form" class="card" style="display:none;margin-top:16px">
+        <div class="sec-head" style="margin-bottom:16px">Manual Salary Entry</div>
+        <div style="font-size:13px;color:var(--t2);margin-bottom:16px;line-height:1.5">No AI needed — just type in your salary details from your payslip.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+          <div><div style="font-size:12px;color:var(--t2);margin-bottom:5px;font-weight:500">Name</div><input id="m-name" placeholder="Your name"></div>
+          <div><div style="font-size:12px;color:var(--t2);margin-bottom:5px;font-weight:500">Designation</div><input id="m-desig" placeholder="e.g. Manager"></div>
+          <div><div style="font-size:12px;color:var(--t2);margin-bottom:5px;font-weight:500">Month</div><input id="m-month" value="April"></div>
+          <div><div style="font-size:12px;color:var(--t2);margin-bottom:5px;font-weight:500">Year</div><input id="m-year" value="2026"></div>
+          <div><div style="font-size:12px;color:var(--t2);margin-bottom:5px;font-weight:500">Net Salary (₹) <span style="color:var(--red)">*</span></div><input id="m-net" type="number" placeholder="110450"></div>
+          <div><div style="font-size:12px;color:var(--t2);margin-bottom:5px;font-weight:500">Gross Salary (₹)</div><input id="m-gross" type="number" placeholder="112284"></div>
+          <div><div style="font-size:12px;color:var(--t2);margin-bottom:5px;font-weight:500">Paid Days</div><input id="m-paid" type="number" value="29"></div>
+          <div><div style="font-size:12px;color:var(--t2);margin-bottom:5px;font-weight:500">Total Days</div><input id="m-total" type="number" value="30"></div>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-dark" onclick="saveManual()">Save & Continue</button>
+          <button class="btn-ghost" onclick="document.getElementById('manual-form').style.display='none'">Cancel</button>
+        </div>
+      </div>
+
+      <div class="g3" style="margin-top:20px">
+        <div class="card-sm" style="text-align:center"><div style="font-size:22px;margin-bottom:8px">🔒</div><div style="font-size:13px;font-weight:600;margin-bottom:3px">Private</div><div style="font-size:12px;color:var(--t2)">PDF stays on your device — AI reads it via the API</div></div>
+        <div class="card-sm" style="text-align:center"><div style="font-size:22px;margin-bottom:8px">⚡</div><div style="font-size:13px;font-weight:600;margin-bottom:3px">Instant</div><div style="font-size:12px;color:var(--t2)">AI extracts all fields in ~10 seconds</div></div>
+        <div class="card-sm" style="text-align:center"><div style="font-size:22px;margin-bottom:8px">💾</div><div style="font-size:13px;font-weight:600;margin-bottom:3px">Persistent</div><div style="font-size:12px;color:var(--t2)">Key & data remembered across sessions</div></div>
+      </div>
+    </div>
+
+    <!-- EXPENSES -->
+    <div id="sec-expenses" class="section">
+      <div class="month-sel">
+        <span class="month-label">Tracking month</span>
+        <input type="month" id="track-month" value="2026-04" style="width:auto" onchange="refreshExpenses()">
+      </div>
+      <!-- Summary strip -->
+      <div class="kpi-row" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px">
+        <div class="kpi"><div class="kpi-tag">Total Expenses</div><div class="kpi-val" style="color:var(--red)" id="exp-total">₹0</div><div class="kpi-sub" id="exp-pct-of-net">— of net salary</div></div>
+        <div class="kpi"><div class="kpi-tag">Categories Active</div><div class="kpi-val" style="color:var(--t1)" id="exp-cats">0</div><div class="kpi-sub">expense categories</div></div>
+        <div class="kpi"><div class="kpi-tag">Remaining</div><div class="kpi-val" id="exp-rem">₹0</div><div class="kpi-sub">after all expenses</div></div>
+      </div>
+
+      <div class="g2" style="align-items:start">
+        <!-- LEFT: Category picker -->
+        <div>
+          <div class="sec-head">Add Expenses by Category</div>
+          <div class="exp-scroll" id="category-list"></div>
+        </div>
+        <!-- RIGHT: Monthly summary -->
+        <div>
+          <div class="sec-head">This Month's Summary</div>
+          <div class="card" id="summary-card">
+            <div id="summary-empty" style="text-align:center;padding:40px 20px;color:var(--t2)">
+              <div style="font-size:28px;margin-bottom:10px">📋</div>
+              <div style="font-size:14px;font-weight:600;margin-bottom:4px">No expenses yet</div>
+              <div style="font-size:13px">Check items on the left to add expenses</div>
+            </div>
+            <div id="summary-list" style="display:none"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOANS -->
+    <div id="sec-loans" class="section">
+      <div class="kpi-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px">
+        <div class="kpi"><div class="kpi-tag">Total Debt</div><div class="kpi-val" id="l-debt" style="color:var(--red)">₹0</div></div>
+        <div class="kpi"><div class="kpi-tag">Monthly EMIs</div><div class="kpi-val" id="l-emi" style="color:var(--orange)">₹0</div></div>
+        <div class="kpi"><div class="kpi-tag">EMI / Income</div><div class="kpi-val" id="l-ratio">—</div></div>
+        <div class="kpi"><div class="kpi-tag">Loans Active</div><div class="kpi-val" id="l-count" style="color:var(--t2)">0</div></div>
+      </div>
+      <div id="loans-list"></div>
+      <button class="btn btn-outline" style="border-radius:10px" onclick="toggleAddLoan()">+ Add Loan / EMI</button>
+      <div id="add-loan-card" class="card" style="display:none;margin-top:14px">
+        <div class="sec-head" style="margin-bottom:16px">New Loan / EMI</div>
+        <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px;margin-bottom:12px">
+          <div><div style="font-size:12px;color:var(--t2);margin-bottom:5px;font-weight:500">Lender / Name</div><input id="nl-name" placeholder="e.g. HDFC Bank"></div>
+          <div><div style="font-size:12px;color:var(--t2);margin-bottom:5px;font-weight:500">Outstanding (₹)</div><input id="nl-bal" type="number" placeholder="0"></div>
+          <div><div style="font-size:12px;color:var(--t2);margin-bottom:5px;font-weight:500">Monthly EMI (₹)</div><input id="nl-emi" type="number" placeholder="0"></div>
+          <div><div style="font-size:12px;color:var(--t2);margin-bottom:5px;font-weight:500">Interest Rate (%)</div><input id="nl-rate" type="number" placeholder="0"></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap" id="loan-type-btns">
+          <button class="tab-item active" onclick="setLT('cc',this)">Credit Card</button>
+          <button class="tab-item" onclick="setLT('pl',this)">Personal Loan</button>
+          <button class="tab-item" onclick="setLT('hl',this)">Home Loan</button>
+          <button class="tab-item" onclick="setLT('cl',this)">Car Loan</button>
+          <button class="tab-item" onclick="setLT('bl',this)">Bike Loan</button>
+          <button class="tab-item" onclick="setLT('other',this)">Other</button>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-dark" onclick="addLoan()">Add Loan</button>
+          <button class="btn-ghost" onclick="document.getElementById('add-loan-card').style.display='none'">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STRATEGY -->
+    <div id="sec-strategy" class="section">
+      <div id="st-alert" class="alert alert-red" style="display:none">
+        <div class="alert-icon">⚠️</div>
+        <div><div class="alert-title" style="color:var(--red)">High Debt Load Detected</div><div class="alert-body" id="st-alert-body"></div></div>
+      </div>
+      <div class="card" style="margin-bottom:20px">
+        <div class="sec-head">Payoff Method</div>
+        <div class="g2">
+          <div id="m-av" onclick="setMethod('av')" style="padding:16px;background:var(--surface2);border-radius:var(--r-sm);border:2px solid var(--t1);cursor:pointer;transition:all .2s">
+            <div style="font-size:17px;margin-bottom:6px">🏔️</div>
+            <div style="font-size:14px;font-weight:700;margin-bottom:3px">Debt Avalanche</div>
+            <div style="font-size:12px;color:var(--t2)">Highest interest rate first. Saves the most money overall.</div>
+            <div style="font-size:12px;color:var(--green);margin-top:8px;font-weight:600">✓ Mathematically optimal</div>
+          </div>
+          <div id="m-sb" onclick="setMethod('sb')" style="padding:16px;background:var(--surface2);border-radius:var(--r-sm);border:1px solid var(--border);cursor:pointer;transition:all .2s">
+            <div style="font-size:17px;margin-bottom:6px">⛄</div>
+            <div style="font-size:14px;font-weight:700;margin-bottom:3px">Debt Snowball</div>
+            <div style="font-size:12px;color:var(--t2)">Smallest balance first. Builds momentum through quick wins.</div>
+            <div style="font-size:12px;color:var(--t2);margin-top:8px;font-weight:600">✓ Best for motivation</div>
+          </div>
+        </div>
+      </div>
+      <div class="g2" style="margin-bottom:20px">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div class="sec-head" style="margin:0">Avalanche</div><span class="pill" style="background:var(--green-l);color:var(--green)">Recommended</span></div>
+          <div class="big-num" style="color:#8b5cf6" id="av-mo">—</div>
+          <div style="font-size:13px;color:var(--t2);margin-top:6px" id="av-date">months to debt-free</div>
+          <div class="divider"></div>
+          <div style="font-size:12px;color:var(--t2)">Est. total interest</div>
+          <div class="med-num" style="color:var(--orange);margin-top:4px" id="av-int">—</div>
+        </div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div class="sec-head" style="margin:0">Snowball</div></div>
+          <div class="big-num" style="color:var(--blue)" id="sb-mo">—</div>
+          <div style="font-size:13px;color:var(--t2);margin-top:6px" id="sb-date">months to debt-free</div>
+          <div class="divider"></div>
+          <div style="font-size:12px;color:var(--t2)">Est. total interest</div>
+          <div class="med-num" style="color:var(--orange);margin-top:4px" id="sb-int">—</div>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:20px">
+        <div class="sec-head">Step-by-Step Plan</div>
+        <div id="step-plan"></div>
+      </div>
+      <div class="card">
+        <div class="sec-head">Extra Payment Impact</div>
+        <div class="g4" id="extra-grid"></div>
+      </div>
+    </div>
+
+    <!-- GROW -->
+    <div id="sec-grow" class="section">
+
+      <!-- No salary state -->
+      <div id="grow-empty" class="empty-state" style="display:none">
+        <div class="empty-icon">📈</div>
+        <div class="empty-title">Upload your payslip first</div>
+        <div class="empty-sub">Personalised growth advice is generated from your actual salary, expenses, and debt data.</div>
+        <button class="btn btn-dark" onclick="goSec('upload')" style="margin-top:8px">Upload Payslip</button>
+      </div>
+
+      <div id="grow-content" style="display:none">
+
+        <!-- Financial Snapshot (dynamic KPIs) -->
+        <div class="kpi-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:20px" id="grow-kpis"></div>
+
+        <!-- Reimbursement alert (dynamic, only if payslip has components) -->
+        <div id="grow-reimb-alert" style="display:none;margin-bottom:20px"></div>
+
+        <!-- AI Advisor Card — auto-loads with web search -->
+        <div class="card" style="margin-bottom:20px">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px">
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                <div style="width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green)" id="live-dot"></div>
+                <div class="sec-head" style="margin:0">Personalised Advice  ·  Live Market Data</div>
+              </div>
+              <div style="font-size:13px;color:var(--t2)" id="grow-ai-sub">Analysing your finances with today's market conditions...</div>
+            </div>
+            <button class="btn-ghost" onclick="loadGrowAI(true)" id="refresh-btn" style="display:none">↺ Refresh</button>
+          </div>
+
+          <!-- Loading -->
+          <div id="grow-loading">
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--bg);border-radius:10px">
+                <div class="spinner" style="width:20px;height:20px;flex-shrink:0"></div>
+                <div style="font-size:13px;color:var(--t2)" id="loading-step">Fetching your financial profile...</div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" id="loading-steps">
+                <div style="padding:10px 14px;background:var(--bg);border-radius:8px;font-size:12px;color:var(--t3);display:flex;align-items:center;gap:8px"><span id="ls1-icon">○</span> Checking Nifty 50 & market levels</div>
+                <div style="padding:10px 14px;background:var(--bg);border-radius:8px;font-size:12px;color:var(--t3);display:flex;align-items:center;gap:8px"><span id="ls2-icon">○</span> Scanning best FD & debt fund rates</div>
+                <div style="padding:10px 14px;background:var(--bg);border-radius:8px;font-size:12px;color:var(--t3);display:flex;align-items:center;gap:8px"><span id="ls3-icon">○</span> Checking RBI repo rate & loan rates</div>
+                <div style="padding:10px 14px;background:var(--bg);border-radius:8px;font-size:12px;color:var(--t3);display:flex;align-items:center;gap:8px"><span id="ls4-icon">○</span> Building your personalised plan</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Result -->
+          <div id="grow-result" style="display:none"></div>
+        </div>
+
+        <!-- SIP Growth Calculator (personalised to their investable amount) -->
+        <div class="card">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px">
+            <div>
+              <div class="sec-head" style="margin-bottom:4px">SIP Growth Calculator</div>
+              <div style="font-size:13px;color:var(--t2)" id="sip-caption">Adjust the monthly SIP amount to see your wealth grow</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:11px;color:var(--t3);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px">Monthly SIP</div>
+              <div style="display:flex;align-items:center;gap:4px">
+                <span style="font-size:16px;color:var(--t2);font-weight:500">₹</span>
+                <input type="number" id="sip-amount" value="5000" min="500" max="100000" step="500" style="width:100px;text-align:right;font-size:18px;font-weight:700;border:none;background:transparent;color:var(--t1);padding:0" oninput="updateSIP()">
+              </div>
+            </div>
+          </div>
+          <input type="range" id="sip-slider" min="500" max="50000" step="500" value="5000" style="width:100%;accent-color:var(--blue);margin-bottom:20px" oninput="document.getElementById('sip-amount').value=this.value;updateSIP()">
+          <div class="g4" id="sip-grid"></div>
+          <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);font-size:12px;color:var(--t3)">Assumes 12% p.a. CAGR (Nifty 50 long-term avg). Not a guarantee. Consult a SEBI-registered advisor for personalised financial advice.</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<div id="toast"></div>
+
+<script>
+// ─── Expense Master List ──────────────────────────────────────────────────────
+const EXPENSE_CATEGORIES = [
+  {
+    id:"housing", name:"Housing & Rent", icon:"🏠",
+    items:[
+      {id:"house_rent",name:"House Rent",emoji:"🏠"},
+      {id:"home_loan_emi",name:"Home Loan EMI",emoji:"🏦"},
+      {id:"society_maintenance",name:"Society / Maintenance Charges",emoji:"🔧"},
+      {id:"water_bill",name:"Water Bill",emoji:"💧"},
+      {id:"property_tax",name:"Property Tax",emoji:"📋"},
+      {id:"house_repair",name:"House Repair / Renovation",emoji:"🔨"},
+      {id:"home_insurance",name:"Home Insurance",emoji:"🛡️"},
+    ]
+  },
+  {
+    id:"utilities", name:"Utilities & Bills", icon:"⚡",
+    items:[
+      {id:"electricity",name:"Electricity Bill",emoji:"💡"},
+      {id:"gas_pipeline",name:"Gas Pipeline Bill",emoji:"🔥"},
+      {id:"lpg_cylinder",name:"LPG Cylinder",emoji:"🫙"},
+      {id:"internet",name:"Internet / Broadband",emoji:"🌐"},
+      {id:"mobile_postpaid",name:"Mobile Postpaid Bill",emoji:"📱"},
+      {id:"ott_subs",name:"OTT Subscriptions (Netflix/Prime/Hotstar)",emoji:"📺"},
+      {id:"cable_tv",name:"Cable TV / DTH",emoji:"📡"},
+    ]
+  },
+  {
+    id:"transport", name:"Transport & Vehicle", icon:"🚗",
+    items:[
+      {id:"petrol",name:"Petrol / Diesel / CNG",emoji:"⛽"},
+      {id:"metro_pass",name:"Metro Card / Train Pass",emoji:"🚇"},
+      {id:"auto_taxi",name:"Auto / Taxi / Cab (Ola/Uber)",emoji:"🚕"},
+      {id:"car_loan_emi",name:"Car Loan EMI",emoji:"🚗"},
+      {id:"bike_loan_emi",name:"Bike Loan EMI",emoji:"🏍️"},
+      {id:"car_insurance",name:"Car Insurance",emoji:"🛡️"},
+      {id:"bike_insurance",name:"Bike Insurance",emoji:"🛡️"},
+      {id:"vehicle_service",name:"Vehicle Service / Repair",emoji:"🔧"},
+      {id:"parking_toll",name:"Parking / Toll Charges",emoji:"🅿️"},
+      {id:"ev_charging",name:"EV Charging",emoji:"🔋"},
+      {id:"driver_salary",name:"Driver Salary",emoji:"👨‍✈️"},
+    ]
+  },
+  {
+    id:"food", name:"Food & Groceries", icon:"🛒",
+    items:[
+      {id:"groceries",name:"Groceries / Kirana",emoji:"🛒"},
+      {id:"dining_out",name:"Eating Out / Restaurants",emoji:"🍽️"},
+      {id:"food_delivery",name:"Food Delivery (Swiggy / Zomato)",emoji:"🛵"},
+      {id:"coffee_cafe",name:"Coffee / Tea / Café",emoji:"☕"},
+      {id:"office_lunch",name:"Office Canteen / Tiffin",emoji:"🥡"},
+      {id:"milk_dairy",name:"Milk / Dairy Subscription",emoji:"🥛"},
+      {id:"fruits_vegs",name:"Fruits & Vegetables",emoji:"🥦"},
+    ]
+  },
+  {
+    id:"health", name:"Health & Wellness", icon:"🏥",
+    items:[
+      {id:"health_insurance",name:"Health Insurance Premium",emoji:"🏥"},
+      {id:"medicine",name:"Medicine / Pharmacy",emoji:"💊"},
+      {id:"doctor_visit",name:"Doctor / Hospital Visit",emoji:"👨‍⚕️"},
+      {id:"gym",name:"Gym / Fitness Membership",emoji:"🏋️"},
+      {id:"yoga_class",name:"Yoga / Meditation Class",emoji:"🧘"},
+      {id:"dental",name:"Dental Care",emoji:"🦷"},
+      {id:"eye_care",name:"Eye Care / Spectacles",emoji:"👓"},
+      {id:"lab_tests",name:"Lab Tests / Health Checkup",emoji:"🔬"},
+      {id:"mental_health",name:"Therapy / Mental Health",emoji:"💬"},
+    ]
+  },
+  {
+    id:"insurance", name:"Insurance & Protection", icon:"🛡️",
+    items:[
+      {id:"term_insurance",name:"Life / Term Insurance",emoji:"🛡️"},
+      {id:"lic",name:"LIC Premium",emoji:"📄"},
+      {id:"accident_ins",name:"Personal Accident Insurance",emoji:"🚨"},
+      {id:"travel_ins",name:"Travel Insurance",emoji:"✈️"},
+    ]
+  },
+  {
+    id:"investments", name:"Savings & Investments", icon:"📈",
+    items:[
+      {id:"mutual_fund",name:"Mutual Fund SIP",emoji:"📈"},
+      {id:"ppf",name:"PPF Contribution",emoji:"🏛️"},
+      {id:"nps",name:"NPS Contribution",emoji:"📊"},
+      {id:"stocks",name:"Stocks / Direct Equity",emoji:"📉"},
+      {id:"fd",name:"Fixed Deposit",emoji:"🏦"},
+      {id:"rd",name:"Recurring Deposit",emoji:"💰"},
+      {id:"crypto",name:"Cryptocurrency",emoji:"₿"},
+      {id:"sukanya",name:"Sukanya Samriddhi / SSY",emoji:"👧"},
+      {id:"epf_voluntary",name:"VPF (Voluntary PF)",emoji:"📑"},
+    ]
+  },
+  {
+    id:"gold_savings", name:"Gold & Jewellery", icon:"🪙",
+    items:[
+      {id:"gold_physical",name:"Gold / Jewellery Purchase",emoji:"💍"},
+      {id:"digital_gold",name:"Digital Gold",emoji:"🪙"},
+      {id:"sgb",name:"Sovereign Gold Bond",emoji:"📜"},
+      {id:"silver",name:"Silver Purchase",emoji:"🥈"},
+    ]
+  },
+  {
+    id:"personal", name:"Personal & Lifestyle", icon:"👔",
+    items:[
+      {id:"clothes",name:"Clothing / Shopping",emoji:"👔"},
+      {id:"shoes",name:"Shoes / Footwear",emoji:"👟"},
+      {id:"salon",name:"Salon / Haircut / Grooming",emoji:"💇"},
+      {id:"cosmetics",name:"Cosmetics / Skincare",emoji:"💄"},
+      {id:"laundry",name:"Laundry / Dry Cleaning",emoji:"👕"},
+      {id:"perfume",name:"Perfume / Personal Care",emoji:"🧴"},
+    ]
+  },
+  {
+    id:"entertainment", name:"Entertainment & Leisure", icon:"🎬",
+    items:[
+      {id:"movies",name:"Movies / Events / Concerts",emoji:"🎬"},
+      {id:"vacation",name:"Travel / Vacation",emoji:"✈️"},
+      {id:"sports_hobby",name:"Sports / Hobbies",emoji:"⚽"},
+      {id:"gaming",name:"Gaming (Apps / Console)",emoji:"🎮"},
+      {id:"books",name:"Books / Magazines / Kindle",emoji:"📚"},
+    ]
+  },
+  {
+    id:"education", name:"Education & Learning", icon:"🎓",
+    items:[
+      {id:"school_fees",name:"School / College Fees",emoji:"🎓"},
+      {id:"coaching",name:"Coaching / Tuition",emoji:"📖"},
+      {id:"online_courses",name:"Online Courses / Udemy",emoji:"💻"},
+      {id:"books_stat",name:"Books / Stationery",emoji:"📓"},
+      {id:"kids_activities",name:"Kids Activities / Classes",emoji:"🎨"},
+    ]
+  },
+  {
+    id:"family", name:"Family & Social", icon:"👨‍👩‍👧",
+    items:[
+      {id:"child_care",name:"Child Care / Crèche / Nanny",emoji:"👶"},
+      {id:"maid_cook",name:"Maid / Cook / Domestic Help",emoji:"🧹"},
+      {id:"parents_support",name:"Parents' Support / Money Transfer",emoji:"👴"},
+      {id:"gifts",name:"Gifts / Birthday / Occasions",emoji:"🎁"},
+      {id:"charity",name:"Charity / Donation",emoji:"🙏"},
+    ]
+  },
+  {
+    id:"emis_debts", name:"EMIs & Debt Repayment", icon:"🏦",
+    items:[
+      {id:"personal_loan_emi",name:"Personal Loan EMI",emoji:"🏦"},
+      {id:"credit_card_emi",name:"Credit Card EMI",emoji:"💳"},
+      {id:"gold_loan_emi",name:"Gold Loan EMI",emoji:"💛"},
+      {id:"education_loan",name:"Education Loan EMI",emoji:"🎓"},
+      {id:"gadget_emi",name:"Gadget / Phone EMI",emoji:"📱"},
+    ]
+  },
+  {
+    id:"misc", name:"Miscellaneous", icon:"📦",
+    items:[
+      {id:"pet_care",name:"Pet Care / Vet",emoji:"🐾"},
+      {id:"newspaper",name:"Newspaper / Subscriptions",emoji:"📰"},
+      {id:"professional_dev",name:"Professional Membership / Fees",emoji:"🪪"},
+      {id:"bank_charges",name:"Bank Charges / Fees",emoji:"🏦"},
+      {id:"tax_filing",name:"CA / Tax Filing Fee",emoji:"📊"},
+      {id:"stationery",name:"Stationery / Office Supplies",emoji:"✏️"},
+    ]
+  },
+];
+
+// ─── State ────────────────────────────────────────────────────────────────────
+let salary = null;
+let monthData = {}; // { "2026-04": { "house_rent": 20000, ... } }
+let loans = [];
+let curMethod = "av";
+let curLoanType = "cc";
+let pieChart = null, barChart = null;
+
+// ─── API Key Management ───────────────────────────────────────────────────────
+function getApiKey() { return localStorage.getItem("wm_apikey") || ""; }
+
+function saveApiKey() {
+  const key = document.getElementById("apikey-input").value.trim();
+  if (!key.startsWith("sk-ant-")) { toast("Key must start with sk-ant-", "err"); return; }
+  localStorage.setItem("wm_apikey", key);
+  updateKeyUI();
+  toast("API key saved ✓");
+}
+
+function resetApiKey() {
+  localStorage.removeItem("wm_apikey");
+  document.getElementById("apikey-input").value = "";
+  updateKeyUI();
+}
+
+function checkKeyInput() {
+  const v = document.getElementById("apikey-input").value.trim();
+  const btn = document.getElementById("save-key-btn");
+  const valid = v.startsWith("sk-ant-") && v.length > 20;
+  btn.style.opacity = valid ? "1" : ".4";
+  btn.style.pointerEvents = valid ? "auto" : "none";
+}
+
+function updateKeyUI() {
+  const key = getApiKey();
+  const hasKey = !!key;
+  document.getElementById("apikey-card").style.display = hasKey ? "none" : "block";
+  document.getElementById("apikey-ok").style.display = hasKey ? "block" : "none";
+  if (hasKey) document.getElementById("apikey-preview").textContent = key.slice(0,12) + "••••••••" + key.slice(-4);
+  // Sidebar
+  const okEl = document.getElementById("sidebar-key-ok");
+  const missEl = document.getElementById("sidebar-key-missing");
+  if (okEl) { okEl.style.display = hasKey ? "block" : "none"; }
+  if (missEl) { missEl.style.display = hasKey ? "none" : "block"; }
+}
+
+function handleUzoneClick() {
+  document.getElementById("fpick").click();
+}
+
+function apiHeaders() {
+  const key = getApiKey();
+  const h = { "Content-Type": "application/json" };
+  if (key) {
+    h["x-api-key"] = key;
+    h["anthropic-version"] = "2023-06-01";
+    h["anthropic-dangerous-direct-browser-access"] = "true";
+  }
+  return h;
+}
+
+// ─── Persistence ──────────────────────────────────────────────────────────────
+function save(){
+  try{
+    if(salary) localStorage.setItem("wm2_s", JSON.stringify(salary));
+    localStorage.setItem("wm2_mo", JSON.stringify(monthData));
+    localStorage.setItem("wm2_lo", JSON.stringify(loans));
+  }catch(e){}
+}
+function loadData(){
+  try{
+    const s=localStorage.getItem("wm2_s"); if(s) salary=JSON.parse(s);
+    const m=localStorage.getItem("wm2_mo"); if(m) monthData=JSON.parse(m);
+    const l=localStorage.getItem("wm2_lo"); if(l) loans=JSON.parse(l);
+  }catch(e){}
+}
+
+// ─── Utils ────────────────────────────────────────────────────────────────────
+const fmt = n => `₹${Math.round(Number(n||0)).toLocaleString("en-IN")}`;
+const fmtL = n => n>=100000 ? `₹${(n/100000).toFixed(2)}L` : fmt(n);
+function getCurMo(){ return document.getElementById("track-month").value || "2026-04"; }
+function getNet(){ return salary ? salary.netSalary : 0; }
+function getTotalDebt(){ return loans.reduce((s,l)=>s+l.balance,0); }
+function getTotalEMI(){ return loans.reduce((s,l)=>s+l.emi,0); }
+function getMonthTotal(mo){
+  const d = monthData[mo] || {};
+  return Object.values(d).reduce((s,v)=>s+(v||0),0);
+}
+function toast(msg,type="ok"){
+  const el=document.getElementById("toast");
+  el.textContent=msg; el.style.display="block";
+  el.style.background=type==="err"?"#ff3b30":"#34c759";
+  el.style.color="#fff";
+  setTimeout(()=>el.style.display="none",2800);
+}
+
+// ─── Navigation ───────────────────────────────────────────────────────────────
+const SECS=["overview","upload","expenses","loans","strategy","grow"];
+const TITLES={overview:"Overview",upload:"Payslip",expenses:"Monthly Expenses",loans:"Loans & EMIs",strategy:"Debt Strategy",grow:"Grow Money"};
+const SUBS={
+  overview:()=>salary?`${salary.month} ${salary.year}  ·  Net ${fmt(salary.netSalary)}  ·  Left: ${fmt(getNet()-getMonthTotal(getCurMo()))}`:"Upload your payslip to get started",
+  upload:()=>"AI-powered payslip extraction",
+  expenses:()=>"Track every rupee across all categories",
+  loans:()=>"Monitor your debt and EMI load",
+  strategy:()=>"Find the fastest path to debt freedom",
+  grow:()=>"Build wealth systematically"
+};
+function goSec(id){
+  SECS.forEach(s=>{
+    document.getElementById("sec-"+s).classList.toggle("active",s===id);
+    document.querySelector(`[data-sec="${s}"]`).classList.toggle("active",s===id);
+  });
+  document.getElementById("page-title").textContent=TITLES[id];
+  document.getElementById("page-sub").textContent=SUBS[id]();
+  if(id==="overview") renderOverview();
+  if(id==="expenses") renderExpenses();
+  if(id==="loans") renderLoans();
+  if(id==="strategy") renderStrategy();
+  if(id==="grow") { growAILoaded = false; renderGrow(); }
+}
+document.querySelectorAll(".nav-item").forEach(el=>el.addEventListener("click",()=>goSec(el.dataset.sec)));
+
+// ─── Salary ───────────────────────────────────────────────────────────────────
+function updateSalaryUI(){
+  const has=!!salary;
+  document.getElementById("payslip-pill").style.display=has?"block":"none";
+  document.getElementById("clear-btn").style.display=has?"block":"none";
+  document.getElementById("header-btn").textContent=has?"New Payslip":"Upload Payslip";
+  if(has){
+    document.getElementById("pp-name").textContent=salary.employeeName||"Employee";
+    document.getElementById("pp-amt").textContent=`${salary.month} ${salary.year} · ${fmt(salary.netSalary)}`;
+    document.getElementById("ul-loaded").style.display="flex";
+    document.getElementById("ul-loaded-title").textContent=`${salary.month} ${salary.year} loaded`;
+    document.getElementById("ul-loaded-sub").textContent=`${salary.employeeName} · ${fmt(salary.netSalary)} net salary`;
+  } else {
+    document.getElementById("ul-loaded").style.display="none";
+  }
+}
+async function handleFile(file){
+  if(!file||file.type!=="application/pdf"){toast("Please upload a PDF file","err");return;}
+  document.getElementById("uzone-inner").innerHTML=`<div class="spinner" style="width:40px;height:40px;margin:0 auto 16px"></div><div style="font-size:16px;font-weight:600;margin-bottom:6px">Reading payslip...</div><div style="font-size:13px;color:var(--t2)">AI is extracting your salary details (~10 seconds)</div>`;
+  try{
+    const b64=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(",")[1]);r.onerror=rej;r.readAsDataURL(file);});
+    const resp=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:apiHeaders(),
+      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:[{type:"document",source:{type:"base64",media_type:"application/pdf",data:b64}},{type:"text",text:'Extract salary slip data. Return ONLY valid JSON, no markdown: {"netSalary":0,"grossSalary":0,"month":"","year":"","employeeName":"","designation":"","paidDays":0,"totalDays":0,"components":[{"name":"","amount":0}],"deductions":[{"name":"","amount":0}]}'}]}]})
+    });
+    if(!resp.ok){
+      const err=await resp.json().catch(()=>({}));
+      if(resp.status===401){toast("Auth error — if running standalone, add your API key above","err");return;}
+      throw new Error(err.error?.message||"API error "+resp.status);
+    }
+    const data=await resp.json();
+    const txt=data.content[0].text.replace(/```[a-z]*|```/g,"").trim();
+    salary=JSON.parse(txt); save(); updateSalaryUI(); toast("Payslip loaded ✓"); goSec("overview");
+  }catch(e){toast(e.message||"Could not parse PDF — try again","err");}
+  document.getElementById("uzone-inner").innerHTML=`<div class="u-icon">📄</div><div class="u-title">Drop your payslip here</div><div class="u-sub">Drag & drop a PDF — AI will read and extract all salary details<br>automatically in about 10 seconds</div><button class="btn btn-dark" onclick="event.stopPropagation();handleUzoneClick()">Choose File</button>`;
+}
+function dropFile(e){e.preventDefault();document.getElementById("uzone").classList.remove("drag");handleFile(e.dataTransfer.files[0]);}
+function showManual(){document.getElementById("manual-form").style.display="block";}
+function saveManual(){
+  const net=Number(document.getElementById("m-net").value);
+  if(!net){toast("Net salary is required","err");return;}
+  salary={employeeName:document.getElementById("m-name").value||"Employee",designation:document.getElementById("m-desig").value,month:document.getElementById("m-month").value||"April",year:document.getElementById("m-year").value||"2026",netSalary:net,grossSalary:Number(document.getElementById("m-gross").value)||net,paidDays:Number(document.getElementById("m-paid").value)||29,totalDays:Number(document.getElementById("m-total").value)||30,components:[],deductions:[]};
+  save();updateSalaryUI();toast("Saved");goSec("overview");
+}
+function clearSalary(){salary=null;localStorage.removeItem("wm2_s");updateSalaryUI();toast("Payslip removed");goSec("upload");}
+
+// ─── Overview ─────────────────────────────────────────────────────────────────
+function renderOverview(){
+  const has=!!salary;
+  document.getElementById("overview-empty").style.display=has?"none":"flex";
+  document.getElementById("overview-data").style.display=has?"block":"none";
+  if(!has)return;
+  const net=getNet(), mo=getCurMo(), moTotal=getMonthTotal(mo), rem=net-moTotal, tDebt=getTotalDebt(), tEMI=getTotalEMI(), dr=net>0?((tEMI/net)*100).toFixed(0):0;
+  // Alert
+  if(rem<10000&&net>0){
+    document.getElementById("ov-alert").style.display="block";
+    document.getElementById("ov-alert").innerHTML=`<div class="alert alert-red"><div class="alert-icon">⚠️</div><div><div class="alert-title" style="color:var(--red)">EMIs consume ${dr}% of your income</div><div class="alert-body">After all expenses, only ${fmt(rem)} remains. Your credit cards at 38–42% APR are the most urgent issue — stop CC spending immediately.</div></div></div>`;
+  } else document.getElementById("ov-alert").style.display="none";
+  // KPIs
+  document.getElementById("ov-net").textContent=fmt(net);
+  document.getElementById("ov-net-sub").textContent=`${salary.paidDays}/${salary.totalDays} days paid`;
+  document.getElementById("ov-exp").textContent=fmt(moTotal);
+  document.getElementById("ov-exp-sub").textContent=net>0?`${((moTotal/net)*100).toFixed(0)}% of net salary`:"—";
+  document.getElementById("ov-rem").textContent=fmt(rem);
+  document.getElementById("ov-rem").style.color=rem<0?"var(--red)":rem<10000?"var(--orange)":"var(--green)";
+  document.getElementById("ov-rem-sub").textContent=rem<0?"In deficit this month":"available this month";
+  document.getElementById("ov-debt").textContent=fmtL(tDebt);
+  document.getElementById("ov-debt-sub").textContent=`${dr}% EMI-to-income ratio`;
+  // Components
+  if(salary.components&&salary.components.filter(c=>c.amount>0).length>0){
+    document.getElementById("comp-card").style.display="block";
+    document.getElementById("comp-grid").innerHTML=salary.components.filter(c=>c.amount>0).map(c=>`<div class="card-inset"><div style="font-size:10px;color:var(--t3);margin-bottom:4px;font-weight:600;text-transform:uppercase">${c.name}</div><div style="font-size:19px;font-weight:700;letter-spacing:-.5px">${fmt(c.amount)}</div></div>`).join("");
+  }
+  // Charts
+  buildCharts(net,moTotal,rem);
+}
+
+function buildCharts(net,moTotal,rem){
+  // Category breakdown
+  const mo=getCurMo(), d=monthData[mo]||{};
+  const catTotals={};
+  EXPENSE_CATEGORIES.forEach(cat=>{
+    let t=0;
+    cat.items.forEach(item=>{ if(d[item.id]) t+=d[item.id]; });
+    if(t>0) catTotals[cat.name]=t;
+  });
+  const labels=Object.keys(catTotals), vals=Object.values(catTotals);
+  const colors=["#8b5cf6","#0071e3","#f97316","#34c759","#ff3b30","#ec4899","#06b6d4","#f0b429","#a855f7","#22c55e","#64748b","#ef4444","#3b82f6","#78716c"];
+  // Pie
+  if(pieChart)pieChart.destroy();
+  const pCtx=document.getElementById("pie-chart").getContext("2d");
+  if(labels.length===0){
+    pCtx.clearRect(0,0,300,300);
+    document.getElementById("pie-legend").innerHTML="<div style='font-size:13px;color:var(--t2);padding:20px 0'>Add expenses to see breakdown</div>";
+    return;
+  }
+  pieChart=new Chart(pCtx,{type:"doughnut",data:{labels,datasets:[{data:vals,backgroundColor:colors,borderWidth:0,hoverOffset:4}]},options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>" "+fmt(c.raw)},backgroundColor:"#fff",borderColor:"rgba(0,0,0,.1)",borderWidth:1,bodyColor:"var(--t1)",titleColor:"var(--t1)"}},cutout:"62%",animation:{duration:700}}});
+  document.getElementById("pie-legend").innerHTML=labels.map((l,i)=>`<div style="display:flex;align-items:center;gap:5px"><div style="width:8px;height:8px;border-radius:50%;background:${colors[i]}"></div><span style="font-size:11px;color:var(--t2)">${l}</span></div>`).join("");
+  // Bar
+  if(barChart)barChart.destroy();
+  const bCtx=document.getElementById("bar-chart").getContext("2d");
+  barChart=new Chart(bCtx,{type:"bar",data:{labels:["Gross","Net","Expenses","Remaining"],datasets:[{data:[salary.grossSalary,net,moTotal,Math.max(0,rem)],backgroundColor:["#8b5cf6","#0071e3","#ff9500","#34c759"],borderRadius:6,borderSkipped:false}]},options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>" "+fmt(c.raw)},backgroundColor:"#fff",borderColor:"rgba(0,0,0,.1)",borderWidth:1,bodyColor:"var(--t1)",titleColor:"var(--t1)"}},scales:{x:{grid:{display:false},ticks:{color:"var(--t2)",font:{size:11}}},y:{grid:{color:"rgba(0,0,0,.05)"},ticks:{callback:v=>`₹${(v/1000).toFixed(0)}K`,color:"var(--t2)",font:{size:10}}}},animation:{duration:700}}});
+}
+
+// ─── Expenses ─────────────────────────────────────────────────────────────────
+function renderExpenses(){
+  buildCategoryList();
+  updateExpSummary();
+}
+
+function buildCategoryList(){
+  const mo=getCurMo(), d=monthData[mo]||{}, container=document.getElementById("category-list");
+  container.innerHTML="";
+  EXPENSE_CATEGORIES.forEach(cat=>{
+    const catTotal=cat.items.reduce((s,item)=>s+(d[item.id]||0),0);
+    const activeCount=cat.items.filter(item=>d[item.id]>0).length;
+    const div=document.createElement("div"); div.className="exp-category"; div.id="cat-"+cat.id;
+    div.innerHTML=`
+      <div class="exp-cat-header" onclick="toggleCat('${cat.id}')">
+        <div class="exp-cat-left">
+          <span class="exp-cat-icon">${cat.icon}</span>
+          <span class="exp-cat-name">${cat.name}</span>
+          ${activeCount>0?`<span class="pill" style="background:var(--green-l);color:var(--green)">${activeCount}</span>`:""}
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          ${catTotal>0?`<span class="exp-cat-total">${fmt(catTotal)}</span>`:""}
+          <span class="exp-cat-chevron" id="chev-${cat.id}">›</span>
+        </div>
+      </div>
+      <div class="exp-cat-body" id="catbody-${cat.id}">
+        ${cat.items.map(item=>{
+          const val=d[item.id]||0;
+          return `<div class="exp-item${val>0?" active-item":""}" id="eitem-${item.id}">
+            <span class="exp-item-emoji">${item.emoji}</span>
+            <span class="exp-item-name">${item.name}</span>
+            <div class="amt-wrap">
+              <span class="currency-sym">₹</span>
+              <input type="number" class="amt-input" id="ainp-${item.id}" value="${val||""}" placeholder="0" onfocus="this.select()" oninput="setExpense('${item.id}',this.value,'${cat.id}')" onblur="saveExpense()">
+            </div>
+          </div>`;
+        }).join("")}
+      </div>`;
+    container.appendChild(div);
+  });
+}
+
+function toggleCat(id){
+  const body=document.getElementById("catbody-"+id);
+  const chev=document.getElementById("chev-"+id);
+  const open=body.style.display==="block";
+  body.style.display=open?"none":"block";
+  chev.style.transform=open?"":"rotate(90deg)";
+}
+
+function setExpense(itemId,val,catId){
+  const mo=getCurMo();
+  if(!monthData[mo]) monthData[mo]={};
+  const num=parseFloat(val)||0;
+  if(num>0) monthData[mo][itemId]=num;
+  else delete monthData[mo][itemId];
+  // Update item highlight
+  const item=document.getElementById("eitem-"+itemId);
+  if(item) item.classList.toggle("active-item",num>0);
+  updateExpSummary();
+  updateCatTotal(catId);
+}
+function saveExpense(){ save(); }
+
+function updateCatTotal(catId){
+  const mo=getCurMo(), d=monthData[mo]||{};
+  const cat=EXPENSE_CATEGORIES.find(c=>c.id===catId); if(!cat) return;
+  const total=cat.items.reduce((s,item)=>s+(d[item.id]||0),0);
+  const activeCount=cat.items.filter(item=>d[item.id]>0).length;
+  // Update header badge & total - rebuild header portion
+  const catEl=document.getElementById("cat-"+catId);
+  if(catEl){
+    const header=catEl.querySelector(".exp-cat-header");
+    const nameEl=header.querySelector(".exp-cat-name");
+    // Update pill
+    const existingPill=header.querySelector(".pill");
+    if(existingPill) existingPill.remove();
+    if(activeCount>0){
+      const pill=document.createElement("span");
+      pill.className="pill"; pill.style.background="var(--green-l)"; pill.style.color="var(--green)";
+      pill.textContent=activeCount; nameEl.insertAdjacentElement("afterend",pill);
+    }
+    // Update total display
+    let totalEl=header.querySelector(".exp-cat-total");
+    if(total>0){
+      if(!totalEl){ totalEl=document.createElement("span"); totalEl.className="exp-cat-total"; header.querySelector("div:last-child").prepend(totalEl); }
+      totalEl.textContent=fmt(total);
+    } else if(totalEl) totalEl.remove();
+  }
+}
+
+function refreshExpenses(){ buildCategoryList(); updateExpSummary(); }
+
+function updateExpSummary(){
+  const mo=getCurMo(), total=getMonthTotal(mo), net=getNet(), rem=net-total;
+  const d=monthData[mo]||{};
+  // Count active categories
+  let activeCats=0;
+  EXPENSE_CATEGORIES.forEach(cat=>{ if(cat.items.some(item=>d[item.id]>0)) activeCats++; });
+  document.getElementById("exp-total").textContent=fmt(total);
+  document.getElementById("exp-pct-of-net").textContent=net>0?`${((total/net)*100).toFixed(0)}% of net salary`:"Add payslip for %";
+  document.getElementById("exp-cats").textContent=activeCats;
+  document.getElementById("exp-rem").textContent=fmt(rem);
+  document.getElementById("exp-rem").style.color=rem<0?"var(--red)":rem<10000?"var(--orange)":"var(--green)";
+  // Summary list
+  buildSummaryList(mo,d,total);
+}
+
+function buildSummaryList(mo,d,total){
+  const items=[];
+  EXPENSE_CATEGORIES.forEach(cat=>{
+    cat.items.forEach(item=>{ if(d[item.id]>0) items.push({emoji:item.emoji,name:item.name,cat:cat.name,amount:d[item.id]}); });
+  });
+  const sumCard=document.getElementById("summary-card");
+  const sumEmpty=document.getElementById("summary-empty");
+  const sumList=document.getElementById("summary-list");
+  if(items.length===0){
+    sumEmpty.style.display="block"; sumList.style.display="none"; return;
+  }
+  sumEmpty.style.display="none"; sumList.style.display="block";
+  // Group by category
+  const grouped={};
+  EXPENSE_CATEGORIES.forEach(cat=>{
+    const catItems=cat.items.filter(item=>d[item.id]>0);
+    if(catItems.length>0) grouped[cat.name]={icon:cat.icon,items:catItems.map(item=>({...item,amount:d[item.id]}))};
+  });
+  sumList.innerHTML=Object.entries(grouped).map(([catName,{icon,items}])=>`
+    <div style="margin-bottom:14px">
+      <div style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;display:flex;align-items:center;gap:6px"><span>${icon}</span>${catName}</div>
+      ${items.map(item=>`<div class="sum-row"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:13px">${item.emoji}</span><span style="font-size:13px;color:var(--t1)">${item.name}</span></div><div style="font-size:14px;font-weight:700;color:var(--t1)">${fmt(item.amount)}</div></div>`).join("")}
+    </div>`).join("")+`<div style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;margin-top:4px;border-top:2px solid var(--t1)"><span style="font-size:13px;font-weight:700">Total</span><span style="font-size:18px;font-weight:800;letter-spacing:-.5px">${fmt(total)}</span></div>`;
+}
+
+// ─── Loans ────────────────────────────────────────────────────────────────────
+function renderLoans(){
+  const tDebt=getTotalDebt(), tEMI=getTotalEMI(), net=getNet(), dr=net>0?((tEMI/net)*100).toFixed(0):0;
+  document.getElementById("l-debt").textContent=fmtL(tDebt);
+  document.getElementById("l-emi").textContent=fmt(tEMI);
+  document.getElementById("l-ratio").textContent=`${dr}%`;
+  document.getElementById("l-ratio").style.color=Number(dr)>55?"var(--red)":Number(dr)>40?"var(--orange)":"var(--green)";
+  document.getElementById("l-count").textContent=loans.length;
+  const el=document.getElementById("loans-list"); el.innerHTML="";
+  if(loans.length===0){
+    el.innerHTML=`<div style="text-align:center;padding:40px;color:var(--t2)"><div style="font-size:32px;margin-bottom:12px">🏦</div><div style="font-size:15px;font-weight:600;margin-bottom:6px">No loans added</div><div style="font-size:13px">Add your loans and credit card dues below</div></div>`;
+    return;
+  }
+  const typeLabels={cc:"Credit Card",pl:"Personal Loan",hl:"Home Loan",cl:"Car Loan",bl:"Bike Loan",other:"Other"};
+  const typeColors={cc:"var(--red)",pl:"var(--orange)",hl:"var(--blue)",cl:"#8b5cf6",bl:"#ec4899",other:"var(--t2)"};
+  loans.forEach(l=>{
+    const months=l.emi>0?Math.ceil(l.balance/l.emi):0, annInt=Math.round(l.balance*l.rate/100);
+    const bar=Math.min(96,Math.max(4,100-(l.balance/2000000)*100));
+    const div=document.createElement("div"); div.className="loan-card";
+    div.innerHTML=`
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+            <span class="pill" style="background:${typeColors[l.type]||"var(--t2)"}20;color:${typeColors[l.type]||"var(--t2)"}">${typeLabels[l.type]||"Loan"}</span>
+            <span style="font-size:15px;font-weight:700">${l.name}</span>
+          </div>
+          <div style="font-size:12px;color:var(--t2)">~${l.rate}% p.a. · EMI ${fmt(l.emi)}/mo · ~${months} months to clear</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:26px;font-weight:800;letter-spacing:-1px;color:var(--red)">${fmtL(l.balance)}</div>
+          <div style="font-size:11px;color:var(--t3)">outstanding</div>
+        </div>
+      </div>
+      <div class="prog-bg"><div class="prog-fill" style="width:${bar}%;background:${typeColors[l.type]||"var(--t2)"}"></div></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+        <div style="display:flex;gap:24px">
+          <div><div style="font-size:10px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px">Annual Interest</div><div style="font-size:14px;font-weight:700;color:var(--orange);margin-top:2px">${fmt(annInt)}</div></div>
+          <div><div style="font-size:10px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px">Payoff (est.)</div><div style="font-size:14px;font-weight:700;margin-top:2px">${months} months</div></div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-ghost" onclick="editLoan('${l.id}')">Edit</button>
+          <button class="btn-ghost" onclick="deleteLoan('${l.id}')" style="color:var(--red);border-color:rgba(255,59,48,.3)">Remove</button>
+        </div>
+      </div>`;
+    el.appendChild(div);
+  });
+}
+
+function toggleAddLoan(){ const f=document.getElementById("add-loan-card"); f.style.display=f.style.display==="none"?"block":"none"; }
+function setLT(t,btn){ curLoanType=t; document.getElementById("loan-type-btns").querySelectorAll(".tab-item").forEach(b=>b.classList.toggle("active",b===btn)); }
+function addLoan(){
+  const name=document.getElementById("nl-name").value;
+  if(!name){toast("Enter lender name","err");return;}
+  loans.push({id:Date.now().toString(),name,balance:Number(document.getElementById("nl-bal").value)||0,emi:Number(document.getElementById("nl-emi").value)||0,rate:Number(document.getElementById("nl-rate").value)||0,type:curLoanType});
+  save(); renderLoans(); document.getElementById("add-loan-card").style.display="none"; toast("Loan added");
+  ["nl-name","nl-bal","nl-emi","nl-rate"].forEach(id=>document.getElementById(id).value="");
+}
+function editLoan(id){
+  const l=loans.find(x=>x.id===id); if(!l) return;
+  const bal=prompt(`Outstanding balance for ${l.name}:`,l.balance); if(bal===null) return;
+  const emi=prompt(`Monthly EMI for ${l.name}:`,l.emi); if(emi===null) return;
+  l.balance=Number(bal)||l.balance; l.emi=Number(emi)||l.emi;
+  save(); renderLoans(); renderStrategy(); toast("Updated");
+}
+function deleteLoan(id){ if(!confirm("Remove this loan?")) return; loans=loans.filter(l=>l.id!==id); save(); renderLoans(); toast("Removed"); }
+
+// ─── Strategy ─────────────────────────────────────────────────────────────────
+function simulate(ordLo,extra=0){
+  if(ordLo.length===0) return{months:0,interest:0};
+  let bals=ordLo.map(l=>({...l,bal:l.balance})); let months=0,interest=0;
+  while(bals.some(l=>l.bal>0)&&months<360){
+    months++; let ex=Math.max(0,extra);
+    bals=bals.map(l=>{ if(l.bal<=0)return l; const mi=l.bal*l.rate/100/12; interest+=mi; return{...l,bal:Math.max(0,l.bal+mi-l.emi)}; });
+    for(let i=0;i<bals.length;i++){ if(bals[i].bal>0&&ex>0){const p=Math.min(bals[i].bal,ex);bals[i]={...bals[i],bal:bals[i].bal-p};break;} }
+  }
+  return{months,interest:Math.round(interest)};
+}
+function toDate(mo){ const d=new Date(2026,3); d.setMonth(d.getMonth()+mo); return d.toLocaleDateString("en-IN",{month:"short",year:"numeric"}); }
+
+function setMethod(m){
+  curMethod=m;
+  document.getElementById("m-av").style.borderWidth=m==="av"?"2px":"1px";
+  document.getElementById("m-av").style.borderColor=m==="av"?"var(--t1)":"var(--border)";
+  document.getElementById("m-sb").style.borderWidth=m==="sb"?"2px":"1px";
+  document.getElementById("m-sb").style.borderColor=m==="sb"?"var(--t1)":"var(--border)";
+  renderStrategy();
+}
+
+function renderStrategy(){
+  const net=getNet(), mo=getCurMo(), moTotal=getMonthTotal(mo), rem=Math.max(0,net-moTotal), tEMI=getTotalEMI(), dr=net>0?((tEMI/net)*100).toFixed(0):0;
+  if(loans.length===0){document.getElementById("step-plan").innerHTML=`<div style="text-align:center;padding:30px;color:var(--t2)"><div style="font-size:28px;margin-bottom:10px">🏦</div><div>Add your loans in the Loans section first</div></div>`;return;}
+  if(rem<5000&&net>0){document.getElementById("st-alert").style.display="flex";document.getElementById("st-alert-body").textContent=`Your EMIs take ${dr}% of net salary. Only ${fmt(rem)} remains monthly. Stopping credit card usage is the single most impactful step right now.`;}
+  const av=[...loans].sort((a,b)=>b.rate-a.rate), sb=[...loans].sort((a,b)=>a.balance-b.balance);
+  const avR=simulate(av,rem), sbR=simulate(sb,rem);
+  document.getElementById("av-mo").textContent=avR.months;
+  document.getElementById("av-date").textContent=`months · debt-free ${toDate(avR.months)}`;
+  document.getElementById("av-int").textContent=fmt(avR.interest);
+  document.getElementById("sb-mo").textContent=sbR.months;
+  document.getElementById("sb-date").textContent=`months · debt-free ${toDate(sbR.months)}`;
+  document.getElementById("sb-int").textContent=fmt(sbR.interest);
+  // Step plan
+  const sorted=curMethod==="av"?av:sb;
+  document.getElementById("step-plan").innerHTML=sorted.map((l,i)=>{
+    const mo=l.emi>0?Math.ceil(l.balance/l.emi):0, isFirst=i===0, isLast=i===sorted.length-1;
+    return`<div style="display:flex;gap:14px;${isLast?"":"padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid var(--border)"}">
+      <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+        <div class="step-num" style="background:${isFirst?"var(--t1)":"var(--bg)"};color:${isFirst?"#fff":"var(--t2)"};border:${isFirst?"2px solid var(--t1)":"1.5px solid var(--border2)"}">${i+1}</div>
+        ${!isLast?`<div class="step-line"></div>`:""}
+      </div>
+      <div style="flex:1">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+          <div style="font-size:14px;font-weight:700">${l.name}</div>
+          <div style="font-size:14px;font-weight:700;color:${isFirst?"var(--blue)":"var(--t2)"}">${mo} mo</div>
+        </div>
+        <div style="font-size:12px;color:var(--t2);margin-bottom:8px">${fmtL(l.balance)} outstanding · ${l.rate}% p.a. · EMI ${fmt(l.emi)}/mo</div>
+        ${isFirst?`<div style="background:rgba(0,113,227,.07);border:1px solid rgba(0,113,227,.15);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--blue);font-weight:600">🎯 Focus all extra money here right now</div>`:`<div style="font-size:12px;color:var(--t2)">After Step ${i}: add the freed ₹${l.emi.toLocaleString("en-IN")}/mo EMI here as extra payment</div>`}
+      </div></div>`;
+  }).join("");
+  // Extra grid
+  const avBase=simulate(sorted,rem);
+  document.getElementById("extra-grid").innerHTML=[0,5000,10000,20000].map(ex=>{
+    const r=simulate(sorted,rem+ex), saved=ex>0?Math.max(0,avBase.interest-r.interest):0;
+    return`<div class="card-inset" style="text-align:center"><div style="font-size:11px;color:var(--t2);margin-bottom:8px">+${fmt(ex)}/mo extra</div><div style="font-size:26px;font-weight:700;letter-spacing:-1px;color:${ex===0?"var(--t2)":"var(--green)"}">${r.months}<span style="font-size:14px;font-weight:500"> mo</span></div><div style="font-size:11px;color:var(--t3);margin-top:4px">${toDate(r.months)}</div>${ex>0&&saved>0?`<div style="font-size:11px;color:var(--green);margin-top:4px;font-weight:600">Save ${fmt(saved)}</div>`:""}</div>`;
+  }).join("");
+}
+
+// ─── Grow ─────────────────────────────────────────────────────────────────────
+// ─── Grow Money ───────────────────────────────────────────────────────────────
+let growAILoaded = false;
+
+function renderGrow() {
+  const hasSal = !!salary;
+  document.getElementById("grow-empty").style.display = hasSal ? "none" : "flex";
+  document.getElementById("grow-content").style.display = hasSal ? "block" : "none";
+  if (!hasSal) return;
+
+  const net = getNet(), mo = getCurMo(), moTotal = getMonthTotal(mo);
+  const rem = net - moTotal, tDebt = getTotalDebt(), tEMI = getTotalEMI();
+  const dr = net > 0 ? ((tEMI / net) * 100).toFixed(0) : 0;
+  const investable = Math.max(0, rem);
+  const ccDebt = loans.filter(l => l.type === "cc").reduce((s, l) => s + l.balance, 0);
+
+  // ── Snapshot KPIs ──
+  const kpiStatus = ccDebt > 0 ? "Clear CC debt first" : tDebt > 0 ? "Paying down debt" : "Ready to invest";
+  const kpiColor = ccDebt > 0 ? "var(--red)" : tDebt > 0 ? "var(--orange)" : "var(--green)";
+  document.getElementById("grow-kpis").innerHTML = [
+    { tag: "Available to Invest", val: fmt(investable) + "/mo", sub: "after all expenses", color: investable > 5000 ? "var(--green)" : "var(--orange)" },
+    { tag: "EMI Burden", val: dr + "%", sub: "of net salary in EMIs", color: Number(dr) > 50 ? "var(--red)" : Number(dr) > 35 ? "var(--orange)" : "var(--green)" },
+    { tag: "Total Debt", val: fmtL(tDebt), sub: tDebt > 0 ? `${loans.length} active loan(s)` : "Debt free! 🎉", color: tDebt > 0 ? "var(--red)" : "var(--green)" },
+    { tag: "Priority Right Now", val: kpiStatus, sub: ccDebt > 0 ? `CC at 40%+ APR` : tDebt > 0 ? "Then invest" : "Start SIP today", color: kpiColor },
+  ].map(k => `<div class="kpi"><div class="kpi-tag">${k.tag}</div><div class="kpi-val" style="color:${k.color};font-size:${k.val.length > 10 ? "18px" : "26px"}">${k.val}</div><div class="kpi-sub">${k.sub}</div></div>`).join("");
+
+  // ── Reimbursement alert (only if salary has components suggesting reimbursements) ──
+  const reimb = document.getElementById("grow-reimb-alert");
+  if (salary.components && salary.components.some(c => c.name && (c.name.toLowerCase().includes("food") || c.name.toLowerCase().includes("fuel") || c.name.toLowerCase().includes("reimb")))) {
+    const totalReimb = salary.components.filter(c => c.amount > 0 && (c.name.toLowerCase().includes("food") || c.name.toLowerCase().includes("fuel") || c.name.toLowerCase().includes("reimb") || c.name.toLowerCase().includes("internet") || c.name.toLowerCase().includes("health"))).reduce((s, c) => s + c.amount, 0);
+    if (totalReimb > 0) {
+      reimb.style.display = "block";
+      reimb.innerHTML = `<div class="alert alert-green"><div class="alert-icon">💡</div><div><div class="alert-title" style="color:var(--green)">Unclaimed reimbursements on your payslip</div><div class="alert-body">Your payslip shows reimbursable components totalling ${fmt(totalReimb)}/month. Collect and submit bills to HR — this is completely tax-free income you may be missing.</div></div></div>`;
+    }
+  } else reimb.style.display = "none";
+
+  // ── SIP Calculator (personalised default) ──
+  const sipDefault = investable > 10000 ? Math.round(investable * 0.3 / 500) * 500 : investable > 3000 ? Math.round(investable * 0.5 / 500) * 500 : 2000;
+  document.getElementById("sip-amount").value = sipDefault;
+  document.getElementById("sip-slider").value = sipDefault;
+  document.getElementById("sip-slider").max = Math.max(50000, sipDefault * 2);
+  document.getElementById("sip-caption").textContent = investable > 0 ? `Based on your ₹${investable.toLocaleString("en-IN")}/month available — start with what you can` : "Enter an amount to model your wealth growth";
+  updateSIP();
+
+  // ── Auto-trigger AI if not yet loaded ──
+  if (!growAILoaded) {
+    growAILoaded = true;
+    loadGrowAI(false);
+  }
+}
+
+function updateSIP() {
+  const monthly = Number(document.getElementById("sip-amount").value) || 5000;
+  document.getElementById("sip-slider").value = Math.min(monthly, 50000);
+  const r = 0.12 / 12;
+  const grid = document.getElementById("sip-grid");
+  grid.innerHTML = [2, 5, 10, 20].map(years => {
+    const n = years * 12;
+    const fv = monthly * ((Math.pow(1 + r, n) - 1) / r) * (1 + r);
+    const invested = monthly * n;
+    const gain = fv - invested;
+    return `<div class="card-inset" style="text-align:center">
+      <div style="font-size:12px;color:var(--t2);margin-bottom:8px">${years} Year${years > 1 ? "s" : ""}</div>
+      <div class="med-num" style="color:var(--blue)">${fmtL(fv)}</div>
+      <div style="font-size:11px;color:var(--t3);margin-top:6px">Invested ${fmtL(invested)}</div>
+      <div style="font-size:11px;color:var(--green);margin-top:2px;font-weight:600">Gain ${fmtL(gain)}</div>
+    </div>`;
+  }).join("");
+}
+
+// ─── Live AI Advice with Web Search ──────────────────────────────────────────
+async function loadGrowAI(forceRefresh = false) {
+  const net = getNet(), mo = getCurMo(), moTotal = getMonthTotal(mo);
+  const rem = net - moTotal, tDebt = getTotalDebt(), tEMI = getTotalEMI();
+  const dr = net > 0 ? ((tEMI / net) * 100).toFixed(0) : 0;
+  const today = new Date().toLocaleDateString("en-IN", { day:"numeric", month:"long", year:"numeric" });
+
+  const d = monthData[mo] || {};
+  const topExp = [];
+  EXPENSE_CATEGORIES.forEach(cat => {
+    const t = cat.items.reduce((s,item)=>s+(d[item.id]||0),0);
+    if (t>0) topExp.push(`${cat.name}: ₹${t.toLocaleString("en-IN")}`);
+  });
+  topExp.sort();
+
+  document.getElementById("grow-loading").style.display = "block";
+  document.getElementById("grow-result").style.display = "none";
+  document.getElementById("refresh-btn").style.display = "none";
+  document.getElementById("grow-ai-sub").textContent = "Fetching live market data and building your plan...";
+
+  const lsIds = ["ls1-icon","ls2-icon","ls3-icon","ls4-icon"];
+  const lsMsgs = ["Checking Nifty 50 & market levels...","Scanning best FD & debt fund rates...","Checking RBI repo rate & loan rates...","Building your personalised plan..."];
+  let lsIdx = 0;
+  const lsInterval = setInterval(()=>{
+    if(lsIdx < lsIds.length){ document.getElementById(lsIds[lsIdx]).textContent="✓"; document.getElementById(lsIds[lsIdx]).style.color="var(--green)"; document.getElementById("loading-step").textContent=lsMsgs[Math.min(lsIdx+1,lsMsgs.length-1)]; lsIdx++; }
+  }, 1800);
+
+  const prompt = `You are a sharp Indian personal finance advisor. Today is ${today}.
+
+USER FINANCIAL PROFILE:
+- Net Monthly Salary: ₹${net.toLocaleString("en-IN")}
+- Monthly Expenses: ₹${moTotal.toLocaleString("en-IN")} (${net>0?((moTotal/net)*100).toFixed(0):0}% of salary)
+- Monthly Remaining After All Expenses: ₹${rem.toLocaleString("en-IN")}
+- Total Outstanding Debt: ₹${tDebt.toLocaleString("en-IN")}
+- Total Monthly EMIs: ₹${tEMI.toLocaleString("en-IN")} (${dr}% of income)
+- Loans & EMIs: ${loans.length>0 ? loans.map(l=>`${l.name} (₹${l.balance.toLocaleString("en-IN")} @ ${l.rate}%, EMI ₹${l.emi.toLocaleString("en-IN")})`).join("; ") : "None entered"}
+- Monthly Expenses by Category: ${topExp.join(", ") || "Not yet tracked"}
+- Salary Components: ${salary.components&&salary.components.filter(c=>c.amount>0).map(c=>`${c.name} ₹${c.amount}`).join(", ")||"Not available"}
+
+INSTRUCTIONS:
+First use web search to find today's live data:
+1. Current Nifty 50 level and 1-month % change
+2. Best FD rates today (SBI, HDFC, ICICI — mention exact % and tenure)
+3. Current RBI repo rate
+4. Best performing mutual fund category right now (large/flexi/index — with approximate returns)
+5. Gold price per 10g in India today
+
+Then return ONLY a single valid JSON object — no markdown fences, no preamble, no text outside the JSON:
+
+{
+  "summary": "<one sharp punchy sentence about this person's financial health, using their actual numbers>",
+  "health_score": <integer 0-100 based on debt ratio, savings rate, emergency fund status>,
+  "score_label": "<Poor | Tight | Fair | Good | Excellent>",
+  "market": [
+    { "label": "<metric name>", "value": "<current value>", "change": "<+/-X% / period>", "trend": "<up|down|stable>", "signal": "<good|neutral|caution|warning>", "note": "<1 sentence why this matters to this user specifically>" }
+  ],
+  "steps": [
+    { "n": 1, "priority": "<urgent|high|medium|low>", "title": "<action title>", "target": "<₹ amount>", "monthly": "<₹X/mo from their remaining>", "timeline": "<X months>", "why": "<1-2 sentences using their actual numbers>", "action": "<specific product/bank/fund name + exact step>" }
+  ],
+  "allocation": [
+    { "label": "<use label>", "pct": <integer>, "monthly_amt": <integer in rupees>, "instrument": "<specific fund/account name>", "color": "<red|orange|blue|green|purple>" }
+  ],
+  "milestones": [
+    { "date": "<Mon YYYY>", "event": "<what happens>", "amount": "<₹ freed or target>", "type": "<start|win|invest|goal>" }
+  ]
+}
+
+Rules:
+- allocation percentages must sum to 100
+- all amounts must be based on their ACTUAL remaining ₹${rem.toLocaleString("en-IN")}/month — not generic numbers
+- steps and milestones must use their real loan balances and real income
+- market data must come from your live search, not your training data
+- return ONLY the JSON object`;
+
+  try {
+    const resp = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST", headers:apiHeaders(),
+      body:JSON.stringify({
+        model:"claude-sonnet-4-20250514", max_tokens:2500,
+        tools:[{type:"web_search_20250305",name:"web_search"}],
+        messages:[{role:"user",content:prompt}]
+      })
+    });
+    const data = await resp.json();
+    const raw = (data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("").trim();
+    const jsonMatch = raw.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error("No JSON in response");
+    const parsed = JSON.parse(jsonMatch[0]);
+    clearInterval(lsInterval);
+    lsIds.forEach(id=>{document.getElementById(id).textContent="✓";document.getElementById(id).style.color="var(--green)";});
+    renderAIResult(parsed, today);
+  } catch(e) {
+    clearInterval(lsInterval);
+    document.getElementById("grow-loading").style.display = "none";
+    document.getElementById("grow-result").style.display = "block";
+    document.getElementById("grow-result").innerHTML = `<div class="alert alert-red"><div class="alert-icon">⚠️</div><div><div class="alert-title" style="color:var(--red)">Could not load live advice</div><div class="alert-body">Check your internet connection and try refreshing. Make sure your payslip is uploaded and expenses are added for the most personalised advice.</div></div></div>`;
+    document.getElementById("refresh-btn").style.display = "block";
+    document.getElementById("grow-ai-sub").textContent = "Live data unavailable — tap Refresh to retry";
+    if(forceRefresh) growAILoaded = false;
+  }
+}
+
+// ─── Render JSON into beautiful cards ────────────────────────────────────────
+function renderAIResult(d, today) {
+  const priorityMeta = {
+    urgent: { color:"#ff3b30", bg:"rgba(255,59,48,.08)", border:"rgba(255,59,48,.2)", label:"Urgent" },
+    high:   { color:"#ff9500", bg:"rgba(255,149,0,.08)",  border:"rgba(255,149,0,.2)",  label:"High" },
+    medium: { color:"#0071e3", bg:"rgba(0,113,227,.07)",  border:"rgba(0,113,227,.15)", label:"Medium" },
+    low:    { color:"#34c759", bg:"rgba(52,199,89,.07)",  border:"rgba(52,199,89,.15)", label:"Low" },
+  };
+  const signalMeta = {
+    good:    { color:"#34c759", bg:"rgba(52,199,89,.1)",   icon:"↑" },
+    neutral: { color:"#6b7280", bg:"rgba(107,114,128,.1)", icon:"→" },
+    caution: { color:"#ff9500", bg:"rgba(255,149,0,.1)",   icon:"!" },
+    warning: { color:"#ff3b30", bg:"rgba(255,59,48,.1)",   icon:"↓" },
+  };
+  const trendIcon = { up:"↑", down:"↓", stable:"→" };
+  const trendColor = { up:"#34c759", down:"#ff3b30", stable:"#6b7280" };
+  const colorMap = { red:"#ff3b30", orange:"#ff9500", blue:"#0071e3", green:"#34c759", purple:"#8b5cf6" };
+  const milestoneIcon = { start:"○", win:"★", invest:"◆", goal:"✦" };
+  const milestoneColor = { start:"#6b7280", win:"#34c759", invest:"#0071e3", goal:"#f0b429" };
+
+  const scoreColor = d.health_score>=70?"#34c759":d.health_score>=45?"#ff9500":"#ff3b30";
+  const circumference = 2*Math.PI*28;
+  const dashOffset = circumference - (d.health_score/100)*circumference;
+
+  let html = `
+  <!-- Summary Banner -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;background:var(--bg);border-radius:14px;border:1px solid var(--border);margin-bottom:24px;gap:20px">
+    <div>
+      <div style="font-size:11px;color:var(--t3);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Financial Health Summary</div>
+      <div style="font-size:15px;color:var(--t1);font-weight:600;line-height:1.5;max-width:520px">${d.summary||""}</div>
+    </div>
+    <div style="flex-shrink:0;text-align:center">
+      <svg width="72" height="72" style="transform:rotate(-90deg)">
+        <circle cx="36" cy="36" r="28" fill="none" stroke="rgba(0,0,0,.08)" stroke-width="5"/>
+        <circle cx="36" cy="36" r="28" fill="none" stroke="${scoreColor}" stroke-width="5" stroke-linecap="round"
+          stroke-dasharray="${circumference}" stroke-dashoffset="${dashOffset}" style="transition:stroke-dashoffset .8s ease"/>
+      </svg>
+      <div style="margin-top:-52px;font-size:18px;font-weight:800;color:${scoreColor}">${d.health_score||0}</div>
+      <div style="margin-top:32px;font-size:11px;color:var(--t3);font-weight:600">${d.score_label||""}</div>
+    </div>
+  </div>
+
+  <!-- Market Snapshot -->
+  <div style="margin-bottom:24px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+      <div style="width:3px;height:18px;background:#0071e3;border-radius:2px"></div>
+      <div style="font-size:13px;font-weight:800;color:var(--t1);letter-spacing:-.2px">Market Snapshot <span style="font-size:11px;font-weight:500;color:var(--t3);margin-left:6px">${today}</span></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:10px">
+    ${(d.market||[]).map(m=>{
+      const sm = signalMeta[m.signal]||signalMeta.neutral;
+      const tc = trendColor[m.trend]||"#6b7280";
+      const ti = trendIcon[m.trend]||"→";
+      return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;position:relative;overflow:hidden">
+        <div style="position:absolute;top:0;right:0;width:36px;height:36px;background:${sm.bg};border-radius:0 14px 0 14px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:${sm.color}">${sm.icon}</div>
+        <div style="font-size:11px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">${m.label}</div>
+        <div style="font-size:20px;font-weight:800;color:var(--t1);letter-spacing:-.5px;margin-bottom:4px">${m.value}</div>
+        <div style="font-size:12px;font-weight:600;color:${tc};margin-bottom:10px">${ti} ${m.change}</div>
+        <div style="font-size:11px;color:var(--t2);line-height:1.5;border-top:1px solid var(--border);padding-top:8px">${m.note}</div>
+      </div>`;
+    }).join("")}
+    </div>
+  </div>
+
+  <!-- Priority Action Plan -->
+  <div style="margin-bottom:24px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+      <div style="width:3px;height:18px;background:#ff9500;border-radius:2px"></div>
+      <div style="font-size:13px;font-weight:800;color:var(--t1);letter-spacing:-.2px">Your Priority Action Plan</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+    ${(d.steps||[]).map(s=>{
+      const pm = priorityMeta[s.priority]||priorityMeta.medium;
+      return `<div style="background:var(--surface);border:1px solid ${pm.border};border-radius:14px;overflow:hidden">
+        <div style="display:flex;align-items:stretch">
+          <div style="width:4px;background:${pm.color};flex-shrink:0"></div>
+          <div style="padding:16px 18px;flex:1">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="width:26px;height:26px;border-radius:50%;background:${pm.color};color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0">${s.n}</div>
+                <div style="font-size:14px;font-weight:700;color:var(--t1)">${s.title}</div>
+              </div>
+              <span style="background:${pm.bg};color:${pm.color};border:1px solid ${pm.border};padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.4px;white-space:nowrap;flex-shrink:0">${pm.label}</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+              <div style="background:var(--bg);border-radius:9px;padding:9px 12px">
+                <div style="font-size:9px;color:var(--t3);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Target</div>
+                <div style="font-size:13px;font-weight:700;color:var(--t1)">${s.target||"—"}</div>
+              </div>
+              <div style="background:var(--bg);border-radius:9px;padding:9px 12px">
+                <div style="font-size:9px;color:var(--t3);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Monthly</div>
+                <div style="font-size:13px;font-weight:700;color:${pm.color}">${s.monthly||"—"}</div>
+              </div>
+              <div style="background:var(--bg);border-radius:9px;padding:9px 12px">
+                <div style="font-size:9px;color:var(--t3);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Timeline</div>
+                <div style="font-size:13px;font-weight:700;color:var(--t1)">${s.timeline||"—"}</div>
+              </div>
+            </div>
+            <div style="font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:10px">${s.why||""}</div>
+            <div style="display:flex;align-items:flex-start;gap:8px;background:${pm.bg};border-radius:9px;padding:10px 12px;border:1px solid ${pm.border}">
+              <div style="color:${pm.color};font-size:12px;margin-top:1px;flex-shrink:0;font-weight:700">→</div>
+              <div style="font-size:12px;color:${pm.color};font-weight:600;line-height:1.5">${s.action||""}</div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    }).join("")}
+    </div>
+  </div>
+
+  <!-- Investment Allocation -->
+  ${d.allocation && d.allocation.length>0 ? `
+  <div style="margin-bottom:24px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+      <div style="width:3px;height:18px;background:#34c759;border-radius:2px"></div>
+      <div style="font-size:13px;font-weight:800;color:var(--t1);letter-spacing:-.2px">How to Split Your ₹${(d.allocation.reduce((s,a)=>s+a.monthly_amt,0)).toLocaleString("en-IN")}/month</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px">
+      <!-- Stacked bar -->
+      <div style="display:flex;height:10px;border-radius:5px;overflow:hidden;margin-bottom:20px;gap:2px">
+        ${(d.allocation||[]).map(a=>`<div style="width:${a.pct}%;background:${colorMap[a.color]||"#6b7280"};border-radius:3px;transition:width .8s"></div>`).join("")}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+      ${(d.allocation||[]).map(a=>{
+        const c = colorMap[a.color]||"#6b7280";
+        return `<div style="display:flex;align-items:center;gap:14px">
+          <div style="width:10px;height:10px;border-radius:3px;background:${c};flex-shrink:0"></div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:5px">
+              <div style="font-size:13px;font-weight:600;color:var(--t1)">${a.label}</div>
+              <div style="font-size:13px;font-weight:700;color:var(--t1);flex-shrink:0;margin-left:12px">₹${(a.monthly_amt||0).toLocaleString("en-IN")}/mo</div>
+            </div>
+            <div style="height:5px;background:var(--bg);border-radius:3px;overflow:hidden;margin-bottom:5px">
+              <div style="width:${a.pct}%;height:100%;background:${c};border-radius:3px;transition:width .8s"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div style="font-size:11px;color:var(--t3)">${a.instrument||""}</div>
+              <div style="font-size:11px;font-weight:700;color:${c}">${a.pct}%</div>
+            </div>
+          </div>
+        </div>`;
+      }).join("")}
+      </div>
+    </div>
+  </div>` : ""}
+
+  <!-- Financial Timeline -->
+  ${d.milestones && d.milestones.length>0 ? `
+  <div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+      <div style="width:3px;height:18px;background:#8b5cf6;border-radius:2px"></div>
+      <div style="font-size:13px;font-weight:800;color:var(--t1);letter-spacing:-.2px">Your Financial Timeline</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 24px">
+    ${(d.milestones||[]).map((m,i)=>{
+      const isLast = i===d.milestones.length-1;
+      const mc = milestoneColor[m.type]||"#6b7280";
+      const mi = milestoneIcon[m.type]||"○";
+      const isGoal = m.type==="goal";
+      return `<div style="display:flex;gap:18px;${isLast?"":"padding-bottom:0"}">
+        <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:28px">
+          <div style="width:28px;height:28px;border-radius:50%;background:${isGoal?"#f0b429":mc+"18"};border:2px solid ${isGoal?"#f0b429":mc};display:flex;align-items:center;justify-content:center;font-size:12px;color:${isGoal?"#000":mc};font-weight:800;flex-shrink:0">${isGoal?"★":mi}</div>
+          ${!isLast?`<div style="width:1px;flex:1;min-height:24px;background:var(--border);margin:4px 0"></div>`:""}
+        </div>
+        <div style="padding-bottom:${isLast?"0":"20px"};flex:1">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:2px">
+            <div style="font-size:14px;font-weight:${isGoal?"800":"600"};color:${isGoal?"#f0b429":"var(--t1)"}">${m.event}</div>
+            <div style="font-size:11px;font-weight:600;color:var(--t3);flex-shrink:0">${m.date}</div>
+          </div>
+          ${m.amount?`<div style="font-size:12px;font-weight:600;color:${mc}">${m.amount}</div>`:""}
+        </div>
+      </div>`;
+    }).join("")}
+    </div>
+  </div>` : ""}`;
+
+  document.getElementById("grow-loading").style.display = "none";
+  document.getElementById("grow-result").style.display = "block";
+  document.getElementById("grow-result").innerHTML = html;
+  document.getElementById("grow-ai-sub").textContent = `Live data · ${today}`;
+  document.getElementById("refresh-btn").style.display = "block";
+  document.getElementById("live-dot").style.background = "var(--green)";
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+loadData();
+updateSalaryUI();
+updateKeyUI();
+updateSIP();
+if (salary) renderOverview();
+</script>
+</body>
+</html>

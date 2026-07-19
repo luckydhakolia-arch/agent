@@ -3,8 +3,10 @@
 A local-first, single-file training companion for the 8-week Phase 1 program:
 dumbbells + bodyweight, 3 rotating sessions/week (A/B/C), 35–45 min each.
 
-**Run it:** open `index.html` in any modern browser. No server, no build step,
-no dependencies. All data lives in the browser's `localStorage` (use
+**Live:** https://luckydhakolia-arch.github.io/agent/ascend/
+
+**Run it locally:** open `index.html` in any modern browser. No server, no build
+step, no dependencies. All data lives in the browser's `localStorage` (use
 Sync → Backup to export/restore).
 
 ## What's inside

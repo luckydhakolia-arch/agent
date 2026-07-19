@@ -118,4 +118,6 @@ Add a new entry to `PLATFORM_CONFIGS` in `src/platforms.py` and include the plat
 `ascend/` contains ASCEND — a self-contained, single-file fitness app for the
 Phase 1: FOUNDATION training program (see `ascend/README.md`). It is unrelated
 to the social media agent above: no Python, no build step — open
-`ascend/index.html` in a browser.
+`ascend/index.html` in a browser, or use the live deployment at
+https://luckydhakolia-arch.github.io/agent/ascend/ (GitHub Pages, deployed
+from `main` by `.github/workflows/pages.yml`).

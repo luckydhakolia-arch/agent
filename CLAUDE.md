@@ -112,3 +112,10 @@ Add a new entry to `PLATFORM_CONFIGS` in `src/platforms.py` and include the plat
 **`posts`**: id, platform, content, hashtags (JSON), media_desc, scheduled_for, content_type, topic_category, status (pending/published/failed), created_at, published_at
 
 **`trends`**: id, topic, platforms (JSON), hashtags (JSON), description, relevance_score, discovered_at
+
+## ASCEND (separate app)
+
+`ascend/` contains ASCEND — a self-contained, single-file fitness app for the
+Phase 1: FOUNDATION training program (see `ascend/README.md`). It is unrelated
+to the social media agent above: no Python, no build step — open
+`ascend/index.html` in a browser.

@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>ASCEND — Phase 1: Foundation</title>
+<style>
+/* ============================================================
+   ASCEND — dark game UI. Chart colors follow the validated
+   reference palette (dark-surface steps).
+   ============================================================ */
+:root {
+  color-scheme: dark;
+  --page:        #0d0d0d;
+  --surface:     #1a1a19;
+  --surface-2:   #232322;
+  --ink:         #ffffff;
+  --ink-2:       #c3c2b7;
+  --ink-mute:    #898781;
+  --grid:        #2c2c2a;
+  --baseline:    #383835;
+  --ring:        rgba(255,255,255,0.10);
+  --accent:      #3987e5;   /* series-1 dark step */
+  --accent-deep: #1c5cab;
+  --accent-soft: rgba(57,135,229,0.16);
+  --good:        #0ca30c;
+  --warning:     #fab219;
+  --serious:     #ec835a;
+  --critical:    #d03b3b;
+  --mana:        #9085e9;   /* violet, dark step */
+  --radius: 14px;
+  --font: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: calc(76px + env(safe-area-inset-bottom));
+}
+.wrap { max-width: 560px; margin: 0 auto; padding: 0 16px; }
+
+/* ---------- header ---------- */
+header.app {
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(13,13,13,0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--ring);
+}
+.app-bar { display: flex; align-items: center; gap: 12px; padding: 12px 16px 10px; }
+.logo {
+  font-weight: 800; font-size: 20px; letter-spacing: 0.22em;
+}
+.logo .up { color: var(--accent); }
+.phase-tag {
+  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-mute); margin-top: 2px;
+}
+.lvl-block { margin-left: auto; text-align: right; min-width: 130px; }
+.lvl-line { font-size: 12px; color: var(--ink-2); display: flex; justify-content: flex-end; gap: 8px; align-items: baseline; }
+.lvl-line b { color: var(--ink); font-size: 14px; }
+.xpbar { height: 5px; border-radius: 3px; background: var(--surface-2); margin-top: 5px; overflow: hidden; }
+.xpbar > i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent-deep), var(--accent)); border-radius: 3px; }
+
+/* ---------- cards & typography ---------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--ring);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin: 14px 0;
+}
+.card.flat { background: transparent; }
+h2.sec {
+  font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink-mute); font-weight: 700; margin: 22px 0 6px;
+}
+.card h3 { margin: 0 0 6px; font-size: 17px; }
+.sub { color: var(--ink-2); font-size: 14px; margin: 2px 0; }
+.mini { color: var(--ink-mute); font-size: 12.5px; }
+.mono { font-variant-numeric: tabular-nums; }
+hr.hair { border: 0; border-top: 1px solid var(--ring); margin: 12px 0; }
+
+/* ---------- banners ---------- */
+.banner {
+  border-radius: var(--radius); padding: 12px 14px; margin: 14px 0;
+  font-size: 14px; display: flex; gap: 10px; align-items: flex-start;
+  border: 1px solid;
+}
+.banner .ico { font-size: 18px; line-height: 1.2; }
+.banner.mana   { border-color: rgba(144,133,233,.45); background: rgba(144,133,233,.10); color: #cfc9ff; }
+.banner.warn   { border-color: rgba(250,178,25,.4);  background: rgba(250,178,25,.08);  color: #ffd97a; }
+.banner.danger { border-color: rgba(208,59,59,.45);  background: rgba(208,59,59,.10);   color: #ff9d9d; }
+.banner.okay   { border-color: rgba(12,163,12,.4);   background: rgba(12,163,12,.08);   color: #7fe07f; }
+.banner b { color: inherit; }
+
+/* ---------- buttons ---------- */
+button { font-family: inherit; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  border-radius: 12px; border: 1px solid var(--ring);
+  background: var(--surface-2); color: var(--ink);
+  font-size: 15px; font-weight: 600; padding: 12px 18px;
+  cursor: pointer; transition: filter .12s ease, transform .05s ease;
+  text-align: center;
+}
+.btn:active { transform: translateY(1px); }
+.btn:hover { filter: brightness(1.15); }
+.btn.primary { background: var(--accent); border-color: transparent; color: #fff; }
+.btn.big { width: 100%; padding: 15px 18px; font-size: 16px; }
+.btn.ghost { background: transparent; }
+.btn.small { padding: 7px 12px; font-size: 13px; border-radius: 10px; }
+.btn.subtle { background: transparent; border-color: transparent; color: var(--ink-mute); font-weight: 500; }
+.btn.danger-ghost { background: transparent; color: var(--critical); border-color: rgba(208,59,59,.4); }
+.btn[disabled] { opacity: .45; cursor: default; }
+.btnrow { display: flex; gap: 10px; margin-top: 12px; }
+.btnrow .btn { flex: 1; }
+/* Reschedule must be more prominent than Skip (coach's rule) */
+.btnrow .btn.resched { flex: 2; }
+
+.chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+.chip {
+  border: 1px solid var(--ring); background: var(--surface-2); color: var(--ink-2);
+  border-radius: 999px; padding: 7px 14px; font-size: 13.5px; font-weight: 600; cursor: pointer;
+}
+.chip.on { background: var(--accent-soft); border-color: var(--accent); color: #bcd8ff; }
+
+/* ---------- quest ---------- */
+.quest-item { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--ring); }
+.quest-item:last-child { border-bottom: 0; }
+.q-check {
+  width: 26px; height: 26px; border-radius: 8px; flex: none;
+  border: 2px solid var(--baseline); display: flex; align-items: center; justify-content: center;
+  font-size: 15px; color: transparent; background: var(--surface-2);
+}
+.q-check.done { background: var(--good); border-color: var(--good); color: #fff; }
+.q-body { flex: 1; min-width: 0; }
+.q-name { font-weight: 600; font-size: 15px; }
+.q-detail { font-size: 12.5px; color: var(--ink-mute); }
+.q-detail .auto { color: var(--accent); font-weight: 600; }
+.q-input { width: 76px; flex: none; }
+input[type=number], input[type=text], input[type=date], select {
+  width: 100%; background: var(--surface-2); color: var(--ink);
+  border: 1px solid var(--ring); border-radius: 10px;
+  padding: 9px 10px; font-size: 15px; font-family: inherit;
+}
+input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+label.lbl { display: block; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-mute); margin: 12px 0 5px; font-weight: 700; }
+
+/* ---------- session player ---------- */
+.ex-card { border: 1px solid var(--ring); border-radius: 12px; padding: 12px 14px; margin: 10px 0; background: var(--surface); }
+.ex-head { display: flex; align-items: baseline; gap: 10px; }
+.ex-tag { font-size: 12px; font-weight: 800; color: var(--accent); letter-spacing: .05em; flex: none; width: 26px; }
+.ex-name { font-weight: 700; font-size: 15.5px; flex: 1; }
+.ex-rx { font-size: 12.5px; color: var(--ink-2); margin: 3px 0 8px 36px; }
+.ex-rx b { color: var(--ink); }
+.set-row { display: flex; align-items: center; gap: 8px; margin: 6px 0 6px 36px; }
+.set-no { font-size: 12px; color: var(--ink-mute); width: 38px; flex: none; }
+.set-row input { width: 74px; padding: 7px 8px; font-size: 14px; text-align: center; }
+.set-done {
+  margin-left: auto; width: 34px; height: 34px; border-radius: 10px; flex: none;
+  border: 2px solid var(--baseline); background: var(--surface-2); color: transparent;
+  font-size: 16px; cursor: pointer;
+}
+.set-done.on { background: var(--good); border-color: var(--good); color: #fff; }
+.warm-item { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--ring); font-size: 14.5px; color: var(--ink-2); align-items: center; cursor: pointer; }
+.warm-item:last-child { border: 0; }
+.warm-item .q-check { width: 22px; height: 22px; font-size: 12px; }
+.warm-item.done { color: var(--ink-mute); text-decoration: line-through; }
+
+/* rest timer */
+#restbar {
+  position: fixed; left: 0; right: 0; bottom: calc(64px + env(safe-area-inset-bottom)); z-index: 50;
+  display: none;
+}
+#restbar.on { display: block; }
+.rest-inner {
+  max-width: 560px; margin: 0 auto; padding: 0 16px;
+}
+.rest-card {
+  background: var(--accent-deep); border-radius: 14px; padding: 12px 16px;
+  display: flex; align-items: center; gap: 14px; box-shadow: 0 8px 30px rgba(0,0,0,.5);
+  border: 1px solid rgba(255,255,255,.18);
+}
+.rest-time { font-size: 26px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.rest-label { font-size: 12.5px; color: #cfe2ff; flex: 1; }
+.rest-track { height: 4px; background: rgba(255,255,255,.25); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+.rest-track > i { display: block; height: 100%; background: #fff; }
+
+/* ---------- stat tiles ---------- */
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; }
+.tile { background: var(--surface); border: 1px solid var(--ring); border-radius: 12px; padding: 12px 14px; }
+.tile .t-label { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-mute); font-weight: 700; }
+.tile .t-value { font-size: 26px; font-weight: 800; margin-top: 2px; }
+.tile .t-sub { font-size: 12px; color: var(--ink-2); }
+.tile .t-value .unit { font-size: 14px; color: var(--ink-mute); font-weight: 600; }
+
+/* ---------- charts ---------- */
+.chart-card { position: relative; }
+.chart-box { position: relative; margin-top: 8px; }
+.chart-box svg { display: block; width: 100%; height: auto; }
+.viz-tip {
+  position: absolute; pointer-events: none; display: none; z-index: 5;
+  background: #262625; border: 1px solid var(--ring); border-radius: 8px;
+  padding: 6px 9px; font-size: 12px; color: var(--ink-2); white-space: nowrap;
+  transform: translate(-50%, -110%);
+}
+.viz-tip b { color: var(--ink); font-variant-numeric: tabular-nums; }
+details.dtable { margin-top: 8px; }
+details.dtable summary { font-size: 12px; color: var(--ink-mute); cursor: pointer; }
+details.dtable table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 12.5px; }
+details.dtable th, details.dtable td { text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--grid); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+details.dtable th { color: var(--ink-mute); font-weight: 600; }
+.empty-note { color: var(--ink-mute); font-size: 13.5px; padding: 14px 0; text-align: center; }
+
+/* ---------- sync ---------- */
+.dropzone {
+  border: 2px dashed var(--baseline); border-radius: var(--radius);
+  padding: 28px 16px; text-align: center; color: var(--ink-2); cursor: pointer;
+  transition: border-color .15s ease, background .15s ease; margin: 12px 0;
+}
+.dropzone.hot { border-color: var(--accent); background: var(--accent-soft); }
+.dropzone .big-ico { font-size: 30px; }
+pre.schema {
+  background: #111110; border: 1px solid var(--ring); border-radius: 10px;
+  padding: 12px; overflow-x: auto; font-size: 12px; line-height: 1.5; color: var(--ink-2);
+}
+.progress-outer { height: 8px; border-radius: 4px; background: var(--surface-2); overflow: hidden; margin: 10px 0; }
+.progress-outer > i { display: block; height: 100%; background: var(--accent); transition: width .1s linear; }
+.map-row { display: flex; align-items: center; gap: 10px; margin: 8px 0; }
+.map-row .fld { flex: 1; font-size: 13.5px; color: var(--ink-2); }
+.map-row select { flex: 1.4; }
+
+/* ---------- guide tables ---------- */
+table.guide { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0; }
+table.guide th, table.guide td { text-align: left; padding: 6px 7px; border-bottom: 1px solid var(--grid); color: var(--ink-2); }
+table.guide th { color: var(--ink-mute); text-transform: uppercase; font-size: 10.5px; letter-spacing: .1em; }
+table.guide td:first-child { color: var(--ink); font-weight: 600; white-space: nowrap; }
+.gtable-scroll { overflow-x: auto; }
+ul.tight { margin: 6px 0; padding-left: 20px; color: var(--ink-2); font-size: 14px; }
+ul.tight li { margin: 6px 0; }
+ul.tight b { color: var(--ink); }
+
+/* ---------- bottom nav ---------- */
+nav.tabs {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 60;
+  background: rgba(13,13,13,.96); backdrop-filter: blur(8px);
+  border-top: 1px solid var(--ring);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.tabs-inner { max-width: 560px; margin: 0 auto; display: flex; }
+.tab {
+  flex: 1; background: none; border: 0; color: var(--ink-mute);
+  padding: 9px 0 8px; cursor: pointer; font-size: 10.5px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+}
+.tab .t-ico { font-size: 19px; line-height: 1; }
+.tab.on { color: var(--accent); }
+
+/* misc */
+.row { display: flex; align-items: center; gap: 10px; }
+.grow { flex: 1; }
+.right { text-align: right; }
+.hidden { display: none !important; }
+.center { text-align: center; }
+.toast {
+  position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(84px + env(safe-area-inset-bottom));
+  background: #262625; color: var(--ink); border: 1px solid var(--ring);
+  border-radius: 999px; padding: 10px 18px; font-size: 14px; z-index: 100;
+  box-shadow: 0 6px 24px rgba(0,0,0,.5); opacity: 0; transition: opacity .2s ease;
+  pointer-events: none; white-space: nowrap;
+}
+.toast.show { opacity: 1; }
+.pill { display: inline-block; border-radius: 999px; padding: 2px 10px; font-size: 11px; font-weight: 700; letter-spacing: .06em; }
+.pill.deload { background: rgba(12,163,12,.15); color: #7fe07f; }
+.pill.boss { background: rgba(208,59,59,.18); color: #ff9d9d; }
+.pill.week { background: var(--accent-soft); color: #bcd8ff; }
+</style>
+</head>
+<body>
+
+<header class="app">
+  <div class="wrap app-bar">
+    <div>
+      <div class="logo">ASC<span class="up">▲</span>ND</div>
+      <div class="phase-tag" id="phaseTag">Phase 1 · Foundation</div>
+    </div>
+    <div class="lvl-block">
+      <div class="lvl-line"><span id="hdrWeek"></span><b id="hdrLvl">LVL 1</b></div>
+      <div class="xpbar"><i id="hdrXp" style="width:0%"></i></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="view" aria-live="polite"></main>
+
+<div id="restbar">
+  <div class="rest-inner">
+    <div class="rest-card">
+      <div class="rest-time mono" id="restTime">0:00</div>
+      <div class="rest-label">
+        <span id="restLabel">Rest</span>
+        <div class="rest-track"><i id="restFill" style="width:100%"></i></div>
+      </div>
+      <button class="btn small ghost" id="restSkip" style="border-color:rgba(255,255,255,.3);color:#fff">Skip</button>
+    </div>
+  </div>
+</div>
+
+<nav class="tabs">
+  <div class="tabs-inner" id="tabbar">
+    <button class="tab on" data-tab="home"><span class="t-ico">⌂</span>Home</button>
+    <button class="tab" data-tab="train"><span class="t-ico">⚔︎</span>Train</button>
+    <button class="tab" data-tab="progress"><span class="t-ico">📈</span>Progress</button>
+    <button class="tab" data-tab="sync"><span class="t-ico">⇄</span>Sync</button>
+    <button class="tab" data-tab="guide"><span class="t-ico">✦</span>Guide</button>
+  </div>
+</nav>
+
+<div class="toast" id="toast"></div>
+<script>
+"use strict";
+/* ============================================================
+   ASCEND — Phase 1: FOUNDATION
+   Single-file app. Data layer is hard-coded from the coach's
+   program document — it is authoritative content, not generated.
+   ============================================================ */
+
+/* ---------------- PROGRAM DATA (authoritative) ---------------- */
+
+const PROGRAM = {
+  phase: 1,
+  name: "FOUNDATION",
+  weeks: 8,
+  perWeek: 3,
+  equipment: "Dumbbells + bodyweight",
+  sessionLength: "35–45 min",
+  rotationNote: "Three rotating sessions — A, B, C — run in order, three times a week on non-consecutive days. Monday/Wednesday/Friday, or Tuesday/Thursday/Saturday. Never two in a row.",
+  weekPlan: [
+    { week: 1, setsMain: 2, setsRest: 2, reps: [10, 12], rpe: "5–6", note: "Technique only. Go embarrassingly light." },
+    { week: 2, setsMain: 3, setsRest: 3, reps: [10, 12], rpe: "6",   note: "Same loads as week 1. Add the third set." },
+    { week: 3, setsMain: 3, setsRest: 3, reps: [10, 12], rpe: "7",   note: "First real load increase." },
+    { week: 4, setsMain: 3, setsRest: 3, reps: [8, 10],  rpe: "7–8", note: "Heavier. Boss Fight at end of week.", boss: true },
+    { week: 5, setsMain: 4, setsRest: 3, reps: [8, 10],  rpe: "8",   note: "Peak volume." },
+    { week: 6, setsMain: 2, setsRest: 2, reps: [8, 8],   rpe: "5",   note: "DELOAD. Non-negotiable. Recovery gate.", deload: true },
+    { week: 7, setsMain: 4, setsRest: 3, reps: [8, 10],  rpe: "8",   note: "Load up from week 5 numbers." },
+    { week: 8, setsMain: 3, setsRest: 3, reps: [6, 8],   rpe: "8",   note: "Heaviest loads. Boss Fight at end.", boss: true }
+  ],
+  rpeScale: [
+    ["RPE 6", "could do 4 more reps"],
+    ["RPE 7", "could do 3 more reps"],
+    ["RPE 8", "could do 2 more reps"],
+    ["RPE 9", "could do 1 more rep"],
+    ["RPE 10", "failure — never train here in Phase 1"]
+  ],
+  restRule: "90 sec after compound lifts (squat, press, row, hinge). 45–60 sec after core and carries.",
+  warmup: [
+    "30 sec — March in place, arms swinging",
+    "10 each — Cat/cow",
+    "10 each side — World's greatest stretch",
+    "15 — Bodyweight glute bridge",
+    "10 each arm — Band or towel shoulder dislocate",
+    "10 — Bodyweight squat, slow"
+  ],
+  warmupNote: "Purpose: raise core temperature and get blood into the tissue. Do not skip — you sit for 14 hours a day and your hips and thoracic spine are locked up.",
+  cooldown: "3 min cool-down — easy walking pace, slow nasal breathing, let the heart rate settle.",
+  sessions: {
+    A: {
+      key: "A", title: "Squat + Push", emphasis: "Squat + Horizontal Push emphasis",
+      focus: "This is your heaviest lower-body day. The goblet squat teaches you to squat with an upright torso — the dumbbell held at your chest acts as a counterweight, which is exactly what a desk-bound body needs before it ever touches a barbell.",
+      exercises: [
+        { id: "A1", name: "Goblet Squat",            main: true,  kind: "reps",      base: [10, 12], weekReps: true,  perSide: false, tempo: "3-1-1-0", rest: 90, weighted: true },
+        { id: "A2", name: "DB Floor Press",          main: true,  kind: "reps",      base: [10, 12], weekReps: true,  perSide: false, tempo: "3-0-1-0", rest: 90, weighted: true },
+        { id: "A3", name: "One-Arm DB Row",          main: false, kind: "reps",      base: [10, 12], weekReps: true,  perSide: true,  tempo: "2-1-1-1", rest: 75, weighted: true },
+        { id: "A4", name: "DB Romanian Deadlift",    main: false, kind: "reps",      base: [10, 12], weekReps: true,  perSide: false, tempo: "3-1-1-0", rest: 90, weighted: true },
+        { id: "A5", name: "Dead Bug",                main: false, kind: "reps",      base: [8, 8],   weekReps: false, perSide: true,  tempo: "slow",    rest: 45, weighted: false },
+        { id: "A6", name: "Farmer Carry",            main: false, kind: "time",      base: 30,       weekReps: false, perSide: false, tempo: "—",       rest: 60, weighted: true }
+      ]
+    },
+    B: {
+      key: "B", title: "Hinge + Overhead Push", emphasis: "Hinge + Vertical Push emphasis",
+      focus: "The RDL is the single most valuable movement in this phase. It trains the entire posterior chain — the muscles a chair spends all day switching off. Master the hip hinge here and the barbell deadlift in Phase 3 becomes almost trivial to learn.",
+      exercises: [
+        { id: "B1", name: "DB Romanian Deadlift",        main: true,  kind: "reps", base: [10, 12], weekReps: true,  perSide: false, tempo: "3-1-1-0", rest: 90, weighted: true },
+        { id: "B2", name: "DB Overhead Press (standing)", main: true, kind: "reps", base: [10, 12], weekReps: true,  perSide: false, tempo: "2-0-1-0", rest: 90, weighted: true },
+        { id: "B3", name: "DB Split Squat (rear foot on floor)", main: false, kind: "reps", base: [8, 10], weekReps: false, perSide: true, tempo: "2-1-1-0", rest: 75, weighted: true },
+        { id: "B4", name: "Chest-Supported DB Row (incline bench or floor-braced)", main: false, kind: "reps", base: [10, 12], weekReps: true, perSide: false, tempo: "2-1-1-1", rest: 75, weighted: true },
+        { id: "B5", name: "Side Plank",                  main: false, kind: "time-side", base: 20, weekReps: false, perSide: true,  tempo: "—", rest: 45, weighted: false },
+        { id: "B6", name: "Suitcase Carry",              main: false, kind: "time-side", base: 30, weekReps: false, perSide: true,  tempo: "—", rest: 60, weighted: true }
+      ]
+    },
+    C: {
+      key: "C", title: "Unilateral + Pull", emphasis: "Unilateral + Pull emphasis",
+      focus: "Pull volume is deliberately highest here. You have a desk-worker's rounded posture — you need roughly twice as much pulling as pressing to correct it. The tempo squat builds control at low load, which protects your knees.",
+      exercises: [
+        { id: "C1", name: "Goblet Squat (tempo)",        main: true,  kind: "reps", base: [10, 10], weekReps: false, perSide: false, tempo: "4-2-1-0", rest: 90, weighted: true },
+        { id: "C2", name: "One-Arm DB Row",              main: true,  kind: "reps", base: [10, 12], weekReps: true,  perSide: true,  tempo: "2-1-1-1", rest: 75, weighted: true },
+        { id: "C3", name: "DB Floor Press (neutral grip)", main: false, kind: "reps", base: [10, 12], weekReps: true, perSide: false, tempo: "3-0-1-0", rest: 90, weighted: true },
+        { id: "C4", name: "DB Hip Thrust / Glute Bridge (shoulders on floor)", main: false, kind: "reps", base: [12, 15], weekReps: false, perSide: false, tempo: "2-1-1-1", rest: 75, weighted: true },
+        { id: "C5", name: "DB Pullover",                 main: false, kind: "reps", base: [12, 12], weekReps: false, perSide: false, tempo: "3-0-1-0", rest: 60, weighted: true },
+        { id: "C6", name: "Front Plank",                 main: false, kind: "time", base: 30,       weekReps: false, perSide: false, tempo: "—", rest: 45, weighted: false }
+      ]
+    }
+  },
+  bossFight: {
+    note: "Run these as a standalone short session, not added onto a training day. Chart all five over time. Week 8 vs week 4 is your proof the program is working — more reliable than the scale, which will be noisy on semaglutide.",
+    items: [
+      { id: "squatReps", name: "Goblet Squat",       detail: "Max reps at your week-1 working weight, stopping at RPE 9", unit: "reps" },
+      { id: "carrySec",  name: "Farmer Carry",       detail: "Max time with the heaviest pair you own",                   unit: "sec" },
+      { id: "plankSec",  name: "Front Plank",        detail: "Max hold",                                                  unit: "sec" },
+      { id: "pushups",   name: "Push-up",            detail: "Max reps (from knees if needed; log which)",                unit: "reps" },
+      { id: "waistCm",   name: "Waist circumference", detail: "At navel, morning, no shirt",                              unit: "cm" }
+    ]
+  },
+  quests: [
+    { id: "protein", name: "Protein", target: 110, targetHigh: 130, unit: "g",     detail: "110–130 g. The whole game — front-load it: eggs, dahi, paneer, chicken, whey.", input: "number" },
+    { id: "steps",   name: "Steps",   target: 8000, unit: "steps",  detail: "8,000/day. Three 10-min post-meal walks blunt glucose spikes specifically.", input: "number", healthKey: "steps" },
+    { id: "sleep",   name: "Sleep",   target: 7,    unit: "h",      detail: "7 hours. Decides whether training produces muscle or just fatigue.", input: "number", step: 0.1, healthKey: "sleepHours" },
+    { id: "vitd",    name: "Vitamin D + supplements", target: 1, unit: "", detail: "As prescribed.", input: "check" }
+  ],
+  questNote: "Protein is the whole game. On semaglutide your appetite is suppressed, and a calorie deficit without adequate protein means you lose muscle alongside fat. If you hit only one target, hit protein.",
+  coachNotes: [
+    "Weeks 1–2 will feel too easy. That is the design. Tendons and connective tissue adapt several times slower than muscles — almost every home-training injury happens because someone with the enthusiasm of week 1 used the loads of week 5.",
+    "DOMS is not a scoreboard. Soreness measures novelty, not progress. Load on the bar and reps in the log measure progress.",
+    "The scale will lie to you for 8 weeks. New muscle holds water and glycogen. Trust the waist tape and the Boss Fight numbers.",
+    "A missed session is not a failed week. Slide the session, don't delete it — Reschedule, not Skip.",
+    "Never train to RPE 10 in Phase 1. RPE 8 means two clean reps left in the tank."
+  ],
+  stopSigns: "Stop and reassess on: sharp joint pain (as opposed to muscle burn), dizziness, chest tightness, or unusual shortness of breath. Log it and mention it to Dr. Trivedi."
+};
+
+/* ---------------- prescription ---------------- */
+
+function weekPlanFor(week) {
+  return PROGRAM.weekPlan[Math.min(Math.max(week, 1), 8) - 1];
+}
+
+/* Returns {sets, repsText, rpe, lowMana} for an exercise in a given week.
+   Low-mana (readiness) mode caps volume at 2 sets and effort at RPE 6. */
+function prescribe(ex, week, lowMana) {
+  const wp = weekPlanFor(week);
+  let sets = ex.main ? wp.setsMain : wp.setsRest;
+  let rpe = wp.rpe;
+  if (lowMana) { sets = Math.min(sets, 2); rpe = "≤6"; }
+  let repsText;
+  if (ex.kind === "time" || ex.kind === "time-side") {
+    repsText = ex.base + " sec" + (ex.perSide ? " /side" : "");
+  } else {
+    const [lo, hi] = ex.weekReps ? wp.reps : ex.base;
+    repsText = (lo === hi ? lo : lo + "–" + hi) + (ex.perSide ? " /side" : "");
+  }
+  return { sets, repsText, rpe, deload: !!wp.deload };
+}
+
+/* ---------------- store (localStorage) ---------------- */
+
+const DB_KEY = "ascend.v1";
+
+const DEFAULT_STATE = () => ({
+  startDate: null,            // ISO yyyy-mm-dd of week 1 day 1
+  xp: 0,
+  logs: [],                   // [{id,date,week,session,status:'completed'|'skipped'|'rescheduled',lowMana,entries:{exId:[{w,r,done}]}}]
+  boss: [],                   // [{date,week,squatReps,carrySec,plankSec,pushups,pushupStyle,waistCm}]
+  quests: {},                 // {date: {protein,steps,sleep,vitd, stepsAuto,sleepAuto}}
+  manualWeight: [],           // [{date, kg}]
+  health: { days: {}, lastSync: null },  // days: {date: {steps,activeEnergyKcal,restingHeartRate,hrvMs,sleepHours,sleepDeepHours,bodyMassKg,workouts}}
+  csvMap: null                // remembered CSV column mapping
+});
+
+let S = loadState();
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(DB_KEY);
+    if (!raw) return DEFAULT_STATE();
+    const st = Object.assign(DEFAULT_STATE(), JSON.parse(raw));
+    st.health = Object.assign({ days: {}, lastSync: null }, st.health);
+    return st;
+  } catch (e) { console.warn("state reset:", e); return DEFAULT_STATE(); }
+}
+function save() { localStorage.setItem(DB_KEY, JSON.stringify(S)); }
+
+/* ---------------- date helpers ---------------- */
+
+function todayISO() { return toISO(new Date()); }
+function toISO(d) {
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+function fromISO(s) { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); }
+function daysBetween(aISO, bISO) { return Math.round((fromISO(bISO) - fromISO(aISO)) / 86400000); }
+function fmtDate(iso) {
+  return fromISO(iso).toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" });
+}
+
+function currentWeek() {
+  if (!S.startDate) return 1;
+  const d = daysBetween(S.startDate, todayISO());
+  if (d < 0) return 1;
+  return Math.min(Math.floor(d / 7) + 1, 9); // 9 = past end of phase
+}
+
+function nextSessionKey() {
+  // rotation advances on completed AND skipped (skip moves on; reschedule keeps it next)
+  const n = S.logs.filter(l => (l.status === "completed" || l.status === "skipped") && l.session !== "BOSS").length;
+  return ["A", "B", "C"][n % 3];
+}
+function lastTrainedISO() {
+  const done = S.logs.filter(l => l.status === "completed");
+  if (!done.length) return null;
+  return done.map(l => l.date).sort().pop();
+}
+function trainedYesterdayOrToday() {
+  const last = lastTrainedISO();
+  if (!last) return false;
+  const diff = daysBetween(last, todayISO());
+  return diff <= 1 && diff >= 0;
+}
+
+/* Boss fight due: week 4 or 8, not yet logged for that week */
+function bossDue() {
+  const w = currentWeek();
+  if (w === 9) { // phase over — week-8 boss may still be outstanding
+    return S.boss.some(b => b.week >= 8) ? null : 8;
+  }
+  const wp = PROGRAM.weekPlan[w - 1];
+  if (!wp || !wp.boss) return null;
+  return S.boss.some(b => b.week === w) ? null : w;
+}
+
+/* ---------------- gamification ---------------- */
+
+const XP_SESSION = 100, XP_BOSS = 150, XP_QUEST = 25;
+function level() { return 1 + Math.floor(S.xp / 250); }
+function levelProgress() { return (S.xp % 250) / 250; }
+
+function tonnageKg() {
+  // STR stat: total weight moved across all logged working sets
+  let t = 0;
+  for (const l of S.logs) {
+    if (l.status !== "completed" || !l.entries) continue;
+    for (const sets of Object.values(l.entries)) {
+      for (const s of sets) if (s.done && s.w && s.r) t += s.w * s.r;
+    }
+  }
+  return Math.round(t);
+}
+
+function questState(dateISO) {
+  const q = S.quests[dateISO] || {};
+  const h = S.health.days[dateISO] || {};
+  const steps = q.steps != null ? q.steps : h.steps;
+  const sleep = q.sleep != null ? q.sleep : h.sleepHours;
+  return {
+    protein: q.protein || 0,
+    steps: steps || 0, stepsAuto: q.steps == null && h.steps != null,
+    sleep: sleep || 0, sleepAuto: q.sleep == null && h.sleepHours != null,
+    vitd: !!q.vitd,
+    complete: (q.protein || 0) >= 110 && (steps || 0) >= 8000 && (sleep || 0) >= 7 && !!q.vitd,
+    awarded: !!q.awarded
+  };
+}
+
+function questStreak() {
+  let n = 0; const d = new Date();
+  // today counts if complete; otherwise start from yesterday
+  if (!questState(toISO(d)).complete) d.setDate(d.getDate() - 1);
+  while (questState(toISO(d)).complete) { n++; d.setDate(d.getDate() - 1); }
+  return n;
+}
+
+/* ---------------- readiness / LOW MANA ----------------
+   7-day rolling HRV baseline; flag when today's HRV sits more
+   than 1 SD below the mean of the trailing window (≥3 samples). */
+
+function manaState() {
+  const t = todayISO();
+  const today = S.health.days[t];
+  if (!today || today.hrvMs == null) return { known: false };
+  const window = [];
+  for (let i = 1; i <= 7; i++) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const rec = S.health.days[toISO(d)];
+    if (rec && rec.hrvMs != null) window.push(rec.hrvMs);
+  }
+  if (window.length < 3) return { known: false };
+  const mean = window.reduce((a, b) => a + b, 0) / window.length;
+  const sd = Math.sqrt(window.reduce((a, b) => a + (b - mean) ** 2, 0) / window.length);
+  const low = today.hrvMs < mean - sd;
+  return { known: true, low, hrv: today.hrvMs, mean: Math.round(mean), sd: Math.round(sd * 10) / 10 };
+}
+
+/* ============================================================
+   HEALTH LAYER
+   Every read/write of health metrics goes through HealthProvider.
+   FileImportProvider is the active (web) implementation; the
+   NativeHealthProvider stub is the seam for a future Capacitor
+   wrapper (HealthKit / Health Connect) — swapping it in must be
+   a one-file change, so nothing else may touch health data.
+   ============================================================ */
+
+const HEALTH_FIELDS = ["steps", "activeEnergyKcal", "restingHeartRate", "hrvMs", "sleepHours", "sleepDeepHours", "bodyMassKg"];
+
+class HealthProvider {
+  /* merge an array of day records → summary; idempotent on date */
+  mergeDays(days) {
+    let imported = 0, updated = 0, errors = 0;
+    for (const day of days || []) {
+      if (!day || !/^\d{4}-\d{2}-\d{2}$/.test(day.date || "")) { errors++; continue; }
+      const existing = S.health.days[day.date];
+      const rec = existing ? { ...existing } : {};
+      let touched = false;
+      for (const f of HEALTH_FIELDS) {
+        if (day[f] != null && !Number.isNaN(Number(day[f]))) { rec[f] = Number(day[f]); touched = true; }
+      }
+      if (Array.isArray(day.workouts)) { rec.workouts = day.workouts; touched = true; }
+      if (!touched) { errors++; continue; }
+      S.health.days[day.date] = rec;
+      existing ? updated++ : imported++;
+    }
+    if (imported + updated > 0) S.health.lastSync = new Date().toISOString();
+    save();
+    return { imported, updated, errors };
+  }
+  getDay(dateISO) { return S.health.days[dateISO] || null; }
+  lastSync() { return S.health.lastSync; }
+}
+
+class FileImportProvider extends HealthProvider {
+
+  /* Route A: JSON from the Apple Shortcuts bridge */
+  importJSONText(text) {
+    let obj;
+    try { obj = JSON.parse(text); } catch (e) { throw new Error("Not valid JSON: " + e.message); }
+    if (!obj || !Array.isArray(obj.days)) throw new Error('JSON must contain a "days" array (see schema below).');
+    return this.mergeDays(obj.days);
+  }
+
+  /* Apple Health export.xml — streamed in chunks so a multi-hundred-MB
+     file never has to fit in memory at once. Only the six record types
+     the program cares about are extracted; everything else is skipped. */
+  async importExportXML(file, onProgress) {
+    const WANT = {
+      "HKQuantityTypeIdentifierStepCount": "steps",
+      "HKQuantityTypeIdentifierActiveEnergyBurned": "activeEnergyKcal",
+      "HKQuantityTypeIdentifierRestingHeartRate": "restingHeartRate",
+      "HKQuantityTypeIdentifierHeartRateVariabilitySDNN": "hrvMs",
+      "HKQuantityTypeIdentifierBodyMass": "bodyMassKg",
+      "HKCategoryTypeIdentifierSleepAnalysis": "sleep"
+    };
+    const sums = {};   // date -> {steps, activeEnergyKcal, sleepH, sleepDeepH}
+    const avgs = {};   // date -> {restingHeartRate:[..], hrvMs:[..], bodyMassKg:[..]}
+    const day = d => (sums[d] = sums[d] || {});
+    const avg = d => (avgs[d] = avgs[d] || {});
+
+    const reader = file.stream().getReader();
+    const decoder = new TextDecoder();
+    let buf = "", read = 0;
+    const recRe = /<Record\s[^>]*?\/>/g;
+
+    const attr = (tag, name) => {
+      const m = tag.match(new RegExp(name + '="([^"]*)"'));
+      return m ? m[1] : null;
+    };
+    const dateOf = s => s ? s.slice(0, 10) : null;
+
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      read += value.byteLength;
+      buf += decoder.decode(value, { stream: true });
+      let m, lastEnd = 0;
+      recRe.lastIndex = 0;
+      while ((m = recRe.exec(buf))) {
+        lastEnd = recRe.lastIndex;
+        const tag = m[0];
+        const type = attr(tag, "type");
+        const key = WANT[type];
+        if (!key) continue;
+        if (key === "sleep") {
+          const v = attr(tag, "value") || "";
+          if (!v.includes("Asleep")) continue;      // skip InBed / Awake
+          const s = attr(tag, "startDate"), e = attr(tag, "endDate");
+          if (!s || !e) continue;
+          const hours = (new Date(e) - new Date(s)) / 3600000;
+          if (!(hours > 0 && hours < 24)) continue;
+          const d = dateOf(e);                       // night sleep → wake date
+          const rec = day(d);
+          rec.sleepHours = (rec.sleepHours || 0) + hours;
+          if (v.includes("Deep")) rec.sleepDeepHours = (rec.sleepDeepHours || 0) + hours;
+        } else {
+          const d = dateOf(attr(tag, "startDate"));
+          const v = parseFloat(attr(tag, "value"));
+          if (!d || Number.isNaN(v)) continue;
+          if (key === "steps" || key === "activeEnergyKcal") {
+            day(d)[key] = (day(d)[key] || 0) + v;
+          } else {
+            (avg(d)[key] = avg(d)[key] || []).push(v);
+          }
+        }
+      }
+      // keep only the unconsumed tail (an incomplete <Record …) across chunks
+      if (lastEnd) buf = buf.slice(lastEnd);
+      const lt = buf.lastIndexOf("<Record");
+      if (lt > 0) buf = buf.slice(lt);
+      else if (lt === -1 && buf.length > 4096) buf = buf.slice(-4096);
+      if (onProgress) onProgress(read / file.size);
+      await new Promise(r => setTimeout(r, 0));       // keep the UI thread alive
+    }
+
+    const days = [];
+    const allDates = new Set([...Object.keys(sums), ...Object.keys(avgs)]);
+    for (const d of allDates) {
+      const rec = { date: d, ...(sums[d] || {}) };
+      const a = avgs[d] || {};
+      for (const k of ["restingHeartRate", "hrvMs", "bodyMassKg"]) {
+        if (a[k] && a[k].length) rec[k] = Math.round((a[k].reduce((x, y) => x + y, 0) / a[k].length) * 10) / 10;
+      }
+      if (rec.steps != null) rec.steps = Math.round(rec.steps);
+      if (rec.activeEnergyKcal != null) rec.activeEnergyKcal = Math.round(rec.activeEnergyKcal);
+      if (rec.sleepHours != null) rec.sleepHours = Math.round(rec.sleepHours * 10) / 10;
+      if (rec.sleepDeepHours != null) rec.sleepDeepHours = Math.round(rec.sleepDeepHours * 10) / 10;
+      days.push(rec);
+    }
+    if (onProgress) onProgress(1);
+    return this.mergeDays(days);
+  }
+
+  /* Generic CSV (e.g. a Gabit export) — parse now, map columns in the UI */
+  parseCSV(text) {
+    const rows = [];
+    let row = [], field = "", inQ = false;
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (inQ) {
+        if (c === '"') { if (text[i + 1] === '"') { field += '"'; i++; } else inQ = false; }
+        else field += c;
+      } else if (c === '"') inQ = true;
+      else if (c === ",") { row.push(field); field = ""; }
+      else if (c === "\n" || c === "\r") {
+        if (c === "\r" && text[i + 1] === "\n") i++;
+        row.push(field); field = "";
+        if (row.some(f => f !== "")) rows.push(row);
+        row = [];
+      } else field += c;
+    }
+    row.push(field);
+    if (row.some(f => f !== "")) rows.push(row);
+    if (rows.length < 2) throw new Error("CSV needs a header row plus at least one data row.");
+    return { headers: rows[0].map(h => h.trim()), rows: rows.slice(1) };
+  }
+
+  importCSVWithMap(parsed, map) {
+    // map: {date: colIdx, steps: colIdx|-1, ...}
+    const days = [];
+    for (const r of parsed.rows) {
+      const rawDate = (r[map.date] || "").trim();
+      const d = normalizeDate(rawDate);
+      if (!d) continue;
+      const rec = { date: d };
+      for (const f of HEALTH_FIELDS) {
+        if (map[f] != null && map[f] >= 0) {
+          const v = parseFloat(String(r[map[f]]).replace(/[^0-9.\-]/g, ""));
+          if (!Number.isNaN(v)) rec[f] = v;
+        }
+      }
+      days.push(rec);
+    }
+    return this.mergeDays(days);
+  }
+}
+
+/* Route C seam — native HealthKit / Health Connect via Capacitor. Not built yet. */
+class NativeHealthProvider extends HealthProvider {
+  async connect() { throw new Error("NativeHealthProvider is not available on web. Wrap the app with Capacitor + @capacitor-community/health to enable it."); }
+}
+
+const Health = new FileImportProvider();
+
+function normalizeDate(s) {
+  if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.slice(0, 10);
+  let m = s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})/);     // dd/mm/yyyy
+  if (m) return m[3] + "-" + m[2].padStart(2, "0") + "-" + m[1].padStart(2, "0");
+  const d = new Date(s);
+  return isNaN(d) ? null : toISO(d);
+}
+
+function daysSinceSync() {
+  if (!S.health.lastSync) return null;
+  return Math.floor((Date.now() - new Date(S.health.lastSync)) / 86400000);
+}
+
+const SYNC_SCHEMA = `{
+  "source": "apple_health",
+  "exportedAt": "2026-07-19T06:00:00+05:30",
+  "days": [
+    {
+      "date": "2026-07-18",
+      "steps": 8420,
+      "activeEnergyKcal": 410,
+      "restingHeartRate": 68,
+      "hrvMs": 34,
+      "sleepHours": 6.5,
+      "sleepDeepHours": 1.1,
+      "bodyMassKg": 94.2,
+      "workouts": [
+        { "type": "walking", "durationMin": 32, "avgHeartRate": 104 }
+      ]
+    }
+  ]
+}`;
+</script>
+<script>
+"use strict";
+/* ============================================================
+   UI layer
+   ============================================================ */
+
+const $ = (sel, root) => (root || document).querySelector(sel);
+const $$ = (sel, root) => [...(root || document).querySelectorAll(sel)];
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+let TAB = "home";
+let toastTimer = null;
+
+function toast(msg) {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
+}
+
+function beep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.value = 880; g.gain.value = 0.12;
+    o.start();
+    o.frequency.setValueAtTime(1174, ctx.currentTime + 0.12);
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.4);
+    o.stop(ctx.currentTime + 0.4);
+  } catch (e) { /* audio unavailable — fine */ }
+}
+
+function awardXP(n, why) {
+  const before = level();
+  S.xp += n; save();
+  const after = level();
+  toast(after > before ? `LEVEL UP! You are now LVL ${after}` : `+${n} XP — ${why}`);
+  renderHeader();
+}
+
+/* ---------------- header ---------------- */
+function renderHeader() {
+  const w = currentWeek();
+  $("#hdrLvl").textContent = "LVL " + level();
+  $("#hdrXp").style.width = Math.round(levelProgress() * 100) + "%";
+  $("#hdrWeek").textContent = !S.startDate ? "" : (w === 9 ? "Phase complete" : "Week " + w + "/8");
+}
+
+/* ---------------- rest timer ---------------- */
+const Rest = { t: null, remaining: 0, total: 0 };
+function startRest(sec, label) {
+  clearInterval(Rest.t);
+  Rest.remaining = sec; Rest.total = sec;
+  $("#restbar").classList.add("on");
+  $("#restLabel").textContent = label || "Rest";
+  paintRest();
+  Rest.t = setInterval(() => {
+    Rest.remaining--;
+    if (Rest.remaining <= 0) { stopRest(); beep(); toast("Rest over — next set"); }
+    else paintRest();
+  }, 1000);
+}
+function paintRest() {
+  const m = Math.floor(Rest.remaining / 60), s = Rest.remaining % 60;
+  $("#restTime").textContent = m + ":" + String(s).padStart(2, "0");
+  $("#restFill").style.width = Math.round((Rest.remaining / Rest.total) * 100) + "%";
+}
+function stopRest() { clearInterval(Rest.t); $("#restbar").classList.remove("on"); }
+
+/* ============================================================
+   CHARTS — thin SVG line/bar builder with crosshair + tooltip
+   and a data-table fallback. Single series per chart, one axis.
+   ============================================================ */
+
+const CHARTQ = [];   // charts queued for post-render mounting
+
+function chartCard(title, sub, spec) {
+  const id = "ch_" + Math.random().toString(36).slice(2, 9);
+  CHARTQ.push({ id, spec });
+  const rows = spec.points.map(p => `<tr><td>${esc(p.label || p.x)}</td><td>${esc(spec.yFmt ? spec.yFmt(p.y) : p.y)}</td></tr>`).join("");
+  return `<div class="card chart-card">
+    <h3>${esc(title)}</h3>
+    ${sub ? `<div class="mini">${sub}</div>` : ""}
+    ${spec.points.length ? `<div class="chart-box" id="${id}"><div class="viz-tip"></div></div>
+    <details class="dtable"><summary>Data table</summary>
+      <table><thead><tr><th>Date</th><th>${esc(spec.yName || "Value")}</th></tr></thead><tbody>${rows}</tbody></table>
+    </details>` : `<div class="empty-note">${esc(spec.empty || "No data yet — sync or log to see this chart.")}</div>`}
+  </div>`;
+}
+
+function mountCharts() {
+  for (const { id, spec } of CHARTQ) {
+    const box = document.getElementById(id);
+    if (box) buildChart(box, spec);
+  }
+  CHARTQ.length = 0;
+}
+
+function niceExtent(vals, padFrac) {
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  if (lo === hi) { lo -= 1; hi += 1; }
+  const pad = (hi - lo) * (padFrac == null ? 0.15 : padFrac);
+  return [lo - pad, hi + pad];
+}
+
+function buildChart(box, spec) {
+  const W = 560, H = 210, L = 46, R = 10, T = 14, B = 26;
+  const pts = spec.points;
+  const xs = pts.map(p => p.t);
+  const yVals = pts.map(p => p.y).concat(spec.target != null ? [spec.target] : []).concat(spec.band ? [spec.band.lo, spec.band.hi] : []);
+  let [x0, x1] = [Math.min(...xs), Math.max(...xs)];
+  if (x0 === x1) { x0 -= 86400000; x1 += 86400000; }
+  let [y0, y1] = spec.yExtent || niceExtent(yVals);
+  if (spec.zeroBase) y0 = 0;
+  const X = t => L + ((t - x0) / (x1 - x0)) * (W - L - R);
+  const Y = v => T + (1 - (v - y0) / (y1 - y0)) * (H - T - B);
+  const fmt = spec.yFmt || (v => Math.round(v));
+
+  let g = "";
+  // hairline grid: 4 lines + labels
+  for (let i = 0; i <= 3; i++) {
+    const v = y0 + (i / 3) * (y1 - y0), y = Y(v);
+    g += `<line x1="${L}" x2="${W - R}" y1="${y}" y2="${y}" stroke="var(--grid)" stroke-width="1"/>`;
+    g += `<text x="${L - 7}" y="${y + 4}" text-anchor="end" font-size="10.5" fill="var(--ink-mute)" style="font-variant-numeric:tabular-nums">${esc(fmt(v))}</text>`;
+  }
+  // x labels: first, middle, last
+  const lab = (i, anchor) => `<text x="${X(pts[i].t)}" y="${H - 8}" text-anchor="${anchor}" font-size="10.5" fill="var(--ink-mute)">${esc(pts[i].label)}</text>`;
+  if (pts.length) {
+    g += lab(0, "start");
+    if (pts.length > 2) g += lab(Math.floor(pts.length / 2), "middle");
+    if (pts.length > 1) g += lab(pts.length - 1, "end");
+  }
+  // baseline band (e.g. HRV mean ± 1 SD)
+  if (spec.band) {
+    g += `<rect x="${L}" width="${W - L - R}" y="${Y(spec.band.hi)}" height="${Math.max(0, Y(spec.band.lo) - Y(spec.band.hi))}" fill="var(--accent)" opacity="0.10"/>`;
+    g += `<line x1="${L}" x2="${W - R}" y1="${Y(spec.band.mid)}" y2="${Y(spec.band.mid)}" stroke="var(--accent)" stroke-width="1" stroke-dasharray="2 4" opacity=".7"/>`;
+  }
+  // target line
+  if (spec.target != null) {
+    g += `<line x1="${L}" x2="${W - R}" y1="${Y(spec.target)}" y2="${Y(spec.target)}" stroke="var(--ink-mute)" stroke-width="1" stroke-dasharray="4 4"/>`;
+    g += `<text x="${W - R}" y="${Y(spec.target) - 5}" text-anchor="end" font-size="10" fill="var(--ink-mute)">${esc(spec.targetLabel || "target")}</text>`;
+  }
+
+  if (spec.type === "bar") {
+    const bw = Math.max(4, Math.min(26, (W - L - R) / pts.length - 4));
+    for (const p of pts) {
+      const y = Y(p.y), x = X(p.t) - bw / 2;
+      g += `<rect class="mark" data-i="${pts.indexOf(p)}" x="${x}" y="${y}" width="${bw}" height="${Math.max(0, Y(y0) - y)}" rx="3" fill="var(--accent)"/>`;
+    }
+  } else {
+    const path = pts.map((p, i) => (i ? "L" : "M") + X(p.t).toFixed(1) + " " + Y(p.y).toFixed(1)).join(" ");
+    g += `<path d="${path}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+    for (const p of pts) g += `<circle data-i="${pts.indexOf(p)}" cx="${X(p.t)}" cy="${Y(p.y)}" r="3" fill="var(--accent)" stroke="var(--surface)" stroke-width="2"/>`;
+  }
+  // baseline axis
+  g += `<line x1="${L}" x2="${W - R}" y1="${Y(y0)}" y2="${Y(y0)}" stroke="var(--baseline)" stroke-width="1"/>`;
+  // crosshair + hover dot
+  g += `<line class="xh" x1="0" x2="0" y1="${T}" y2="${H - B}" stroke="var(--ink-mute)" stroke-width="1" stroke-dasharray="3 3" style="display:none"/>`;
+  g += `<circle class="hovdot" r="5" fill="var(--accent)" stroke="#fff" stroke-width="2" style="display:none"/>`;
+
+  box.insertAdjacentHTML("beforeend",
+    `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(spec.yName || "chart")}">${g}</svg>`);
+
+  // hover layer: nearest-point crosshair + tooltip
+  const svg = $("svg", box), tip = $(".viz-tip", box), xh = $(".xh", box), dot = $(".hovdot", box);
+  const move = ev => {
+    const r = svg.getBoundingClientRect();
+    const px = ((ev.touches ? ev.touches[0].clientX : ev.clientX) - r.left) / r.width * W;
+    let best = 0, bd = Infinity;
+    pts.forEach((p, i) => { const d = Math.abs(X(p.t) - px); if (d < bd) { bd = d; best = i; } });
+    const p = pts[best], cx = X(p.t), cy = Y(p.y);
+    xh.style.display = ""; xh.setAttribute("x1", cx); xh.setAttribute("x2", cx);
+    dot.style.display = ""; dot.setAttribute("cx", cx); dot.setAttribute("cy", cy);
+    tip.style.display = "block";
+    tip.style.left = (cx / W * r.width) + "px";
+    tip.style.top = (cy / H * r.height) + "px";
+    tip.innerHTML = `${esc(p.label)} · <b>${esc(fmt(p.y))}</b>${spec.yUnit ? " " + esc(spec.yUnit) : ""}`;
+  };
+  const leave = () => { tip.style.display = "none"; xh.style.display = "none"; dot.style.display = "none"; };
+  svg.addEventListener("mousemove", move);
+  svg.addEventListener("touchstart", move, { passive: true });
+  svg.addEventListener("touchmove", move, { passive: true });
+  svg.addEventListener("mouseleave", leave);
+}
+
+function seriesFromHealth(field, opts) {
+  const pts = Object.entries(S.health.days)
+    .filter(([, v]) => v[field] != null)
+    .map(([d, v]) => ({ x: d, t: fromISO(d).getTime(), y: v[field], label: shortDate(d) }))
+    .sort((a, b) => a.t - b.t);
+  return pts.slice(-(opts && opts.last || 90));
+}
+function shortDate(iso) { return fromISO(iso).toLocaleDateString(undefined, { day: "numeric", month: "short" }); }
+
+/* ============================================================
+   VIEWS
+   ============================================================ */
+
+function render() {
+  stopRestIfLeavingTrain();
+  CHARTQ.length = 0;
+  const v = $("#view");
+  if (!S.startDate && TAB !== "guide" && TAB !== "sync") { v.innerHTML = renderOnboarding(); wire(v); renderHeader(); return; }
+  v.innerHTML = { home: renderHome, train: renderTrain, progress: renderProgress, sync: renderSync, guide: renderGuide }[TAB]();
+  wire(v);
+  mountCharts();
+  renderHeader();
+  window.scrollTo(0, 0);
+}
+function stopRestIfLeavingTrain() { if (TAB !== "train") stopRest(); }
+
+/* ---------------- onboarding ---------------- */
+function renderOnboarding() {
+  return `
+  <div class="card" style="margin-top:22px">
+    <h3>Welcome to ASCEND</h3>
+    <p class="sub">Phase 1: <b>FOUNDATION</b> — 8 weeks · dumbbells + bodyweight · 3 sessions/week · 35–45 min each.</p>
+    <p class="sub">${esc(PROGRAM.rotationNote)}</p>
+    <label class="lbl" for="obStart">Week 1 starts on</label>
+    <input type="date" id="obStart" value="${todayISO()}">
+    <button class="btn primary big" style="margin-top:14px" data-act="ob-start">Begin the climb ▲</button>
+  </div>
+  <div class="banner warn"><span class="ico">⚠︎</span><div><b>Weeks 1–2 will feel too easy. That is the design.</b> Your tendons adapt several times slower than your muscles. Go embarrassingly light.</div></div>`;
+}
+
+/* ---------------- HOME ---------------- */
+function renderHome() {
+  const w = currentWeek();
+  const wp = weekPlanFor(w);
+  const mana = manaState();
+  const boss = bossDue();
+  const q = questState(todayISO());
+  const sync = daysSinceSync();
+  const noteIdx = Math.abs(daysBetween("2026-01-01", todayISO())) % PROGRAM.coachNotes.length;
+  let out = "";
+
+  if (w === 9) {
+    out += `<div class="banner okay"><span class="ico">🏔</span><div><b>Phase 1 complete.</b> Run the week-8 Boss Fight if you haven't, compare it to week 4, and take the win. Phase 2 awaits.</div></div>`;
+  } else if (wp.deload) {
+    out += `<div class="banner okay"><span class="ico">🛡</span><div><b>DELOAD WEEK.</b> Non-negotiable. 2 sets of everything at RPE 5 — this is the recovery gate that makes weeks 7–8 possible.</div></div>`;
+  }
+
+  if (mana.known && mana.low) {
+    out += `<div class="banner mana"><span class="ico">🜁</span><div><b>LOW MANA.</b> Today's HRV (${mana.hrv} ms) is more than 1 SD below your 7-day baseline (${mana.mean} ms). The reduced-volume session is pre-selected — 2 sets, cap effort at RPE 6. Showing up still counts.</div></div>`;
+  }
+
+  if (sync != null && sync >= 7) {
+    out += `<div class="banner warn"><span class="ico">⇄</span><div>Last health sync was <b>${sync} days ago</b>. Run your Shortcut and drop the file in the Sync tab.</div></div>`;
+  }
+
+  // Daily Quest
+  out += `<h2 class="sec">Daily Quest — ${esc(fmtDate(todayISO()))}</h2>
+  <div class="card">${PROGRAM.quests.map(qd => questRow(qd, q)).join("")}
+    <div class="mini" style="margin-top:10px">${esc(PROGRAM.questNote)}</div>
+  </div>`;
+
+  // Next session / boss
+  out += `<h2 class="sec">Next Session</h2>`;
+  if (boss) {
+    out += `<div class="card">
+      <div class="row"><h3 class="grow">BOSS FIGHT <span class="pill boss">WEEK ${boss}</span></h3></div>
+      <p class="sub">${esc(PROGRAM.bossFight.note)}</p>
+      <button class="btn primary big" data-act="start-boss">⚔︎ Enter the Boss Fight</button>
+    </div>`;
+  }
+  if (w !== 9) {
+    const key = nextSessionKey();
+    const sess = PROGRAM.sessions[key];
+    const restWarn = trainedYesterdayOrToday();
+    out += `<div class="card">
+      <div class="row"><h3 class="grow">Session ${key} — ${esc(sess.title)}</h3><span class="pill week">WK ${w}</span></div>
+      <p class="sub">${esc(sess.emphasis)} · ${wp.setsMain}${wp.setsMain !== wp.setsRest ? " / " + wp.setsRest : ""} sets · ${wp.reps[0] === wp.reps[1] ? wp.reps[0] : wp.reps[0] + "–" + wp.reps[1]} reps · RPE ${wp.rpe}</p>
+      <p class="mini">${esc(wp.note)}</p>
+      ${restWarn ? `<div class="banner warn" style="margin:10px 0"><span class="ico">☾</span><div>You trained ${lastTrainedISO() === todayISO() ? "today" : "yesterday"} — the program never runs two days in a row. Recovery is where the muscle is built.</div></div>` : ""}
+      <button class="btn primary big" data-act="go-train">Start Session ${key} ▶</button>
+    </div>`;
+  }
+
+  // coach note of the day
+  out += `<div class="card flat" style="border-style:dashed">
+    <div class="mini" style="letter-spacing:.14em;text-transform:uppercase;font-weight:700">Coach's note</div>
+    <p class="sub" style="margin-top:6px">${esc(PROGRAM.coachNotes[noteIdx])}</p>
+  </div>`;
+
+  out += `<div class="banner danger"><span class="ico">✚</span><div>${esc(PROGRAM.stopSigns)}</div></div>`;
+  return out;
+}
+
+function questRow(qd, q) {
+  if (qd.input === "check") {
+    return `<div class="quest-item">
+      <div class="q-check ${q.vitd ? "done" : ""}" data-act="quest-vitd">✓</div>
+      <div class="q-body"><div class="q-name">${esc(qd.name)}</div><div class="q-detail">${esc(qd.detail)}</div></div>
+    </div>`;
+  }
+  const val = q[qd.id];
+  const auto = qd.id === "steps" ? q.stepsAuto : qd.id === "sleep" ? q.sleepAuto : false;
+  const done = qd.id === "protein" ? val >= 110 : qd.id === "steps" ? val >= 8000 : val >= 7;
+  return `<div class="quest-item">
+    <div class="q-check ${done ? "done" : ""}">✓</div>
+    <div class="q-body">
+      <div class="q-name">${esc(qd.name)} <span class="mini">/ ${qd.id === "protein" ? "110–130 g" : qd.target.toLocaleString() + (qd.unit ? " " + qd.unit : "")}</span></div>
+      <div class="q-detail">${auto ? '<span class="auto">⇄ auto-filled from health sync</span>' : esc(qd.detail)}</div>
+    </div>
+    <div class="q-input"><input type="number" inputmode="decimal" step="${qd.step || 1}" min="0" data-quest="${qd.id}" value="${val ? val : ""}" placeholder="0" aria-label="${esc(qd.name)}"></div>
+  </div>`;
+}
+
+/* ---------------- TRAIN ---------------- */
+function renderTrain() {
+  if (S.activeBoss) return renderBossPlayer();
+  if (S.active) return renderPlayer();
+  const w = Math.min(currentWeek(), 8);
+  const wp = weekPlanFor(w);
+  const rec = nextSessionKey();
+  const mana = manaState();
+  const boss = bossDue();
+  const sel = S.trainSel || rec;
+  const sess = PROGRAM.sessions[sel];
+  return `
+  <h2 class="sec">Start Training — Week ${w} ${wp.deload ? '<span class="pill deload">DELOAD</span>' : ""}${wp.boss ? ' <span class="pill boss">BOSS WEEK</span>' : ""}</h2>
+  <div class="card">
+    <div class="chips">
+      ${["A", "B", "C"].map(k => `<button class="chip ${sel === k ? "on" : ""}" data-sel="${k}">${k} · ${esc(PROGRAM.sessions[k].title)}${k === rec ? " ★" : ""}</button>`).join("")}
+      ${boss ? `<button class="chip" data-act="start-boss" style="border-color:var(--critical);color:#ff9d9d">⚔︎ Boss Fight</button>` : ""}
+    </div>
+    <p class="sub"><b>${esc(sess.emphasis)}</b></p>
+    <p class="mini">${esc(sess.focus)}</p>
+    <hr class="hair">
+    <p class="sub mono">${wp.setsMain}${wp.setsMain !== wp.setsRest ? "/" + wp.setsRest : ""} sets · ${wp.reps[0] === wp.reps[1] ? wp.reps[0] : wp.reps[0] + "–" + wp.reps[1]} reps · RPE ${wp.rpe}</p>
+    <p class="mini">${esc(wp.note)} ${esc(PROGRAM.restRule)}</p>
+    <label class="row" style="margin-top:10px;font-size:14px;color:var(--ink-2);gap:8px">
+      <input type="checkbox" id="lowManaChk" ${mana.known && mana.low ? "checked" : ""} style="width:18px;height:18px;accent-color:var(--mana)">
+      Low-mana mode (2 sets, cap RPE 6)${mana.known && mana.low ? ' <span class="pill" style="background:rgba(144,133,233,.15);color:#cfc9ff">recommended today</span>' : ""}
+    </label>
+    <button class="btn primary big" style="margin-top:14px" data-act="begin" data-key="${sel}">Begin Session ${sel} ▶</button>
+  </div>
+  ${renderRecentLog()}`;
+}
+
+function renderRecentLog() {
+  const recent = [...S.logs].slice(-6).reverse();
+  if (!recent.length) return "";
+  return `<h2 class="sec">Recent</h2><div class="card">${recent.map(l => `
+    <div class="quest-item">
+      <div class="q-body"><div class="q-name">${l.session === "BOSS" ? "⚔︎ Boss Fight" : "Session " + l.session}<span class="mini"> · wk ${l.week}</span></div>
+      <div class="q-detail">${esc(fmtDate(l.date))}</div></div>
+      <span class="pill ${l.status === "completed" ? "week" : l.status === "skipped" ? "boss" : "deload"}">${l.status.toUpperCase()}</span>
+    </div>`).join("")}</div>`;
+}
+
+function beginSession(key) {
+  const week = Math.min(currentWeek(), 8);
+  const lowMana = $("#lowManaChk") ? $("#lowManaChk").checked : false;
+  const sess = PROGRAM.sessions[key];
+  const entries = {};
+  const lastLog = [...S.logs].reverse().find(l => l.session === key && l.status === "completed");
+  for (const ex of sess.exercises) {
+    const rx = prescribe(ex, week, lowMana);
+    const prevSets = lastLog && lastLog.entries && lastLog.entries[ex.id];
+    const prevW = prevSets && prevSets.length ? prevSets[prevSets.length - 1].w : null;
+    entries[ex.id] = Array.from({ length: rx.sets }, () => ({ w: ex.weighted ? prevW : null, r: null, done: false }));
+  }
+  S.active = { session: key, week, lowMana, date: todayISO(), warm: PROGRAM.warmup.map(() => false), entries };
+  save(); render();
+}
+
+function renderPlayer() {
+  const a = S.active;
+  const sess = PROGRAM.sessions[a.session];
+  const wp = weekPlanFor(a.week);
+  return `
+  <h2 class="sec">Session ${a.session} — ${esc(sess.title)} · Week ${a.week}</h2>
+  ${a.lowMana ? `<div class="banner mana"><span class="ico">🜁</span><div><b>Low-mana mode.</b> 2 sets per exercise, cap at RPE 6. Bank the win and go home.</div></div>` : ""}
+  ${wp.deload ? `<div class="banner okay"><span class="ico">🛡</span><div><b>Deload.</b> Same movements, easy loads, RPE 5. Speed of recovery is the goal.</div></div>` : ""}
+  <div class="card">
+    <h3>Warm-up <span class="mini">6 min — do not skip</span></h3>
+    ${PROGRAM.warmup.map((wx, i) => `<div class="warm-item ${a.warm[i] ? "done" : ""}" data-warm="${i}"><div class="q-check ${a.warm[i] ? "done" : ""}">✓</div>${esc(wx)}</div>`).join("")}
+    <div class="mini" style="margin-top:8px">${esc(PROGRAM.warmupNote)}</div>
+  </div>
+  ${sess.exercises.map(ex => exerciseCard(ex, a)).join("")}
+  <div class="card flat"><div class="mini">${esc(PROGRAM.cooldown)}</div></div>
+  <button class="btn primary big" data-act="finish">Complete Session ✓</button>
+  <div class="btnrow">
+    <button class="btn resched" data-act="resched">⟳ Reschedule</button>
+    <button class="btn subtle" data-act="skip">Skip</button>
+  </div>
+  <p class="mini center" style="margin-top:6px">A missed session is not a failed week — slide it, don't delete it.</p>`;
+}
+
+function exerciseCard(ex, a) {
+  const rx = prescribe(ex, a.week, a.lowMana);
+  const sets = a.entries[ex.id];
+  const timeBased = ex.kind === "time" || ex.kind === "time-side";
+  return `<div class="ex-card">
+    <div class="ex-head"><span class="ex-tag">${ex.id}</span><span class="ex-name">${esc(ex.name)}</span></div>
+    <div class="ex-rx"><b>${rx.sets} × ${esc(rx.repsText)}</b> @ RPE ${esc(rx.rpe)} · tempo ${esc(ex.tempo)} · rest ${ex.rest}s</div>
+    ${sets.map((s, i) => `
+      <div class="set-row">
+        <span class="set-no">Set ${i + 1}</span>
+        ${ex.weighted ? `<input type="number" inputmode="decimal" placeholder="kg" step="0.5" min="0" data-set="${ex.id}:${i}:w" value="${s.w != null ? s.w : ""}" aria-label="${esc(ex.name)} set ${i + 1} weight">` : ""}
+        <input type="number" inputmode="numeric" placeholder="${timeBased ? "sec" : "reps"}" min="0" data-set="${ex.id}:${i}:r" value="${s.r != null ? s.r : ""}" aria-label="${esc(ex.name)} set ${i + 1} ${timeBased ? "seconds" : "reps"}">
+        <button class="set-done ${s.done ? "on" : ""}" data-done="${ex.id}:${i}" aria-label="mark set done">✓</button>
+      </div>`).join("")}
+  </div>`;
+}
+
+function finishSession() {
+  const a = S.active;
+  const anyDone = Object.values(a.entries).some(sets => sets.some(s => s.done));
+  if (!anyDone) { toast("Mark at least one set done first"); return; }
+  S.logs.push({ id: Date.now(), date: todayISO(), week: a.week, session: a.session, status: "completed", lowMana: a.lowMana, entries: a.entries });
+  delete S.active; save();
+  awardXP(XP_SESSION, "session complete");
+  TAB = "home"; setTab(); render();
+}
+
+function closeSession(status) {
+  const a = S.active;
+  S.logs.push({ id: Date.now(), date: todayISO(), week: a.week, session: a.session, status, entries: null });
+  delete S.active; save();
+  toast(status === "rescheduled" ? "Session slides to your next training day — still Session " + a.session : "Skipped — rotation moves on");
+  TAB = "home"; setTab(); render();
+}
+
+/* ---------------- BOSS FIGHT ---------------- */
+function renderBossPlayer() {
+  const w = Math.min(currentWeek(), 8);
+  const prev = [...S.boss].sort((x, y) => x.date < y.date ? -1 : 1);
+  const last = prev[prev.length - 1];
+  return `
+  <h2 class="sec">⚔︎ Boss Fight — Week ${w}</h2>
+  <div class="banner danger"><span class="ico">⚔︎</span><div><b>Standalone short session</b> — not added onto a training day. Stop the squat at RPE 9. Log everything.</div></div>
+  <div class="card">
+    ${PROGRAM.bossFight.items.map(it => `
+      <label class="lbl" for="boss_${it.id}">${esc(it.name)} <span class="mini" style="text-transform:none;letter-spacing:0">— ${esc(it.detail)}</span></label>
+      <div class="row">
+        <input type="number" inputmode="decimal" step="0.1" min="0" id="boss_${it.id}" placeholder="${it.unit}">
+        ${last && last[it.id] != null ? `<span class="mini mono" style="flex:none">last: ${last[it.id]} ${it.unit}</span>` : ""}
+      </div>
+      ${it.id === "pushups" ? `<label class="row" style="margin-top:6px;font-size:13.5px;color:var(--ink-2);gap:8px"><input type="checkbox" id="boss_knees" style="width:16px;height:16px;accent-color:var(--accent)"> from knees</label>` : ""}
+    `).join("")}
+    <button class="btn primary big" style="margin-top:16px" data-act="boss-save">Log the Fight ⚔︎</button>
+    <button class="btn subtle big" data-act="boss-cancel" style="margin-top:8px">Cancel</button>
+  </div>`;
+}
+
+function saveBoss() {
+  const rec = { date: todayISO(), week: Math.min(currentWeek(), 8) };
+  let any = false;
+  for (const it of PROGRAM.bossFight.items) {
+    const v = parseFloat($("#boss_" + it.id).value);
+    if (!Number.isNaN(v)) { rec[it.id] = v; any = true; }
+  }
+  if (!any) { toast("Enter at least one result"); return; }
+  rec.pushupStyle = $("#boss_knees") && $("#boss_knees").checked ? "knees" : "full";
+  S.boss.push(rec);
+  S.logs.push({ id: Date.now(), date: rec.date, week: rec.week, session: "BOSS", status: "completed", entries: null });
+  delete S.activeBoss; save();
+  awardXP(XP_BOSS, "boss defeated");
+  TAB = "progress"; setTab(); render();
+}
+
+/* ---------------- PROGRESS ---------------- */
+function renderProgress() {
+  const mana = manaState();
+  const end7 = avgHealth("activeEnergyKcal", 7);
+  let out = `<h2 class="sec">Character Sheet</h2>
+  <div class="tiles">
+    <div class="tile"><div class="t-label">Level</div><div class="t-value">${level()}</div><div class="t-sub mono">${S.xp} XP total</div></div>
+    <div class="tile"><div class="t-label">Quest streak</div><div class="t-value">${questStreak()}<span class="unit"> days</span></div><div class="t-sub">full Daily Quests in a row</div></div>
+    <div class="tile"><div class="t-label">STR · tonnage</div><div class="t-value">${tonnageKg().toLocaleString()}<span class="unit"> kg</span></div><div class="t-sub">total weight moved</div></div>
+    <div class="tile"><div class="t-label">END · active energy</div><div class="t-value">${end7 != null ? Math.round(end7) : "—"}<span class="unit"> kcal</span></div><div class="t-sub">7-day average</div></div>
+  </div>`;
+
+  // Boss fight comparison
+  const boss = [...S.boss].sort((a, b) => a.date < b.date ? -1 : 1);
+  out += `<h2 class="sec">Boss Fight Record</h2>`;
+  if (!boss.length) {
+    out += `<div class="card"><div class="empty-note">No boss fights logged yet. The first one comes at the end of week 4.</div></div>`;
+  } else {
+    const head = boss.map(b => `<th>wk ${b.week}</th>`).join("");
+    const rows = PROGRAM.bossFight.items.map(it => {
+      const cells = boss.map(b => `<td>${b[it.id] != null ? b[it.id] + (it.id === "pushups" && b.pushupStyle === "knees" ? " (knees)" : "") : "—"}</td>`).join("");
+      const first = boss.find(b => b[it.id] != null), lastB = [...boss].reverse().find(b => b[it.id] != null);
+      let delta = "";
+      if (first && lastB && first !== lastB) {
+        const d = lastB[it.id] - first[it.id];
+        const good = it.id === "waistCm" ? d < 0 : d > 0;
+        delta = `<td style="color:${good ? "var(--good)" : "var(--ink-mute)"};font-weight:700">${d > 0 ? "+" : ""}${Math.round(d * 10) / 10}</td>`;
+      } else delta = "<td>—</td>";
+      return `<tr><td>${esc(it.name)}</td>${cells}${delta}</tr>`;
+    }).join("");
+    out += `<div class="card"><div class="gtable-scroll"><table class="guide">
+      <thead><tr><th>Metric</th>${head}<th>Δ</th></tr></thead><tbody>${rows}</tbody></table></div>
+      <div class="mini">Week 8 vs week 4 is your proof the program is working — more reliable than the scale.</div></div>`;
+  }
+
+  // Charts
+  const weightPts = mergedWeightSeries();
+  out += `<h2 class="sec">Trends</h2>`;
+  out += chartCard("Body mass", "The scale lies for 8 weeks — watch the trend, not the days.", {
+    points: weightPts, yName: "kg", yUnit: "kg", yFmt: v => (Math.round(v * 10) / 10), empty: "Sync health data or log a weight below."
+  });
+  out += `<div class="card"><div class="row">
+      <input type="number" id="wIn" inputmode="decimal" step="0.1" min="0" placeholder="weight kg">
+      <button class="btn small" data-act="log-weight" style="flex:none">Log today</button>
+    </div></div>`;
+
+  const waistPts = boss.filter(b => b.waistCm != null).map(b => ({ x: b.date, t: fromISO(b.date).getTime(), y: b.waistCm, label: "wk " + b.week }));
+  out += chartCard("Waist at navel", "Boss-fight tape measurements.", {
+    points: waistPts, yName: "cm", yUnit: "cm", yFmt: v => Math.round(v * 10) / 10, empty: "Measured during each Boss Fight."
+  });
+
+  const hrvPts = seriesFromHealth("hrvMs", { last: 30 });
+  out += chartCard("HRV (SDNN)", mana.known ? `7-day baseline ${mana.mean} ms ± ${mana.sd} — the shaded band. Below it = LOW MANA.` : "Needs ≥3 synced days to build your baseline.", {
+    points: hrvPts, yName: "ms", yUnit: "ms",
+    band: mana.known ? { lo: mana.mean - mana.sd, hi: mana.mean + mana.sd, mid: mana.mean } : null,
+    empty: "Sync HRV data to unlock readiness tracking."
+  });
+
+  const stepPts = seriesFromHealth("steps", { last: 14 });
+  out += chartCard("Steps — last 14 days", "Target 8,000. Three 10-minute post-meal walks.", {
+    points: stepPts, type: "bar", zeroBase: true, target: 8000, targetLabel: "8k", yName: "steps",
+    yFmt: v => v >= 1000 ? (Math.round(v / 100) / 10) + "k" : Math.round(v), empty: "Sync step data to see this."
+  });
+
+  const rhrPts = seriesFromHealth("restingHeartRate", { last: 30 });
+  out += chartCard("Resting heart rate", "Drifting down over weeks = engine getting bigger.", {
+    points: rhrPts, yName: "bpm", yUnit: "bpm", empty: "Sync resting-heart-rate data to see this."
+  });
+  return out;
+}
+
+function avgHealth(field, lastN) {
+  const vals = [];
+  for (let i = 0; i < lastN; i++) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const rec = S.health.days[toISO(d)];
+    if (rec && rec[field] != null) vals.push(rec[field]);
+  }
+  return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
+}
+
+function mergedWeightSeries() {
+  const map = {};
+  for (const [d, v] of Object.entries(S.health.days)) if (v.bodyMassKg != null) map[d] = v.bodyMassKg;
+  for (const m of S.manualWeight) map[m.date] = m.kg;   // manual wins
+  return Object.entries(map).map(([d, kg]) => ({ x: d, t: fromISO(d).getTime(), y: kg, label: shortDate(d) })).sort((a, b) => a.t - b.t).slice(-90);
+}
+
+/* ---------------- SYNC ---------------- */
+function renderSync() {
+  const sync = daysSinceSync();
+  const nDays = Object.keys(S.health.days).length;
+  return `
+  <h2 class="sec">Health Sync</h2>
+  <div class="card">
+    <div class="row">
+      <div class="grow">
+        <h3>⇄ ${sync == null ? "Never synced" : sync === 0 ? "Synced today" : "Last synced " + sync + " day" + (sync > 1 ? "s" : "") + " ago"}</h3>
+        <div class="mini">${nDays} day${nDays === 1 ? "" : "s"} of health data stored locally</div>
+      </div>
+    </div>
+    ${sync != null && sync >= 7 ? `<div class="banner warn" style="margin:10px 0 0"><span class="ico">⏳</span><div>It's been a week — run the Shortcut and drop the file here.</div></div>` : ""}
+  </div>
+
+  <div class="dropzone" id="dz" role="button" tabindex="0" aria-label="Import health file">
+    <div class="big-ico">⇩</div>
+    <b>Drop a file here</b> or tap to choose<br>
+    <span class="mini">Shortcut JSON · Apple Health export.xml · CSV (e.g. Gabit export)</span>
+    <input type="file" id="fileIn" accept=".json,.xml,.csv,application/json,text/xml,text/csv" class="hidden">
+  </div>
+  <div id="syncStatus"></div>
+
+  <div class="card">
+    <h3>How syncing works</h3>
+    <p class="sub">Apple Health has no web API — a browser app cannot read it directly. The bridge is an <b>iOS Shortcut</b> that reads Health data and writes a JSON file matching the schema below. Run it daily (or weekly) and drop the file here.</p>
+    <p class="sub"><b>Gabit Ring:</b> check the Gabit app's settings for an Apple Health / Health Connect toggle. If it writes to the platform health store, Apple Health becomes the single integration point and this one file covers the ring too. If it only offers CSV export, drop the CSV here and map the columns once.</p>
+    <details>
+      <summary class="mini" style="cursor:pointer">Expected JSON schema (build the Shortcut to match)</summary>
+      <pre class="schema">${esc(SYNC_SCHEMA)}</pre>
+      <p class="mini">Import is idempotent — records merge on <b>date</b>: same date overwrites, never duplicates. Any field may be missing; absent metrics simply show as unavailable.</p>
+    </details>
+    <details style="margin-top:8px">
+      <summary class="mini" style="cursor:pointer">Apple Health export.xml</summary>
+      <p class="mini">Health app → your profile picture → <b>Export All Health Data</b>. The zip contains <b>export.xml</b> — drop it here. It's parsed in a streaming pass (fine for very large files); only steps, active energy, resting HR, HRV, body mass and sleep are read. Everything else is ignored.</p>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3>What synced data drives</h3>
+    <ul class="tight">
+      <li><b>Steps</b> → auto-completes the Daily Quest step target. No manual entry.</li>
+      <li><b>Sleep hours</b> → auto-fills the readiness check-in.</li>
+      <li><b>HRV + resting HR</b> → 7-day rolling baseline. More than 1 SD below → <b style="color:var(--mana)">LOW MANA</b>, and the reduced-volume session is pre-selected.</li>
+      <li><b>Body mass</b> → weight log and trend line.</li>
+      <li><b>Active energy</b> → feeds the END stat.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Backup</h3>
+    <p class="mini">Everything lives in this browser's local storage. Export a backup before clearing the browser or switching devices.</p>
+    <div class="btnrow">
+      <button class="btn" data-act="backup">⇓ Export backup</button>
+      <button class="btn" data-act="restore">⇑ Restore</button>
+    </div>
+    <input type="file" id="restoreIn" accept=".json" class="hidden">
+  </div>`;
+}
+
+async function handleFile(file) {
+  const status = $("#syncStatus");
+  const name = (file.name || "").toLowerCase();
+  try {
+    if (name.endsWith(".xml")) {
+      status.innerHTML = `<div class="card"><b>Parsing ${esc(file.name)}…</b><div class="progress-outer"><i id="xmlProg" style="width:0%"></i></div><div class="mini" id="xmlPct">0%</div></div>`;
+      const res = await Health.importExportXML(file, f => {
+        const el = $("#xmlProg"), pc = $("#xmlPct");
+        if (el) { el.style.width = Math.round(f * 100) + "%"; pc.textContent = Math.round(f * 100) + "%"; }
+      });
+      finishImport(res, status);
+    } else if (name.endsWith(".csv")) {
+      const text = await file.text();
+      const parsed = Health.parseCSV(text);
+      showCSVMapper(parsed, status);
+    } else {
+      const text = await file.text();
+      const res = Health.importJSONText(text);
+      finishImport(res, status);
+    }
+  } catch (e) {
+    status.innerHTML = `<div class="banner danger"><span class="ico">✕</span><div><b>Import failed.</b> ${esc(e.message)}</div></div>`;
+  }
+}
+
+function finishImport(res, status) {
+  status.innerHTML = `<div class="banner okay"><span class="ico">✓</span><div><b>${res.imported} day${res.imported === 1 ? "" : "s"} imported, ${res.updated} updated, ${res.errors} error${res.errors === 1 ? "" : "s"}.</b></div></div>`;
+  renderHeader();
+  // refresh the sync header numbers without wiping the status message
+  const stale = $("#view .card");
+  if (stale) {
+    const sync = daysSinceSync(); const nDays = Object.keys(S.health.days).length;
+    const h3 = $("h3", stale); const mini = $(".mini", stale);
+    if (h3) h3.textContent = "⇄ " + (sync === 0 ? "Synced today" : "Synced");
+    if (mini) mini.textContent = nDays + " days of health data stored locally";
+  }
+}
+
+const CSV_TARGETS = [
+  ["date", "Date (required)"], ["steps", "Steps"], ["sleepHours", "Sleep (hours)"],
+  ["hrvMs", "HRV (ms)"], ["restingHeartRate", "Resting HR (bpm)"],
+  ["bodyMassKg", "Body mass (kg)"], ["activeEnergyKcal", "Active energy (kcal)"]
+];
+
+function showCSVMapper(parsed, status) {
+  const guess = f => {
+    const pats = {
+      date: /date|day/i, steps: /step/i, sleepHours: /sleep/i, hrvMs: /hrv|variab/i,
+      restingHeartRate: /rest.*(hr|heart)|rhr/i, bodyMassKg: /weight|mass|kg/i, activeEnergyKcal: /energy|calorie|kcal|active/i
+    };
+    const saved = S.csvMap && S.csvMap[f];
+    if (saved != null && parsed.headers[saved] != null) return saved;
+    const i = parsed.headers.findIndex(h => pats[f] && pats[f].test(h));
+    return i;
+  };
+  status.innerHTML = `<div class="card">
+    <h3>Map CSV columns</h3>
+    <p class="mini">${parsed.rows.length} rows. Match each metric to a column — mapping is remembered for next time.</p>
+    ${CSV_TARGETS.map(([f, label]) => `
+      <div class="map-row"><span class="fld">${esc(label)}</span>
+        <select data-map="${f}">
+          <option value="-1">— not present —</option>
+          ${parsed.headers.map((h, i) => `<option value="${i}" ${guess(f) === i ? "selected" : ""}>${esc(h)}</option>`).join("")}
+        </select>
+      </div>`).join("")}
+    <button class="btn primary big" style="margin-top:12px" id="csvGo">Import CSV</button>
+  </div>`;
+  $("#csvGo").onclick = () => {
+    const map = {};
+    $$("select[data-map]", status).forEach(sel => { map[sel.dataset.map] = parseInt(sel.value, 10); });
+    if (map.date < 0) { toast("Pick the date column"); return; }
+    S.csvMap = map;
+    const res = Health.importCSVWithMap(parsed, map);
+    finishImport(res, status);
+  };
+}
+
+function downloadBackup() {
+  const blob = new Blob([JSON.stringify(S, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "ascend-backup-" + todayISO() + ".json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+/* ---------------- GUIDE ---------------- */
+function renderGuide() {
+  const sessTable = key => {
+    const s = PROGRAM.sessions[key];
+    return `<div class="card">
+      <h3>Session ${key} — ${esc(s.title)}</h3>
+      <div class="mini">${esc(s.emphasis)}</div>
+      <div class="gtable-scroll"><table class="guide">
+        <thead><tr><th>#</th><th>Exercise</th><th>Wk-1</th><th>Tempo</th><th>Rest</th></tr></thead>
+        <tbody>${s.exercises.map(e => {
+          const rx = prescribe(e, 1, false);
+          return `<tr><td>${e.id}</td><td style="white-space:normal;color:var(--ink-2);font-weight:400">${esc(e.name)}</td><td>${rx.sets}×${esc(rx.repsText)}</td><td>${esc(e.tempo)}</td><td>${e.rest}s</td></tr>`;
+        }).join("")}</tbody>
+      </table></div>
+      <p class="mini">${esc(s.focus)}</p>
+    </div>`;
+  };
+  return `
+  <h2 class="sec">The Program</h2>
+  <div class="card">
+    <h3>Phase 1 — FOUNDATION</h3>
+    <p class="sub">8 weeks · ${esc(PROGRAM.equipment)} · 3 sessions/week · ${esc(PROGRAM.sessionLength)}</p>
+    <p class="mini">${esc(PROGRAM.rotationNote)}</p>
+    <p class="mini">Every session: 6 min warm-up → the exercises → 3 min cool-down. ${esc(PROGRAM.restRule)}</p>
+  </div>
+
+  <h2 class="sec">Weekly Progression</h2>
+  <div class="card"><div class="gtable-scroll"><table class="guide">
+    <thead><tr><th>Wk</th><th>Sets</th><th>Reps</th><th>RPE</th><th>Notes</th></tr></thead>
+    <tbody>${PROGRAM.weekPlan.map(w => `<tr>
+      <td>${w.week}${w.deload ? " 🛡" : ""}${w.boss ? " ⚔︎" : ""}</td>
+      <td>${w.setsMain}${w.setsMain !== w.setsRest ? " / " + w.setsRest : ""}</td>
+      <td>${w.reps[0] === w.reps[1] ? w.reps[0] : w.reps[0] + "–" + w.reps[1]}</td>
+      <td>${esc(w.rpe)}</td>
+      <td style="white-space:normal;color:var(--ink-2);font-weight:400">${esc(w.note)}</td>
+    </tr>`).join("")}</tbody>
+  </table></div>
+  <p class="mini">Weeks 5 & 7: main lifts (first two movements) get the higher set count; the rest stay at 3.</p></div>
+
+  <h2 class="sec">RPE — how hard is hard</h2>
+  <div class="card">
+    ${PROGRAM.rpeScale.map(([k, v]) => `<div class="quest-item"><div class="q-body"><div class="q-name">${esc(k)}</div><div class="q-detail">${esc(v)}</div></div></div>`).join("")}
+  </div>
+
+  <h2 class="sec">Warm-up · every session</h2>
+  <div class="card">
+    <ul class="tight">${PROGRAM.warmup.map(w => `<li>${esc(w)}</li>`).join("")}</ul>
+    <p class="mini">${esc(PROGRAM.warmupNote)}</p>
+  </div>
+
+  ${sessTable("A")}${sessTable("B")}${sessTable("C")}
+
+  <h2 class="sec">Boss Fights · weeks 4 & 8</h2>
+  <div class="card">
+    <ul class="tight">${PROGRAM.bossFight.items.map(i => `<li><b>${esc(i.name)}</b> — ${esc(i.detail)}</li>`).join("")}</ul>
+    <p class="mini">${esc(PROGRAM.bossFight.note)}</p>
+  </div>
+
+  <h2 class="sec">Non-negotiables</h2>
+  <div class="card">
+    <ul class="tight">
+      <li><b>Protein ~110–130 g/day.</b> The whole game. Front-load it — eggs, dahi, paneer, chicken, whey. If you hit only one target, hit this one.</li>
+      <li><b>Steps 8,000/day.</b> Highest-yield intervention for insulin resistance, zero recovery cost. Three 10-min post-meal walks blunt glucose spikes specifically.</li>
+      <li><b>Sleep 7 h.</b> Decides whether training produces muscle or just fatigue. Protect it over everything except protein.</li>
+      <li><b>Vitamin D + supplements</b> as prescribed.</li>
+    </ul>
+  </div>
+
+  <h2 class="sec">Coach's Notes</h2>
+  <div class="card"><ul class="tight">${PROGRAM.coachNotes.map(n => `<li>${esc(n)}</li>`).join("")}</ul></div>
+  <div class="banner danger"><span class="ico">✚</span><div>${esc(PROGRAM.stopSigns)}</div></div>
+
+  <h2 class="sec">Settings</h2>
+  <div class="card">
+    <label class="lbl" for="setStart">Week 1 start date</label>
+    <input type="date" id="setStart" value="${S.startDate || ""}">
+    <div class="btnrow">
+      <button class="btn" data-act="save-start">Save start date</button>
+      <button class="btn danger-ghost" data-act="reset">Reset all data</button>
+    </div>
+  </div>
+  <p class="mini center" style="margin:18px 0">ASCEND · Phase 1 · local-first — your data never leaves this device.</p>`;
+}
+
+/* ============================================================
+   EVENT WIRING
+   ============================================================ */
+
+function setTab() {
+  $$("#tabbar .tab").forEach(b => b.classList.toggle("on", b.dataset.tab === TAB));
+}
+
+function wire(root) {
+  // quest number inputs
+  $$("input[data-quest]", root).forEach(inp => {
+    inp.addEventListener("change", () => {
+      const d = todayISO();
+      S.quests[d] = S.quests[d] || {};
+      const v = parseFloat(inp.value);
+      S.quests[d][inp.dataset.quest] = Number.isNaN(v) ? null : v;
+      checkQuestAward(d); save(); render();
+    });
+  });
+  // set inputs
+  $$("input[data-set]", root).forEach(inp => {
+    inp.addEventListener("change", () => {
+      const [ex, i, f] = inp.dataset.set.split(":");
+      const v = parseFloat(inp.value);
+      S.active.entries[ex][+i][f] = Number.isNaN(v) ? null : v;
+      save();
+    });
+  });
+}
+
+document.addEventListener("click", ev => {
+  const t = ev.target.closest("[data-act],[data-sel],[data-done],[data-warm],.tab,.q-check[data-act],#dz");
+  if (!t) return;
+
+  if (t.classList && t.classList.contains("tab")) { TAB = t.dataset.tab; setTab(); render(); return; }
+
+  if (t.id === "dz") { $("#fileIn").click(); return; }
+
+  if (t.dataset.sel) { S.trainSel = t.dataset.sel; save(); render(); return; }
+
+  if (t.dataset.warm != null) {
+    const i = +t.dataset.warm;
+    S.active.warm[i] = !S.active.warm[i]; save(); render(); return;
+  }
+
+  if (t.dataset.done) {
+    const [ex, i] = t.dataset.done.split(":");
+    const set = S.active.entries[ex][+i];
+    set.done = !set.done; save();
+    t.classList.toggle("on", set.done);
+    if (set.done) {
+      const exDef = PROGRAM.sessions[S.active.session].exercises.find(e => e.id === ex);
+      startRest(exDef.rest, exDef.name + " — set " + (+i + 1) + " done");
+    }
+    return;
+  }
+
+  switch (t.dataset.act) {
+    case "ob-start": {
+      const v = $("#obStart").value;
+      if (!v) { toast("Pick a start date"); return; }
+      S.startDate = v; save(); render(); break;
+    }
+    case "go-train": TAB = "train"; setTab(); render(); break;
+    case "begin": beginSession(t.dataset.key); break;
+    case "finish": finishSession(); break;
+    case "resched": closeSession("rescheduled"); break;
+    case "skip": closeSession("skipped"); break;
+    case "start-boss": S.activeBoss = true; save(); TAB = "train"; setTab(); render(); break;
+    case "boss-save": saveBoss(); break;
+    case "boss-cancel": delete S.activeBoss; save(); render(); break;
+    case "quest-vitd": {
+      const d = todayISO();
+      S.quests[d] = S.quests[d] || {};
+      S.quests[d].vitd = !S.quests[d].vitd;
+      checkQuestAward(d); save(); render(); break;
+    }
+    case "log-weight": {
+      const v = parseFloat($("#wIn").value);
+      if (Number.isNaN(v) || v <= 0) { toast("Enter a weight"); return; }
+      S.manualWeight = S.manualWeight.filter(m => m.date !== todayISO());
+      S.manualWeight.push({ date: todayISO(), kg: v });
+      save(); toast("Weight logged"); render(); break;
+    }
+    case "backup": downloadBackup(); break;
+    case "restore": $("#restoreIn").click(); break;
+    case "save-start": {
+      const v = $("#setStart").value;
+      if (!v) return;
+      S.startDate = v; save(); toast("Start date saved"); renderHeader(); break;
+    }
+    case "reset": {
+      if (confirm("Erase ALL ASCEND data on this device? Export a backup first if in doubt.")) {
+        localStorage.removeItem(DB_KEY); S = loadState(); TAB = "home"; setTab(); render();
+      }
+      break;
+    }
+  }
+});
+
+function checkQuestAward(d) {
+  const q = questState(d);
+  if (q.complete && !q.awarded) {
+    S.quests[d].awarded = true;
+    S.xp += XP_QUEST;
+    toast("Daily Quest complete! +" + XP_QUEST + " XP");
+  }
+}
+
+document.addEventListener("change", ev => {
+  if (ev.target.id === "fileIn" && ev.target.files.length) { handleFile(ev.target.files[0]); ev.target.value = ""; }
+  if (ev.target.id === "restoreIn" && ev.target.files.length) {
+    const f = ev.target.files[0];
+    f.text().then(text => {
+      try {
+        const obj = JSON.parse(text);
+        if (!obj || typeof obj !== "object" || !("logs" in obj)) throw new Error("not an ASCEND backup");
+        localStorage.setItem(DB_KEY, JSON.stringify(Object.assign(DEFAULT_STATE(), obj)));
+        S = loadState(); toast("Backup restored"); render();
+      } catch (e) { toast("Restore failed: " + e.message); }
+    });
+    ev.target.value = "";
+  }
+});
+
+// drag & drop
+document.addEventListener("dragover", ev => {
+  const dz = $("#dz"); if (!dz) return;
+  ev.preventDefault(); dz.classList.add("hot");
+});
+document.addEventListener("dragleave", ev => { const dz = $("#dz"); if (dz) dz.classList.remove("hot"); });
+document.addEventListener("drop", ev => {
+  const dz = $("#dz"); if (!dz) return;
+  ev.preventDefault(); dz.classList.remove("hot");
+  if (ev.dataTransfer.files.length) handleFile(ev.dataTransfer.files[0]);
+});
+
+$("#restSkip").addEventListener("click", stopRest);
+
+/* debug/testing hooks */
+window.ASCEND = { get S() { return S; }, Health, render, PROGRAM, prescribe, manaState, questState };
+
+render();
+</script>
+</body>
+</html>

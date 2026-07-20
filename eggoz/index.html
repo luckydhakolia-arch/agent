@@ -2463,7 +2463,9 @@ function showLiveDataBanner() {
   const postLabel = D && !D.__noPlatformData && !D.__noDataInRange
     ? `${D.rawCount} posts · ${getFilterLabel()}`
     : getFilterLabel();
-  banner.innerHTML = `<span style="color:var(--green);">✓ Instagram data loaded · ${postLabel}</span><span style="color:var(--muted);font-size:12px;cursor:pointer;" onclick="clearLiveData()">✕ Reset</span>`;
+  const platName = (liveData && liveData.platform ? liveData.platform : 'instagram');
+  const platLabel = platName.charAt(0).toUpperCase() + platName.slice(1);
+  banner.innerHTML = `<span style="color:var(--green);">✓ ${platLabel} data loaded · ${postLabel}</span><span style="color:var(--muted);font-size:12px;cursor:pointer;" onclick="clearLiveData()">✕ Reset</span>`;
 }
 
 function clearLiveData() {
@@ -2543,25 +2545,31 @@ function _ingestParsedRows(rows, fields) {
   html += '</tbody></table></div>';
   const prev = document.getElementById('data-preview'); if (prev) prev.innerHTML = html;
 
+  // Facebook Page exports are mapped onto the Instagram row schema (all rows are the
+  // brand's own posts) so the whole dashboard pipeline works unchanged.
+  let processedRows = rows;
   let result = null;
   if (detectedPlatform === 'instagram') {
     result = processInstagramCSV(rows);
+  } else if (detectedPlatform === 'facebook') {
+    processedRows = mapFacebookToIG(rows);
+    result = processInstagramCSV(processedRows);
   } else {
-    showToast(`⚠ ${detectedPlatform.charAt(0).toUpperCase()+detectedPlatform.slice(1)} CSV parsing coming soon. Only Instagram is fully supported.`);
+    showToast(`⚠ ${detectedPlatform.charAt(0).toUpperCase()+detectedPlatform.slice(1)} CSV parsing coming soon. Instagram and Facebook are supported.`);
     uploadedFiles[uploadedFiles.length-1].status = 'err';
     renderFileList();
     return;
   }
 
   if (!result) {
-    showToast('⚠ Could not parse this file — check it has Views/Likes columns');
+    showToast('⚠ Could not parse this file — check it has Views/Reach/Reactions columns');
     uploadedFiles[uploadedFiles.length-1].status = 'err';
     renderFileList();
     return;
   }
 
-  // Cache raw rows so confirmed screenshots merge into the same dataset.
-  csvRawRows = rows.slice();
+  // Cache raw rows (in the Instagram schema) so confirmed screenshots merge into the same dataset.
+  csvRawRows = processedRows.slice();
   try { localStorage.setItem('eggoz_raw_rows', JSON.stringify(csvRawRows)); } catch(e) { /* quota — screenshots still merge in-session */ }
 
   result.platform = detectedPlatform;
@@ -2578,10 +2586,51 @@ function _ingestParsedRows(rows, fields) {
   uploadedFiles[uploadedFiles.length-1].rows = rows.length;
   renderFileList();
 
+  // Show everything just uploaded regardless of age — otherwise a default
+  // "Last 30 days" window hides older exports entirely and looks like nothing loaded.
+  const ts = document.getElementById('timeSelect'); if (ts) ts.value = 'all';
+
   autoSelectPlatform(detectedPlatform);
   updatePlatformIndicators();
   applyLiveDataToDashboard(getFilteredData());
-  showToast(`✓ ${detectedPlatform.charAt(0).toUpperCase()+detectedPlatform.slice(1)} · ${rows.length} posts loaded`);
+  showToast(`✓ ${detectedPlatform.charAt(0).toUpperCase()+detectedPlatform.slice(1)} · ${result.postCount} posts loaded`);
+}
+
+// Map a Facebook / Meta Business Suite Page export onto the Instagram row schema this
+// dashboard is built around. Every row is one of the brand's own posts (Page exports
+// have no influencer rows), so we force the own-account username. Reactions map to Likes;
+// Facebook has no Saves/Follows in this export, so those are 0.
+function mapFacebookToIG(rows) {
+  const normType = (v) => {
+    v = (v || '').toString().trim().toLowerCase();
+    if (!v) return 'post';
+    if (v === 'videos' || v === 'video') return 'video';
+    if (v === 'photos' || v === 'photo') return 'photo';
+    if (v === 'reels' || v === 'reel') return 'reel';
+    if (v.endsWith('s')) v = v.slice(0, -1);
+    return v;
+  };
+  const val = (r, k) => { const v = r[k]; return (v === undefined || v === null || String(v).trim() === '') ? '' : String(v); };
+  return rows.map(r => {
+    const views = val(r, 'Views') || val(r, 'Reach') || '0';
+    return {
+      'Post ID':          val(r, 'Post ID'),
+      'Account username': 'eggoznutrition',
+      'Account name':     val(r, 'Page name') || 'Eggoz',
+      'Description':      (val(r, 'Title') || val(r, 'Description') || '').replace(/\s+/g, ' ').trim(),
+      'Publish time':     val(r, 'Publish time'),
+      'Post type':        'IG ' + normType(r['Post type']),
+      'Views':            views,
+      'Likes':            val(r, 'Reactions') || '0',
+      'Comments':         val(r, 'Comments') || '0',
+      'Shares':           val(r, 'Shares') || '0',
+      'Saves':            '0',
+      'Reach':            val(r, 'Reach') || '0',
+      'Follows':          '0',
+      'Permalink':        val(r, 'Permalink'),
+      'Data comment':     ''
+    };
+  });
 }
 
 function autoSelectPlatform(platform) {
@@ -2659,6 +2708,11 @@ let platformDataStore = JSON.parse(localStorage.getItem('eggoz_platform_store') 
 function detectCSVPlatform(fields) {
   const fl = fields.map(f => f.toLowerCase().replace(/[\s_\-\(\)]/g,''));
 
+  // Facebook / Meta Business Suite Page export — check FIRST, because it also has a
+  // "Post type" column that would otherwise be mistaken for the Instagram signature.
+  if (fl.some(f => f === 'pageid' || f === 'pagename' || f.includes('postreach') || f.includes('pagefans'))) {
+    return 'facebook';
+  }
   // Instagram Posts export signature
   if (fl.includes('accountusername') || fl.includes('posttype') || (fl.includes('views') && fl.includes('follows') && fl.includes('reach'))) {
     return 'instagram';
@@ -2666,10 +2720,6 @@ function detectCSVPlatform(fields) {
   // YouTube Studio export signature
   if (fl.some(f => f.includes('videotitle') || f.includes('impressionclickthrough') || f.includes('averageviewduration'))) {
     return 'youtube';
-  }
-  // Facebook / Meta Business Suite
-  if (fl.some(f => f.includes('pageid') || f.includes('pagename') || f.includes('postreach') || f.includes('pagefans'))) {
-    return 'facebook';
   }
   // LinkedIn Company Pages
   if (fl.some(f => f.includes('organizationid') || f.includes('companyname') || f.includes('impressions') && fl.includes('clicks'))) {

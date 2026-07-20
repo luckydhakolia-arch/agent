@@ -2,6 +2,22 @@
 
 Single-file dashboard (`index.html`). No build step, CDN-only, localStorage-backed.
 
+## v14.1 — Facebook export support + age-aware upload
+
+- **Facebook / Meta Business Suite Page exports now load.** Previously such a file
+  showed nothing: it has a `Post type` column, so it was misdetected as Instagram, then
+  misparsed (no `eggoznutrition` username → every row treated as an influencer; no
+  `Likes` column → all own-account metrics zero). Detection now recognises Page exports
+  (`Page ID` / `Page name`) *before* the Instagram rule, and `mapFacebookToIG()` maps the
+  Facebook columns onto the Instagram row schema (Reactions → Likes; Views falls back to
+  Reach; Saves/Follows = 0; all rows are the brand's own posts) so the entire dashboard
+  pipeline works unchanged.
+- **Uploads now switch the time filter to "All time"** so older exports are visible
+  immediately. The default was "Last 30 days", which silently hid any data older than a
+  month (e.g. a 2025 export viewed in 2026 looked like nothing loaded).
+- The green "data loaded" banner and the post-count toast now reflect the detected
+  platform instead of always saying "Instagram".
+
 ## v14 — redesign pass (this change)
 
 Renamed the deploy artifact to `index.html` (no spaces/parentheses) so it can be

@@ -2529,7 +2529,7 @@ function handleFile(file) {
 
 // Shared ingestion path for CSV and XLSX (rows already parsed to objects).
 function _ingestParsedRows(rows, fields) {
-  const detectedPlatform = detectCSVPlatform(fields) || currentPlatform;
+  let detectedPlatform = detectCSVPlatform(fields) || currentPlatform;
 
   if (detectedPlatform !== currentPlatform) {
     const tabEl = document.querySelector(`.ptab[onclick*="'${detectedPlatform}'"]`);
@@ -2545,17 +2545,17 @@ function _ingestParsedRows(rows, fields) {
   html += '</tbody></table></div>';
   const prev = document.getElementById('data-preview'); if (prev) prev.innerHTML = html;
 
-  // Facebook Page exports are mapped onto the Instagram row schema (all rows are the
-  // brand's own posts) so the whole dashboard pipeline works unchanged.
+  // Instagram covers both the classic Posts export and the Meta Business Suite content
+  // export. The latter uses different column names (Page name / Reactions and no
+  // "Account username"), so it's normalised onto the classic schema first.
   let processedRows = rows;
   let result = null;
-  if (detectedPlatform === 'instagram') {
-    result = processInstagramCSV(rows);
-  } else if (detectedPlatform === 'facebook') {
-    processedRows = mapFacebookToIG(rows);
+  if (detectedPlatform === 'instagram' || detectedPlatform === 'facebook') {
+    processedRows = looksLikeMetaSuiteExport(fields) ? mapMetaSuiteToIG(rows) : rows;
     result = processInstagramCSV(processedRows);
+    detectedPlatform = 'instagram';
   } else {
-    showToast(`⚠ ${detectedPlatform.charAt(0).toUpperCase()+detectedPlatform.slice(1)} CSV parsing coming soon. Instagram and Facebook are supported.`);
+    showToast(`⚠ ${detectedPlatform.charAt(0).toUpperCase()+detectedPlatform.slice(1)} CSV parsing coming soon. Instagram is fully supported.`);
     uploadedFiles[uploadedFiles.length-1].status = 'err';
     renderFileList();
     return;
@@ -2596,11 +2596,19 @@ function _ingestParsedRows(rows, fields) {
   showToast(`✓ ${detectedPlatform.charAt(0).toUpperCase()+detectedPlatform.slice(1)} · ${result.postCount} posts loaded`);
 }
 
-// Map a Facebook / Meta Business Suite Page export onto the Instagram row schema this
-// dashboard is built around. Every row is one of the brand's own posts (Page exports
-// have no influencer rows), so we force the own-account username. Reactions map to Likes;
-// Facebook has no Saves/Follows in this export, so those are 0.
-function mapFacebookToIG(rows) {
+// True when the columns match a Meta Business Suite content export (Page name / Reactions
+// and no "Account username") rather than the classic Instagram Posts export.
+function looksLikeMetaSuiteExport(fields) {
+  const norm = fields.map(f => f.toLowerCase().replace(/[\s_\-\(\)]/g, ''));
+  const has = (n) => norm.includes(n);
+  return (has('pagename') || has('pageid') || has('reactions')) && !has('accountusername');
+}
+
+// Map a Meta Business Suite content export onto the classic Instagram row schema this
+// dashboard is built around. Every row is one of the brand's own posts, so we force the
+// own-account username. Reactions map to Likes; Views falls back to Reach; this export
+// carries no Saves/Follows, so those are 0.
+function mapMetaSuiteToIG(rows) {
   const normType = (v) => {
     v = (v || '').toString().trim().toLowerCase();
     if (!v) return 'post';
@@ -2708,18 +2716,20 @@ let platformDataStore = JSON.parse(localStorage.getItem('eggoz_platform_store') 
 function detectCSVPlatform(fields) {
   const fl = fields.map(f => f.toLowerCase().replace(/[\s_\-\(\)]/g,''));
 
-  // Facebook / Meta Business Suite Page export — check FIRST, because it also has a
-  // "Post type" column that would otherwise be mistaken for the Instagram signature.
-  if (fl.some(f => f === 'pageid' || f === 'pagename' || f.includes('postreach') || f.includes('pagefans'))) {
-    return 'facebook';
-  }
-  // Instagram Posts export signature
-  if (fl.includes('accountusername') || fl.includes('posttype') || (fl.includes('views') && fl.includes('follows') && fl.includes('reach'))) {
+  // Instagram — both the classic Posts export (Account username / Likes / Follows) and
+  // the Meta Business Suite content export (Page name / Reactions, IG content via Meta
+  // Suite). Meta Suite exports are the brand's own Instagram content, so they're treated
+  // as Instagram here; _ingestParsedRows normalises the differing columns.
+  if (fl.includes('accountusername') || fl.includes('posttype') || fl.includes('pagename') || fl.includes('pageid') || (fl.includes('views') && fl.includes('reach'))) {
     return 'instagram';
   }
   // YouTube Studio export signature
   if (fl.some(f => f.includes('videotitle') || f.includes('impressionclickthrough') || f.includes('averageviewduration'))) {
     return 'youtube';
+  }
+  // Facebook / Meta Business Suite Page-level export (fans/page reach metrics)
+  if (fl.some(f => f.includes('pagefans') || f.includes('postreach'))) {
+    return 'facebook';
   }
   // LinkedIn Company Pages
   if (fl.some(f => f.includes('organizationid') || f.includes('companyname') || f.includes('impressions') && fl.includes('clicks'))) {

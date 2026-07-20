@@ -2103,6 +2103,25 @@ function processInstagramCSV(rows) {
   };
 }
 
+// Show an "Upload CSV to see chart" message over a chart slot WITHOUT removing the
+// <canvas> element — so applyLiveDataToDashboard() can still locate and re-render it
+// after data is loaded in the same session. (Previously the canvas was replaced by
+// the message, so first-upload charts never appeared until a page reload.)
+function _showChartEmpty(id) {
+  const canvas = document.getElementById(id);
+  if (!canvas) return;
+  const wrap = canvas.closest('.chart-wrap') || canvas.parentElement;
+  if (!wrap) return;
+  canvas.style.display = 'none';
+  if (!wrap.querySelector('.empty-chart-msg')) {
+    const m = document.createElement('div');
+    m.className = 'empty-chart-msg';
+    m.style.cssText = 'display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);font-size:12px;';
+    m.textContent = 'Upload CSV to see chart';
+    wrap.appendChild(m);
+  }
+}
+
 // ===== RENDER EMPTY STATE =====
 function renderEmptyState() {
   const emptyHTML = `<div style="text-align:center;padding:40px 20px;">
@@ -2119,14 +2138,9 @@ function renderEmptyState() {
     card.querySelector('.metric-sub').className = 'metric-sub neu';
   });
 
-  // Overview charts → empty message
-  ['c-growth-mini','c-platform-pie','c-eng-format'].forEach(id => {
-    const canvas = document.getElementById(id);
-    if (canvas) {
-      const wrap = canvas.closest('.chart-wrap') || canvas.parentElement;
-      wrap.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);font-size:12px;">Upload CSV to see chart</div>`;
-    }
-  });
+  // Overview charts → empty message (keep the <canvas> in the DOM so a later
+  // applyLiveDataToDashboard() can still find and re-render it — see _showChartEmpty)
+  ['c-growth-mini','c-platform-pie','c-eng-format'].forEach(_showChartEmpty);
 
   // Content section
   const contentCard = document.querySelector('#sec-content .card');
@@ -2136,13 +2150,7 @@ function renderEmptyState() {
   });
 
   // Growth section charts
-  ['c-growth-full','c-monthly-gain','c-plat-followers','c-plat-growth-time','c-reach-monthly'].forEach(id => {
-    const canvas = document.getElementById(id);
-    if (canvas) {
-      const wrap = canvas.closest('.chart-wrap') || canvas.parentElement;
-      wrap.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);font-size:12px;">Upload CSV to see chart</div>`;
-    }
-  });
+  ['c-growth-full','c-monthly-gain','c-plat-followers','c-plat-growth-time','c-reach-monthly'].forEach(_showChartEmpty);
 
   // Growth metric cards
   document.querySelectorAll('#sec-growth .metric-card').forEach(card => {
@@ -5687,6 +5695,13 @@ function _shotReviewForm(id, name, dataUrl, m) {
     <button class="btn btn-ghost" onclick="dismissShot('${id}')">Skip</button>
   </div>`;
 }
+// Format a YYYY-MM-DD date-input value into the MM/DD/YYYY HH:MM string parseDate() expects,
+// so screenshot-imported posts flow into the monthly/timeline charts (not just totals).
+function _igDate(ymd) {
+  const d = ymd ? new Date(ymd + 'T00:00:00') : new Date();
+  if (isNaN(d)) return '';
+  return (d.getMonth()+1) + '/' + d.getDate() + '/' + d.getFullYear() + ' 00:00';
+}
 function manualShot(id, name) { const c = document.getElementById(id); if (c) c.innerHTML = _shotReviewForm(id, name, '', { post_type: 'reel' }); }
 function dismissShot(id) { const c = document.getElementById(id); if (c) c.remove(); }
 function commitShot(id) {
@@ -5703,7 +5718,7 @@ function commitShot(id) {
     'Account username': 'eggoznutrition',
     'Account name': 'Eggoz (screenshot)',
     'Description': 'Imported from screenshot',
-    'Publish time': vals.date || new Date().toISOString().slice(0,10),
+    'Publish time': _igDate(vals.date),
     'Post type': 'IG ' + (vals.post_type || 'reel'),
     'Views': String(num(vals.impressions) || num(vals.reach)),
     'Likes': s(vals.likes), 'Comments': s(vals.comments), 'Shares': s(vals.shares),

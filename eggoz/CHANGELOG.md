@@ -45,11 +45,22 @@ preserved; two new keys are added (`eggoz_theme`, `eggoz_raw_rows`,
   it back, for moving data between devices/browsers. The API key is excluded from
   exports.
 
-### Bug fixes found while reading the file
+### Bug fixes found while reading / running the file
 - `callClaudeWithKey()` called `updateApiKeyStatus()`, which does not exist — it would
   throw when a key was entered via the prompt fallback. Fixed to `updateApiKeyUI()`.
 - `handleDrop()` was referenced by the upload zone's `ondrop` but never defined —
   dragging a file threw. Now implemented (routes to the unified file handler).
+- **Charts didn't appear on first upload.** `renderEmptyState()` (which runs on a
+  first-run boot with no saved data) *replaced* the `<canvas>` elements with an
+  "Upload CSV to see chart" message. `applyLiveDataToDashboard()` then looked those
+  canvases up by id, found nothing, and skipped every Overview/Growth chart — so a
+  first-time user saw only KPIs until they reloaded the page. `renderEmptyState()` now
+  overlays the message *without* removing the canvas (`_showChartEmpty()`), so all 11
+  charts render immediately after the first upload. Verified end-to-end in a browser.
+- Screenshot-imported posts now use the `MM/DD/YYYY HH:MM` date format that
+  `parseDate()` expects (`_igDate()`), so they flow into the monthly/timeline charts
+  and the date range — not just the totals. Synthetic screenshot rows are also stored
+  as strings, since `pn()` (the numeric parser) ignores non-string cell values.
 
 ### Notes / deviations from the brief
 - **Model:** the brief named `claude-sonnet-4-6`, which is not a valid model id. The

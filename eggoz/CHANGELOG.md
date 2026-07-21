@@ -2,6 +2,14 @@
 
 Single-file dashboard (`index.html`). No build step, CDN-only, localStorage-backed.
 
+## v15.1 — bolder, interactive 3D
+
+- **Interactive 3D tilt:** every glass card now rotates in perspective toward the
+  cursor (pointer-tracked `rotateX/rotateY`) with a glare highlight that follows the
+  pointer. Disabled on touch devices and under `prefers-reduced-motion`.
+- Stronger ambient colour glows and gradient-image card borders for clearly visible
+  depth in both themes.
+
 ## v15 — premium "3D glass" visual makeover
 
 A full visual overhaul on top of the working structure:

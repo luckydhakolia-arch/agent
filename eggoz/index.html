@@ -683,10 +683,10 @@
     --glass-brd:  rgba(255,255,255,0.10);
     --glass-hi:   rgba(255,255,255,0.10);
     --elev-1: 0 1px 2px rgba(0,0,0,0.45), 0 10px 26px -8px rgba(0,0,0,0.55);
-    --elev-2: 0 2px 6px rgba(0,0,0,0.45), 0 26px 60px -14px rgba(0,0,0,0.70);
-    --glow-a: rgba(232,197,71,0.22);
-    --glow-b: rgba(167,139,250,0.18);
-    --glow-c: rgba(52,211,153,0.14);
+    --elev-2: 0 2px 6px rgba(0,0,0,0.45), 0 30px 70px -12px rgba(0,0,0,0.75);
+    --glow-a: rgba(232,197,71,0.40);
+    --glow-b: rgba(150,110,255,0.38);
+    --glow-c: rgba(45,220,180,0.30);
   }
   :root[data-theme="light"]{
     --glass:      rgba(255,255,255,0.60);
@@ -695,9 +695,9 @@
     --glass-hi:   rgba(255,255,255,0.95);
     --elev-1: 0 1px 2px rgba(30,30,45,0.06), 0 14px 30px -10px rgba(40,40,70,0.16);
     --elev-2: 0 2px 8px rgba(30,30,45,0.09), 0 30px 60px -16px rgba(40,40,70,0.24);
-    --glow-a: rgba(232,197,71,0.26);
-    --glow-b: rgba(120,90,240,0.12);
-    --glow-c: rgba(45,170,120,0.12);
+    --glow-a: rgba(232,197,71,0.42);
+    --glow-b: rgba(140,100,250,0.30);
+    --glow-c: rgba(45,190,150,0.26);
   }
   @media (prefers-color-scheme: light){
     :root:not([data-theme="dark"]):not([data-theme="light"]){
@@ -705,7 +705,7 @@
       --glass-brd: rgba(255,255,255,0.80); --glass-hi: rgba(255,255,255,0.95);
       --elev-1: 0 1px 2px rgba(30,30,45,0.06), 0 14px 30px -10px rgba(40,40,70,0.16);
       --elev-2: 0 2px 8px rgba(30,30,45,0.09), 0 30px 60px -16px rgba(40,40,70,0.24);
-      --glow-a: rgba(232,197,71,0.26); --glow-b: rgba(120,90,240,0.12); --glow-c: rgba(45,170,120,0.12);
+      --glow-a: rgba(232,197,71,0.42); --glow-b: rgba(140,100,250,0.30); --glow-c: rgba(45,190,150,0.26);
     }
   }
 
@@ -737,25 +737,33 @@
     border-bottom: 1px solid var(--glass-brd);
   }
 
-  /* 3D glass cards */
+  /* 3D glass cards — gradient border via padding-box/border-box, interactive tilt */
   .card, .metric-card{
     position: relative;
-    background: linear-gradient(160deg, var(--glass), var(--glass-2));
-    -webkit-backdrop-filter: blur(24px) saturate(1.5); backdrop-filter: blur(24px) saturate(1.5);
-    border: 1px solid var(--glass-brd);
+    border: 1.5px solid transparent;
+    background:
+      linear-gradient(160deg, var(--glass), var(--glass-2)) padding-box,
+      linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0.05) 38%, var(--glow-a) 78%, rgba(255,255,255,0.35)) border-box;
+    -webkit-backdrop-filter: blur(26px) saturate(1.6); backdrop-filter: blur(26px) saturate(1.6);
     box-shadow: var(--elev-1), inset 0 1px 0 var(--glass-hi);
-    transition: transform .38s var(--ease), box-shadow .38s var(--ease), border-color .38s var(--ease);
+    transform-style: preserve-3d;
+    transition: transform .5s var(--ease), box-shadow .4s var(--ease);
+    --gx: 50%; --gy: 0%;
   }
   .metric-card{ border-radius: 20px; }
-  .card > *, .metric-card > *{ position: relative; z-index: 1; }
+  .card > *, .metric-card > *{ position: relative; z-index: 1; transform: translateZ(24px); }
   .card::after, .metric-card::after{
     content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; z-index:0;
-    background: linear-gradient(180deg, rgba(255,255,255,0.07), transparent 38%);
+    background:
+      radial-gradient(420px circle at var(--gx) var(--gy), rgba(255,255,255,0.16), transparent 42%),
+      linear-gradient(180deg, rgba(255,255,255,0.08), transparent 40%);
+    transition: opacity .4s var(--ease); opacity: 0.85;
   }
+  .card.tilting, .metric-card.tilting{ transition: transform .08s linear, box-shadow .4s var(--ease); box-shadow: var(--elev-2), inset 0 1px 0 var(--glass-hi); }
+  .card.tilting::after, .metric-card.tilting::after{ opacity: 1; }
+  /* Fallback lift for non-pointer / reduced-motion (no JS tilt) */
   .card:hover, .metric-card:hover{
-    transform: translateY(-5px);
-    box-shadow: var(--elev-2), inset 0 1px 0 var(--glass-hi), 0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent);
-    border-color: color-mix(in srgb, var(--accent) 45%, var(--glass-brd));
+    box-shadow: var(--elev-2), inset 0 1px 0 var(--glass-hi), 0 0 0 1px color-mix(in srgb, var(--accent) 24%, transparent);
   }
 
   /* Hero numerals — metallic gradient with soft glow */
@@ -5985,6 +5993,31 @@ function rebuildFromAllRows() {
   window._initCountUp = function () {
     document.querySelectorAll('.metric-val').forEach(el => obs.observe(el, { childList: true, characterData: true, subtree: true }));
   };
+})();
+
+/* ---- Interactive 3D tilt on glass cards (pointer-tracking, reduced-motion aware) ---- */
+(function () {
+  const mm = window.matchMedia;
+  const reduce = mm && mm('(prefers-reduced-motion: reduce)').matches;
+  const fine = mm && mm('(hover: hover) and (pointer: fine)').matches;
+  if (reduce || !fine) return;
+  const MAX = 8;
+  let cur = null;
+  function reset(el) { el.style.transform = ''; el.classList.remove('tilting'); }
+  document.addEventListener('pointermove', (e) => {
+    const el = e.target.closest ? e.target.closest('.card, .metric-card') : null;
+    if (el !== cur) { if (cur) reset(cur); cur = el; }
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    el.style.transform = `perspective(1000px) rotateX(${(-py * MAX).toFixed(2)}deg) rotateY(${(px * MAX).toFixed(2)}deg) translateY(-4px) scale(1.012)`;
+    el.style.setProperty('--gx', (px * 100 + 50).toFixed(1) + '%');
+    el.style.setProperty('--gy', (py * 100 + 50).toFixed(1) + '%');
+    el.classList.add('tilting');
+  }, { passive: true });
+  document.addEventListener('pointerdown', (e) => { const el = e.target.closest ? e.target.closest('.card, .metric-card') : null; if (el) el.style.transition = 'transform .08s linear'; }, { passive: true });
+  window.addEventListener('blur', () => { if (cur) reset(cur); cur = null; });
 })();
 
 /* ---- Restore persisted ingestion state + theme on load ---- */

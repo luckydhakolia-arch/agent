@@ -2,6 +2,27 @@
 
 Single-file dashboard (`index.html`). No build step, CDN-only, localStorage-backed.
 
+## v15 — premium "3D glass" visual makeover
+
+A full visual overhaul on top of the working structure:
+- **Typeface:** dropped the Syne/DM Sans split for one modern system stack
+  (SF Pro / Inter fallback) with antialiasing and tighter tracking.
+- **Hero numerals:** KPI values are now 38–52px, weight 600, tabular-nums, tight
+  `-0.03em` tracking, with a metallic gradient fill — the numbers read from across
+  the room. A guarded **count-up animation** tweens them on load (respects
+  `prefers-reduced-motion`, and never animates non-numeric values like date ranges).
+- **3D glass surfaces:** cards, the sidebar and the topbar are frosted glass
+  (`backdrop-filter` blur + saturation), with layered elevation shadows, an inner
+  top highlight, a glossy sheen, and a lift-on-hover with an accent ring.
+- **Ambient depth:** a fixed background layer with soft gold/lavender/teal colour
+  glows plus a fine dot texture, so the glass has something to refract.
+- **Controls:** glossy gradient primary button with glow, glass ghost buttons and
+  filter pills, and an accent-chip active nav state with a left indicator bar.
+- Fully themed for light and dark; light mode leans into the frosted-glass look.
+
+All effects degrade gracefully and were verified rendering with real data (0 page
+errors, all charts intact) in both themes.
+
 ## v14.1 — Facebook export support + age-aware upload
 
 - **Facebook / Meta Business Suite Page exports now load.** Previously such a file

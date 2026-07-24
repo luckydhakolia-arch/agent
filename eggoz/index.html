@@ -1077,7 +1077,8 @@
           <div class="metric-card"><div class="metric-label">Avg views / post</div><div class="metric-val" id="cm-avgviews">—</div><div class="metric-sub neu">Own account</div></div>
           <div class="metric-card"><div class="metric-label">Top post views</div><div class="metric-val" id="cm-topviews">—</div><div class="metric-sub neu" id="cm-topviews-sub">—</div></div>
           <div class="metric-card"><div class="metric-label">Total likes</div><div class="metric-val" id="cm-likes">—</div><div class="metric-sub neu">Filtered range</div></div>
-          <div class="metric-card"><div class="metric-label">Total shares</div><div class="metric-val" id="cm-shares">—</div><div class="metric-sub neu">Filtered range</div></div>
+          <div class="metric-card"><div class="metric-label">Total shares</div><div class="metric-val" id="cm-shares">—</div><div class="metric-sub neu">Own account</div></div>
+          <div class="metric-card"><div class="metric-label">Influencer shares</div><div class="metric-val" id="cm-infl-shares">—</div><div class="metric-sub neu">Collab posts</div></div>
           <div class="metric-card"><div class="metric-label">Avg ER</div><div class="metric-val" id="cm-er">—</div><div class="metric-sub neu">Filtered posts</div></div>
         </div>
 
@@ -2401,8 +2402,9 @@ function applyLiveDataToDashboard(D) {
       { id:'cm-avgviews', label:'Avg views / post',  val: fmt(D.avgViews),               sub: 'Own account' },
       { id:'cm-topviews', label:'Top post views',    val: fmt(topPost?.views||0),         sub: topPost ? fmtD(topPost.date) : '—' },
       { id:'cm-likes',    label:'Total likes',       val: fmt(D.totalLikes),             sub: 'Filtered range' },
-      { id:'cm-shares',   label:'Total shares',      val: fmt(D.totalShares||0),         sub: 'Filtered range' },
-      { id:'cm-er',       label:'Avg reach / post',  val: D.avgReach>0 ? fmt(D.avgReach) : '—', sub: 'Unique accounts per post' },
+      { id:'cm-shares',      label:'Total shares',      val: fmt(D.totalShares||0),         sub: 'Own account' },
+      { id:'cm-infl-shares', label:'Influencer shares', val: fmt(D.inflShares||0),          sub: `${D.inflCount} collab posts` },
+      { id:'cm-er',          label:'Avg reach / post',  val: D.avgReach>0 ? fmt(D.avgReach) : '—', sub: 'Unique accounts per post' },
     ];
     const v = vals[i];
     if (!v) return;
@@ -2998,8 +3000,9 @@ function getFilteredData() {
   const avgReach      = postCount > 0 ? totalReach / postCount : 0;
   const avgER         = totalViews > 0 ? ((totalLikes + totalComments + totalShares) / totalViews) * 100 : 0;
 
-  const inflViews = sum(inflPosts, 'views');
-  const inflLikes = sum(inflPosts, 'likes');
+  const inflViews  = sum(inflPosts, 'views');
+  const inflLikes  = sum(inflPosts, 'likes');
+  const inflShares = sum(inflPosts, 'shares');
   const inflER    = inflViews > 0 ? ((inflLikes + sum(inflPosts,'comments') + sum(inflPosts,'shares')) / inflViews) * 100 : 0;
 
   // Rebuild byMonth from filtered posts
@@ -3046,7 +3049,7 @@ function getFilteredData() {
     // Metrics
     postCount, totalViews, totalLikes, totalComments, totalShares, totalSaves,
     totalReach, totalFollows, avgViews, avgLikes, avgReach, avgER,
-    inflCount: inflPosts.length, inflViews, inflLikes, inflER,
+    inflCount: inflPosts.length, inflViews, inflLikes, inflShares, inflER,
     // Breakdowns
     byMonth, monthKeys, byType,
     // Meta

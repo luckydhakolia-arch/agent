@@ -1077,6 +1077,7 @@
           <div class="metric-card"><div class="metric-label">Avg views / post</div><div class="metric-val" id="cm-avgviews">—</div><div class="metric-sub neu">Own account</div></div>
           <div class="metric-card"><div class="metric-label">Top post views</div><div class="metric-val" id="cm-topviews">—</div><div class="metric-sub neu" id="cm-topviews-sub">—</div></div>
           <div class="metric-card"><div class="metric-label">Total likes</div><div class="metric-val" id="cm-likes">—</div><div class="metric-sub neu">Filtered range</div></div>
+          <div class="metric-card"><div class="metric-label">Total shares</div><div class="metric-val" id="cm-shares">—</div><div class="metric-sub neu">Filtered range</div></div>
           <div class="metric-card"><div class="metric-label">Avg ER</div><div class="metric-val" id="cm-er">—</div><div class="metric-sub neu">Filtered posts</div></div>
         </div>
 
@@ -2278,9 +2279,10 @@ function renderEmptyState() {
   // applyLiveDataToDashboard() can still find and re-render it — see _showChartEmpty)
   ['c-growth-mini','c-platform-pie','c-eng-format'].forEach(_showChartEmpty);
 
-  // Content section
-  const contentCard = document.querySelector('#sec-content .card');
-  if (contentCard) contentCard.innerHTML = `<div class="card-title">Posts</div>${emptyHTML}`;
+  // Content section — put the empty message INSIDE the posts list container so it can
+  // be re-filled by renderContentPosts() once data loads (don't destroy the container).
+  const contentList = document.getElementById('content-posts-list');
+  if (contentList) contentList.innerHTML = emptyHTML;
   document.querySelectorAll('#sec-content .metric-card').forEach(card => {
     card.querySelector('.metric-val').textContent = '—';
   });
@@ -2399,6 +2401,7 @@ function applyLiveDataToDashboard(D) {
       { id:'cm-avgviews', label:'Avg views / post',  val: fmt(D.avgViews),               sub: 'Own account' },
       { id:'cm-topviews', label:'Top post views',    val: fmt(topPost?.views||0),         sub: topPost ? fmtD(topPost.date) : '—' },
       { id:'cm-likes',    label:'Total likes',       val: fmt(D.totalLikes),             sub: 'Filtered range' },
+      { id:'cm-shares',   label:'Total shares',      val: fmt(D.totalShares||0),         sub: 'Filtered range' },
       { id:'cm-er',       label:'Avg reach / post',  val: D.avgReach>0 ? fmt(D.avgReach) : '—', sub: 'Unique accounts per post' },
     ];
     const v = vals[i];

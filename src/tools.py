@@ -187,12 +187,36 @@ TOOL_DEFINITIONS: list[dict] = [
         "description": (
             "Return aggregate statistics about all generated content: "
             "total posts, breakdown by platform, breakdown by status, "
-            "and total trends stored. Use this to understand content coverage."
+            "total number of shares (overall and per platform), "
+            "and total trends stored. Use this to understand content coverage "
+            "and which platforms are driving engagement."
         ),
         "input_schema": {
             "type": "object",
             "properties": {},
             "required": [],
+        },
+    },
+    {
+        "name": "update_post_shares",
+        "description": (
+            "Record the number of shares a published post has received, as reported "
+            "by the platform's analytics. Keeps the share totals in get_content_stats "
+            "accurate — call it whenever fresh engagement numbers are available."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "post_id": {
+                    "type": "integer",
+                    "description": "ID of the post (as returned by save_post)",
+                },
+                "shares": {
+                    "type": "integer",
+                    "description": "Current total share count for the post",
+                },
+            },
+            "required": ["post_id", "shares"],
         },
     },
 ]
@@ -210,6 +234,7 @@ async def execute_tool(
         "save_trend": _save_trend,
         "get_recent_trends": _get_recent_trends,
         "get_content_stats": _get_content_stats,
+        "update_post_shares": _update_post_shares,
     }
     handler = handlers.get(name)
     if handler is None:
@@ -339,3 +364,13 @@ async def _get_recent_trends(tool_input: dict, db: Database) -> dict:
 
 async def _get_content_stats(_tool_input: dict, db: Database) -> dict:
     return await db.get_stats()
+
+
+async def _update_post_shares(tool_input: dict, db: Database) -> dict:
+    post_id = int(tool_input["post_id"])
+    shares = int(tool_input["shares"])
+    found = await db.update_post_shares(post_id, shares)
+    if not found:
+        return {"success": False, "error": f"No post with id {post_id}"}
+    logger.info("Updated shares post_id=%d shares=%d", post_id, shares)
+    return {"success": True, "post_id": post_id, "shares": shares}

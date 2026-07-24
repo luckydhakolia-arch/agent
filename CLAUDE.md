@@ -10,7 +10,7 @@ src/
   config.py               ← Config + SchedulerConfig (reads .env)
   database.py             ← async SQLite via aiosqlite (posts + trends)
   platforms.py            ← per-platform constraints and best practices
-  tools.py                ← 6 tool definitions + dispatch + implementations
+  tools.py                ← 7 tool definitions + dispatch + implementations
   agent.py                ← SocialMediaAgent: _run_loop() agentic tool-use loop
   scheduler.py            ← ContentScheduler: APScheduler jobs for 24x7 ops
 ```
@@ -34,7 +34,8 @@ The system prompt is marked `cache_control: {type: "ephemeral"}` so it is served
 | `get_pending_posts` | Retrieve queued/published posts |
 | `save_trend` | Persist a discovered trend |
 | `get_recent_trends` | Fetch the latest stored trends |
-| `get_content_stats` | Aggregate counts by platform and status |
+| `get_content_stats` | Aggregate counts by platform/status + total shares (overall and per platform) |
+| `update_post_shares` | Record a post's share count from platform analytics |
 
 ### Scheduler (`src/scheduler.py`)
 
@@ -109,7 +110,7 @@ Add a new entry to `PLATFORM_CONFIGS` in `src/platforms.py` and include the plat
 
 ## Database schema
 
-**`posts`**: id, platform, content, hashtags (JSON), media_desc, scheduled_for, content_type, topic_category, status (pending/published/failed), created_at, published_at
+**`posts`**: id, platform, content, hashtags (JSON), media_desc, scheduled_for, content_type, topic_category, status (pending/published/failed), created_at, published_at, shares
 
 **`trends`**: id, topic, platforms (JSON), hashtags (JSON), description, relevance_score, discovered_at
 

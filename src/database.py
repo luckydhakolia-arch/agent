@@ -30,7 +30,8 @@ class Database:
                     topic_category  TEXT    DEFAULT 'general',
                     status          TEXT    DEFAULT 'pending',
                     created_at      TEXT    NOT NULL,
-                    published_at    TEXT
+                    published_at    TEXT,
+                    shares          INTEGER DEFAULT 0
                 );
 
                 CREATE TABLE IF NOT EXISTS trends (
@@ -52,6 +53,13 @@ class Database:
                 CREATE INDEX IF NOT EXISTS idx_trends_discovered
                     ON trends(discovered_at DESC);
             """)
+            # migrate databases created before the shares column existed
+            cursor = await db.execute("PRAGMA table_info(posts)")
+            columns = [row[1] for row in await cursor.fetchall()]
+            if "shares" not in columns:
+                await db.execute(
+                    "ALTER TABLE posts ADD COLUMN shares INTEGER DEFAULT 0"
+                )
             await db.commit()
         logger.info("Database initialised at %s", self.db_path)
 
@@ -130,6 +138,16 @@ class Database:
             )
             await db.commit()
 
+    async def update_post_shares(self, post_id: int, shares: int) -> bool:
+        """Record the share count reported by the platform for a post."""
+        async with aiosqlite.connect(self.db_path) as db:
+            cursor = await db.execute(
+                "UPDATE posts SET shares = ? WHERE id = ?",
+                (shares, post_id),
+            )
+            await db.commit()
+            return cursor.rowcount > 0
+
     # ----------------------------------------------------------------- trends
 
     async def save_trend(
@@ -206,6 +224,17 @@ class Database:
                 )
             ).fetchall()
 
+            shares_row = await (
+                await db.execute("SELECT COALESCE(SUM(shares), 0) FROM posts")
+            ).fetchone()
+            total_shares = shares_row[0] if shares_row else 0
+
+            shares_platform_rows = await (
+                await db.execute(
+                    "SELECT platform, COALESCE(SUM(shares), 0) FROM posts GROUP BY platform"
+                )
+            ).fetchall()
+
             trends_row = await (await db.execute("SELECT COUNT(*) FROM trends")).fetchone()
             total_trends = trends_row[0] if trends_row else 0
 
@@ -213,6 +242,8 @@ class Database:
             "total_posts": total_posts,
             "posts_by_platform": {r[0]: r[1] for r in platform_rows},
             "posts_by_status": {r[0]: r[1] for r in status_rows},
+            "total_shares": total_shares,
+            "shares_by_platform": {r[0]: r[1] for r in shares_platform_rows},
             "total_trends": total_trends,
             "generated_at": datetime.utcnow().isoformat(),
         }

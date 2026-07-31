@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eggoz — SEO / AEO Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#0d0d0f; --panel:#141417; --panel-2:#1b1b1f; --line:#26262b;
+    --ink:#f2f2f0; --ink-dim:#8e8e96; --ink-faint:#5c5c66;
+    --accent:#e8c547; --good:#4ea172; --warn:#d9963f; --bad:#c9524d; --info:#5b8fc7;
+    --r:10px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .shell{display:flex;min-height:100vh}
+
+  /* Sidebar */
+  aside{width:212px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--line);padding:22px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+  .brand{padding:0 20px 20px;border-bottom:1px solid var(--line);margin-bottom:14px}
+  .brand h1{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;letter-spacing:-.01em}
+  .brand span{color:var(--accent)}
+  .brand p{font-size:10.5px;color:var(--ink-faint);letter-spacing:.09em;text-transform:uppercase;margin-top:3px}
+  nav button{display:block;width:100%;text-align:left;background:none;border:0;color:var(--ink-dim);padding:9px 20px;font:inherit;font-size:13px;cursor:pointer;border-left:2px solid transparent}
+  nav button:hover{color:var(--ink);background:var(--panel-2)}
+  nav button[aria-current="true"]{color:var(--accent);border-left-color:var(--accent);background:var(--panel-2)}
+  nav button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+  .stamp{padding:16px 20px 0;margin-top:14px;border-top:1px solid var(--line);font-size:11px;color:var(--ink-faint)}
+
+  /* Main */
+  main{flex:1;padding:26px 30px 60px;max-width:1180px}
+  .page{display:none}.page.on{display:block}
+  h2{font-family:'Syne',sans-serif;font-size:21px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px}
+  .sub{color:var(--ink-dim);font-size:13px;margin-bottom:22px;max-width:64ch}
+  h3{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-dim);margin:26px 0 11px}
+  h3:first-of-type{margin-top:0}
+
+  .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(178px,1fr))}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:15px 17px}
+  .kpi .label{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)}
+  .kpi .value{font-family:'Syne',sans-serif;font-size:27px;font-weight:700;margin:5px 0 2px;letter-spacing:-.02em}
+  .kpi .note{font-size:12px;color:var(--ink-dim)}
+  .up{color:var(--good)}.down{color:var(--bad)}.flat{color:var(--ink-faint)}
+
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+  .chart-wrap{position:relative;height:250px}
+
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:left;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);font-weight:500;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+  td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:0}
+  tbody tr:hover{background:var(--panel-2)}
+  .num{text-align:right;font-family:'DM Mono',monospace;font-size:12.5px;white-space:nowrap}
+  .truncate{max-width:400px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .scroll{max-height:460px;overflow-y:auto}
+
+  .chip{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;white-space:nowrap}
+  .chip.g{background:rgba(78,161,114,.16);color:var(--good)}
+  .chip.w{background:rgba(217,150,63,.16);color:var(--warn)}
+  .chip.b{background:rgba(201,82,77,.16);color:var(--bad)}
+  .chip.i{background:rgba(91,143,199,.16);color:var(--info)}
+  .chip.n{background:var(--panel-2);color:var(--ink-dim)}
+
+  .alert{display:flex;gap:11px;padding:12px 14px;border-radius:var(--r);border:1px solid var(--line);background:var(--panel);margin-bottom:8px;align-items:flex-start}
+  .alert.high{border-left:3px solid var(--bad)}
+  .alert.medium{border-left:3px solid var(--warn)}
+  .alert.low{border-left:3px solid var(--ink-faint)}
+  .alert .area{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);flex-shrink:0;width:66px;padding-top:2px}
+
+  details{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);margin-bottom:9px;overflow:hidden}
+  summary{padding:13px 16px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:14px;align-items:center}
+  summary::-webkit-details-marker{display:none}
+  summary:hover{background:var(--panel-2)}
+  summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+  .brief-title{font-weight:500;flex:1;min-width:0}
+  .brief-why{font-size:12px;color:var(--ink-dim);margin-top:2px}
+  .body{padding:0 16px 16px;border-top:1px solid var(--line)}
+  pre{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:13px;overflow-x:auto;font-family:'DM Mono',monospace;font-size:11.5px;line-height:1.6;white-space:pre-wrap;word-break:break-word;max-height:400px;color:var(--ink-dim)}
+  .copy{background:var(--panel-2);border:1px solid var(--line);color:var(--ink-dim);border-radius:6px;padding:5px 11px;font:inherit;font-size:12px;cursor:pointer;margin-top:9px}
+  .copy:hover{color:var(--accent);border-color:var(--accent)}
+
+  .empty{background:var(--panel);border:1px dashed var(--line);border-radius:var(--r);padding:34px;text-align:center;color:var(--ink-dim)}
+  .empty strong{display:block;color:var(--ink);font-family:'Syne',sans-serif;margin-bottom:6px}
+  .loader{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;z-index:50;padding:28px;text-align:center}
+  .loader.off{display:none}
+  .drop{border:1px dashed var(--line);border-radius:var(--r);padding:26px 34px;color:var(--ink-dim);max-width:460px}
+  .drop input{margin-top:12px;color:var(--ink-dim);font:inherit;font-size:12px}
+  code{font-family:'DM Mono',monospace;font-size:12px;color:var(--accent)}
+  @media(max-width:860px){.shell{flex-direction:column}aside{width:100%;height:auto;position:static}nav{display:flex;overflow-x:auto}nav button{white-space:nowrap;border-left:0;border-bottom:2px solid transparent}nav button[aria-current="true"]{border-left:0;border-bottom-color:var(--accent)}main{padding:20px 16px 50px}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="loader" id="loader">
+  <div class="drop">
+    <strong style="font-family:Syne,sans-serif;color:var(--ink);display:block;margin-bottom:8px">Load engine data</strong>
+    <p id="loadMsg">Reading <code>../data/latest.json</code>…</p>
+    <input type="file" id="filePick" accept="application/json">
+  </div>
+</div>
+
+<div class="shell">
+  <aside>
+    <div class="brand">
+      <h1>SEO <span>/</span> AEO Engine</h1>
+      <p id="brandName">Eggoz</p>
+    </div>
+    <nav id="nav"></nav>
+    <div class="stamp">
+      <div>Last daily: <span id="stampDaily">—</span></div>
+      <div>Last weekly: <span id="stampWeekly">—</span></div>
+    </div>
+  </aside>
+
+  <main>
+    <section class="page on" data-page="overview">
+      <h2>Overview</h2>
+      <p class="sub">Search performance from Google Search Console and answer-engine visibility from the weekly prompt panel. Search figures cover a 28-day window against the 28 days before it.</p>
+      <div class="grid" id="kpis"></div>
+      <h3>Alerts</h3>
+      <div id="alerts"></div>
+      <h3>Clicks and impressions</h3>
+      <div class="panel"><div class="chart-wrap"><canvas id="cTraffic"></canvas></div></div>
+      <h3>Answer-engine mention rate</h3>
+      <div class="panel"><div class="chart-wrap"><canvas id="cAeo"></canvas></div></div>
+    </section>
+
+    <section class="page" data-page="search">
+      <h2>Search</h2>
+      <p class="sub">Real impressions, clicks and average position for every query eggoz.in already surfaces on. More reliable than any rank tracker, because it is Google reporting on your own property.</p>
+      <div class="grid" id="searchKpis"></div>
+      <h3>Striking distance <span class="chip n">position 5–20, worth one push</span></h3>
+      <div class="panel scroll" id="tStriking"></div>
+      <h3>Weak snippets <span class="chip n">ranking fine, nobody clicking</span></h3>
+      <div class="panel scroll" id="tCtr"></div>
+      <h3>Losing ground</h3>
+      <div class="panel scroll" id="tDecay"></div>
+      <h3>Top pages</h3>
+      <div class="panel scroll" id="tPages"></div>
+    </section>
+
+    <section class="page" data-page="technical">
+      <h2>Technical</h2>
+      <p class="sub">Crawl of the sitemap plus mobile Lighthouse scores on priority pages. The extractability checks matter as much as the classic SEO ones — answer engines lift question-shaped headings with direct answers under them.</p>
+      <div class="grid" id="techKpis"></div>
+      <h3>Issues by frequency</h3>
+      <div class="panel scroll" id="tIssues"></div>
+      <h3>Page speed</h3>
+      <div class="panel scroll" id="tPsi"></div>
+      <h3>Pages</h3>
+      <div class="panel scroll" id="tCrawl"></div>
+    </section>
+
+    <section class="page" data-page="aeo">
+      <h2>Answer engines</h2>
+      <p class="sub">A fixed panel of buyer questions fired at Perplexity and Gemini every Monday. Mention rate is how often Eggoz appears at all; brand rank is where it lands when several brands are named.</p>
+      <div class="grid" id="aeoKpis"></div>
+      <h3>Visibility by question type</h3>
+      <div class="panel"><div class="chart-wrap"><canvas id="cBucket"></canvas></div></div>
+      <h3>Share of voice</h3>
+      <div class="panel scroll" id="tSov"></div>
+      <h3>Every response</h3>
+      <div class="panel scroll" id="tResponses"></div>
+    </section>
+
+    <section class="page" data-page="citations">
+      <h2>Citation gap</h2>
+      <p class="sub">Domains answer engines cite for your category that never mention Eggoz. This is the outreach list — LLM citations are earned media, so the way in is getting onto these pages, not editing your own.</p>
+      <h3>Gap — cited often, never mentions us</h3>
+      <div class="panel scroll" id="tGap"></div>
+      <h3>All cited domains</h3>
+      <div class="panel scroll" id="tCited"></div>
+      <h3>Reddit threads worth answering</h3>
+      <div class="panel scroll" id="tReddit"></div>
+    </section>
+
+    <section class="page" data-page="content">
+      <h2>Briefs and drafts</h2>
+      <p class="sub">Generated Monday from the gaps the collectors found. Every draft passes an ASCI Addendum II check before it lands here. Blocked drafts are kept, not deleted — read them and decide.</p>
+      <div class="grid" id="contentKpis"></div>
+      <h3>Queue</h3>
+      <div id="briefList"></div>
+    </section>
+
+    <section class="page" data-page="schema">
+      <h2>Structured data</h2>
+      <p class="sub">The one AEO lever fully under your control. These blocks are paste-ready — hand them to whoever ships changes to eggoz.in.</p>
+      <div id="schemaGaps"></div>
+      <h3>Ready to paste</h3>
+      <div id="schemaBlocks"></div>
+      <h3>llms.txt</h3>
+      <div id="llmsBlock"></div>
+    </section>
+  </main>
+</div>
+
+<script>
+const PAGES = [
+  ['overview','Overview'],['search','Search'],['technical','Technical'],
+  ['aeo','Answer engines'],['citations','Citation gap'],['content','Briefs & drafts'],['schema','Structured data']
+];
+let D = {}, H = {};
+
+const nav = document.getElementById('nav');
+PAGES.forEach(([id,label],i)=>{
+  const b=document.createElement('button');
+  b.textContent=label; b.setAttribute('aria-current', i===0?'true':'false');
+  b.onclick=()=>{
+    document.querySelectorAll('nav button').forEach(x=>x.setAttribute('aria-current','false'));
+    b.setAttribute('aria-current','true');
+    document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.dataset.page===id));
+    window.scrollTo(0,0);
+  };
+  nav.appendChild(b);
+});
+
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const n = v => v==null?'—':Number(v).toLocaleString('en-IN');
+const pct = v => v==null?'—':(v*100).toFixed(0)+'%';
+const empty = (msg,hint) => `<div class="empty"><strong>${esc(msg)}</strong>${hint?esc(hint):''}</div>`;
+
+function kpi(label,value,note,cls){
+  return `<div class="kpi"><div class="label">${esc(label)}</div><div class="value">${esc(value)}</div><div class="note ${cls||''}">${note||''}</div></div>`;
+}
+function table(el, cols, rows, render){
+  const t = document.getElementById(el);
+  if(!rows || !rows.length){ t.innerHTML = empty('Nothing here yet','Run the engine to populate this.'); return; }
+  t.innerHTML = `<table><thead><tr>${cols.map(c=>`<th${c.num?' class="num"':''}>${esc(c.label)}</th>`).join('')}</tr></thead><tbody>${rows.map(render).join('')}</tbody></table>`;
+}
+function delta(v, invert){
+  if(v==null) return '<span class="flat">no prior data</span>';
+  const good = invert ? v>0 : v>0;
+  if(v===0) return '<span class="flat">no change</span>';
+  return `<span class="${good?'up':'down'}">${v>0?'+':''}${v}</span>`;
+}
+
+/* ---------- Overview ---------- */
+function renderOverview(){
+  const s = D.seo?.totals, a = D.aeo, c = D.crawl;
+  document.getElementById('kpis').innerHTML = [
+    kpi('Search clicks', s?n(s.clicks):'—','28 days'),
+    kpi('Impressions', s?n(s.impressions):'—','28 days'),
+    kpi('Average position', s?s.avgPosition:'—', s?`across ${n(s.queryCount)} queries`:''),
+    kpi('Answer-engine mentions', a?pct(a.mentionRate):'—', a?`${a.responsesCollected} responses`:'not run yet'),
+    kpi('Own domain cited', a?pct(a.ownDomainCitationRate):'—','as a source in answers'),
+    kpi('Open technical issues', c?n(c.totalIssues):'—', c?`${c.pagesWithIssues} of ${c.pagesCrawled} pages`:'')
+  ].join('');
+
+  const al = D.alerts||[];
+  document.getElementById('alerts').innerHTML = al.length
+    ? al.map(x=>`<div class="alert ${esc(x.level)}"><div class="area">${esc(x.area)}</div><div>${esc(x.message)}</div></div>`).join('')
+    : empty('Nothing needs attention','All tracked thresholds are within range.');
+
+  const seoH = H.seo||[];
+  if(seoH.length>1) line('cTraffic', seoH.map(p=>p.date), [
+    {label:'Clicks', data:seoH.map(p=>p.clicks), color:'#e8c547'},
+    {label:'Impressions', data:seoH.map(p=>p.impressions), color:'#5b8fc7', axis:'y1'}
+  ]);
+  const aeoH = H.aeo||[];
+  if(aeoH.length>1) line('cAeo', aeoH.map(p=>p.date), [
+    {label:'Mention rate %', data:aeoH.map(p=>+(p.mentionRate*100).toFixed(1), ), color:'#4ea172'},
+    {label:'Own domain cited %', data:aeoH.map(p=>+(p.ownDomainCitationRate*100).toFixed(1)), color:'#e8c547'}
+  ]);
+}
+
+function line(id, labels, sets){
+  const ctx = document.getElementById(id); if(!ctx) return;
+  new Chart(ctx,{type:'line',data:{labels,datasets:sets.map(s=>({
+    label:s.label,data:s.data,borderColor:s.color,backgroundColor:s.color+'22',
+    tension:.3,borderWidth:2,pointRadius:2,fill:true,yAxisID:s.axis||'y'
+  }))},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#8e8e96',font:{family:'DM Sans',size:11},boxWidth:10}}},
+    scales:{
+      x:{ticks:{color:'#5c5c66',font:{size:10},maxTicksLimit:9},grid:{color:'#26262b'}},
+      y:{ticks:{color:'#5c5c66',font:{size:10}},grid:{color:'#26262b'}},
+      y1:{position:'right',ticks:{color:'#5c5c66',font:{size:10}},grid:{display:false},display:sets.some(s=>s.axis==='y1')}
+    }}});
+}
+
+/* ---------- Search ---------- */
+function renderSearch(){
+  const s = D.seo, t = s?.totals;
+  document.getElementById('searchKpis').innerHTML = t ? [
+    kpi('Clicks', n(t.clicks), `${t.ctr}% CTR`),
+    kpi('Impressions', n(t.impressions),''),
+    kpi('Queries ranking', n(t.queryCount),''),
+    kpi('Striking distance', n(s.strikingDistance?.length), 'one push from page one')
+  ].join('') : empty('Search Console not connected yet','');
+
+  table('tStriking',[{label:'Query'},{label:'Bucket'},{label:'Pos',num:1},{label:'Impr',num:1},{label:'Clicks',num:1},{label:'Δ Pos',num:1}],
+    s?.strikingDistance, r=>`<tr><td class="truncate">${esc(r.query)}</td><td><span class="chip n">${esc(r.bucket)}</span></td>
+    <td class="num">${r.position}</td><td class="num">${n(r.impressions)}</td><td class="num">${n(r.clicks)}</td><td class="num">${delta(r.positionDelta)}</td></tr>`);
+
+  table('tCtr',[{label:'Query'},{label:'Pos',num:1},{label:'Impr',num:1},{label:'CTR',num:1}],
+    s?.weakSnippets, r=>`<tr><td class="truncate">${esc(r.query)}</td><td class="num">${r.position}</td>
+    <td class="num">${n(r.impressions)}</td><td class="num"><span class="chip b">${r.ctr}%</span></td></tr>`);
+
+  table('tDecay',[{label:'Query'},{label:'Pos now',num:1},{label:'Dropped',num:1},{label:'Impr',num:1}],
+    s?.decayed, r=>`<tr><td class="truncate">${esc(r.query)}</td><td class="num">${r.position}</td>
+    <td class="num down">${r.positionDelta}</td><td class="num">${n(r.impressions)}</td></tr>`);
+
+  table('tPages',[{label:'Page'},{label:'Clicks',num:1},{label:'Impr',num:1},{label:'CTR',num:1},{label:'Pos',num:1}],
+    s?.topPages, r=>`<tr><td class="truncate">${esc(r.page)}</td><td class="num">${n(r.clicks)}</td>
+    <td class="num">${n(r.impressions)}</td><td class="num">${r.ctr}%</td><td class="num">${r.position}</td></tr>`);
+}
+
+/* ---------- Technical ---------- */
+function renderTechnical(){
+  const c = D.crawl, p = D.psi;
+  document.getElementById('techKpis').innerHTML = [
+    kpi('Pages crawled', c?n(c.pagesCrawled):'—',''),
+    kpi('Total issues', c?n(c.totalIssues):'—', c?`on ${c.pagesWithIssues} pages`:''),
+    kpi('Mobile performance', p?.avgPerformance??'—','priority pages'),
+    kpi('Lighthouse SEO', p?.avgSeo??'—',''),
+    kpi('llms.txt', c? (c.hasLlmsTxt?'Present':'Missing') : '—', c && !c.hasLlmsTxt ? 'generated weekly, needs dev to ship' : ''),
+    kpi('AI crawlers', c? (c.robotsBlocksAiCrawlers?'Blocked':'Allowed') : '—', c?.robotsBlocksAiCrawlers ? 'robots.txt is blocking them' : '')
+  ].join('');
+
+  const issues = Object.entries(c?.issueCounts||{}).sort((a,b)=>b[1]-a[1]);
+  table('tIssues',[{label:'Issue'},{label:'Pages affected',num:1}], issues,
+    r=>`<tr><td>${esc(r[0])}</td><td class="num">${r[1]}</td></tr>`);
+
+  table('tPsi',[{label:'URL'},{label:'Perf',num:1},{label:'SEO',num:1},{label:'A11y',num:1},{label:'LCP',num:1},{label:'CLS',num:1}],
+    p?.pages, r=>`<tr><td class="truncate">${esc(r.url)}</td>
+    <td class="num">${r.error?'—':scoreChip(r.performance)}</td><td class="num">${r.error?'—':scoreChip(r.seo)}</td>
+    <td class="num">${r.error?'—':scoreChip(r.accessibility)}</td>
+    <td class="num">${r.lcp?(r.lcp/1000).toFixed(1)+'s':'—'}</td><td class="num">${r.cls!=null?r.cls.toFixed(3):'—'}</td></tr>`);
+
+  table('tCrawl',[{label:'URL'},{label:'Words',num:1},{label:'Schema'},{label:'Q-headings',num:1},{label:'Issues'}],
+    c?.pages, r=>`<tr><td class="truncate">${esc(r.url)}</td><td class="num">${r.words!=null?n(r.words):'—'}</td>
+    <td>${(r.schemaTypes||[]).length?(r.schemaTypes||[]).map(t=>`<span class="chip i">${esc(t)}</span>`).join(' '):'<span class="chip b">none</span>'}</td>
+    <td class="num">${(r.questionHeadings||[]).length}</td>
+    <td style="font-size:12px;color:var(--ink-dim)">${(r.issues||[]).map(esc).join('<br>')||'—'}</td></tr>`);
+}
+const scoreChip = v => v==null?'—':`<span class="chip ${v>=90?'g':v>=50?'w':'b'}">${v}</span>`;
+
+/* ---------- AEO ---------- */
+function renderAeo(){
+  const a = D.aeo;
+  if(!a){ document.getElementById('aeoKpis').innerHTML = empty('The weekly run has not happened yet','Trigger "AEO weekly" from the Actions tab to populate this.'); return; }
+  document.getElementById('aeoKpis').innerHTML = [
+    kpi('Mention rate', pct(a.mentionRate), `${a.responsesCollected} responses`),
+    kpi('Average brand rank', a.avgBrandRank??'—','when brands are listed'),
+    kpi('Own domain cited', pct(a.ownDomainCitationRate),'as a source'),
+    kpi('Prompts run', n(a.promptsRun), (a.enginesUsed||[]).join(', ')),
+    kpi('Positive sentiment', n(a.sentimentSplit?.positive), 'of mentions'),
+    kpi('Errors', n(a.errors),'failed calls')
+  ].join('');
+
+  const buckets = Object.entries(a.byBucket||{});
+  if(buckets.length){
+    const ctx=document.getElementById('cBucket');
+    new Chart(ctx,{type:'bar',data:{labels:buckets.map(b=>b[0]),datasets:[{
+      label:'Mention rate %',data:buckets.map(b=>+(b[1].rate*100).toFixed(1)),
+      backgroundColor:buckets.map(b=>b[1].rate>=.4?'#4ea172':b[1].rate>=.15?'#d9963f':'#c9524d'),borderRadius:4
+    }]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{ticks:{color:'#8e8e96',font:{size:11}},grid:{display:false}},
+              y:{ticks:{color:'#5c5c66',font:{size:10}},grid:{color:'#26262b'},max:100}}}});
+  }
+
+  const sov = Object.entries(a.shareOfVoice||{}).sort((x,y)=>y[1]-x[1]);
+  const total = sov.reduce((s,r)=>s+r[1],0) + (a.responsesCollected*a.mentionRate);
+  table('tSov',[{label:'Brand'},{label:'Times named',num:1},{label:'Share',num:1}],
+    [['Eggoz', Math.round(a.responsesCollected*a.mentionRate)],...sov],
+    r=>`<tr><td>${r[0]==='Eggoz'?`<strong style="color:var(--accent)">${esc(r[0])}</strong>`:esc(r[0])}</td>
+    <td class="num">${r[1]}</td><td class="num">${total?((r[1]/total)*100).toFixed(1)+'%':'—'}</td></tr>`);
+
+  table('tResponses',[{label:'Prompt'},{label:'Engine'},{label:'Us?'},{label:'Rank',num:1},{label:'Competitors named'}],
+    a.responses, r=>`<tr><td class="truncate" title="${esc(r.prompt)}">${esc(r.prompt)}</td>
+    <td><span class="chip n">${esc(r.engine)}</span></td>
+    <td>${r.error?'<span class="chip w">error</span>':r.brandMentioned?`<span class="chip g">${esc(r.brandSentiment||'yes')}</span>`:'<span class="chip b">absent</span>'}</td>
+    <td class="num">${r.brandRank??'—'}</td>
+    <td style="font-size:12px;color:var(--ink-dim)">${(r.competitorsMentioned||[]).map(esc).join(', ')||'—'}</td></tr>`);
+}
+
+/* ---------- Citations ---------- */
+function renderCitations(){
+  const a = D.aeo, s = D.social;
+  table('tGap',[{label:'Domain'},{label:'Times cited',num:1},{label:'On prompts'}],
+    a?.citationGap, r=>`<tr><td><a href="https://${esc(r.host)}" target="_blank" rel="noopener" style="color:var(--accent)">${esc(r.host)}</a></td>
+    <td class="num">${r.count}</td><td style="font-size:12px;color:var(--ink-dim)">${(r.prompts||[]).map(esc).join(', ')}</td></tr>`);
+
+  table('tCited',[{label:'Domain'},{label:'Times cited',num:1},{label:'Mentions us',num:1}],
+    a?.topCitedDomains, r=>`<tr><td>${esc(r.host)}</td><td class="num">${r.count}</td>
+    <td class="num">${r.mentionsBrand?`<span class="chip g">${r.mentionsBrand}</span>`:'<span class="chip b">0</span>'}</td></tr>`);
+
+  table('tReddit',[{label:'Thread'},{label:'Sub'},{label:'Comments',num:1},{label:'Date',num:1}],
+    s?.engagementOpportunities, r=>`<tr><td class="truncate"><a href="${esc(r.url)}" target="_blank" rel="noopener" style="color:var(--accent)">${esc(r.title)}</a></td>
+    <td style="font-size:12px;color:var(--ink-dim)">${esc(r.subreddit)}</td><td class="num">${r.comments}</td><td class="num">${esc(r.created)}</td></tr>`);
+}
+
+/* ---------- Content ---------- */
+function renderContent(){
+  const c = D.content;
+  if(!c){ document.getElementById('contentKpis').innerHTML=''; document.getElementById('briefList').innerHTML = empty('No briefs yet','The weekly run generates these from whatever gaps the collectors find.'); return; }
+  document.getElementById('contentKpis').innerHTML=[
+    kpi('Briefs generated', n(c.briefsGenerated),''),
+    kpi('Drafts ready', n((c.briefs||[]).filter(b=>b.status==='draft-ready').length),''),
+    kpi('Blocked by ASCI', n(c.blockedByAsci), c.blockedByAsci?'read before publishing':'nothing flagged'),
+    kpi('Generated', (c.generatedAt||'').slice(0,10),'')
+  ].join('');
+
+  document.getElementById('briefList').innerHTML = (c.briefs||[]).map((b,i)=>{
+    if(b.status==='error') return `<details><summary><div class="brief-title">${esc(b.id)}<div class="brief-why">Generation failed</div></div><span class="chip b">error</span></summary><div class="body"><pre>${esc(b.error)}</pre></div></details>`;
+    const br = b.brief||{};
+    const chip = b.status==='blocked-asci'?'<span class="chip b">ASCI: blocked</span>'
+      : b.compliance?.verdict==='review'?'<span class="chip w">ASCI: review</span>'
+      : b.draft?'<span class="chip g">draft ready</span>':'<span class="chip i">brief only</span>';
+    return `<details><summary>
+      <div class="brief-title">${esc(br.workingTitle||b.id)}<div class="brief-why">${esc(br.opportunity?.evidence||'')}</div></div>${chip}</summary>
+      <div class="body">
+        <h3>Meta</h3>
+        <p style="font-size:13px"><strong>${esc(br.metaTitle||'')}</strong><br><span style="color:var(--ink-dim)">${esc(br.metaDescription||'')}</span></p>
+        <h3>Answer block</h3><pre>${esc(br.answerBlock||'—')}</pre>
+        <h3>Angle</h3><p style="font-size:13px;color:var(--ink-dim)">${esc(br.distinctiveAngle||'—')}</p>
+        <h3>Outline</h3><pre>${esc((br.outline||[]).map(o=>`${o.heading}\n  ${o.answerFirst}`).join('\n\n'))}</pre>
+        ${b.compliance?.aiReview?`<h3>ASCI review</h3><pre>${esc(JSON.stringify(b.compliance.aiReview,null,2))}</pre>`:''}
+        ${b.draft?`<h3>Draft</h3><pre id="draft${i}">${esc(b.draft)}</pre><button class="copy" onclick="copyEl('draft${i}')">Copy draft</button>`:''}
+      </div></details>`;
+  }).join('') || empty('No briefs yet','');
+}
+
+/* ---------- Schema ---------- */
+function renderSchema(){
+  const s = D.schema;
+  if(!s){ document.getElementById('schemaGaps').innerHTML = empty('Not analysed yet','The weekly run produces this.'); return; }
+  document.getElementById('schemaGaps').innerHTML = (s.missingTypes||[]).length
+    ? `<h3>Missing</h3>` + s.missingTypes.map(m=>`<div class="alert medium"><div class="area">schema</div><div>${esc(m)}</div></div>`).join('')
+    : `<div class="alert low"><div class="area">schema</div><div>All expected schema types are present somewhere on the site.</div></div>`;
+
+  document.getElementById('schemaBlocks').innerHTML = Object.entries(s.readyToPaste||{}).map(([k,v],i)=>
+    `<details><summary><div class="brief-title">${esc(k)}</div><span class="chip i">JSON-LD</span></summary>
+     <div class="body"><pre id="sc${i}">${esc('<script type="application/ld+json">\n'+JSON.stringify(v,null,2)+'\n<\/script>')}</pre>
+     <button class="copy" onclick="copyEl('sc${i}')">Copy block</button></div></details>`).join('');
+
+  document.getElementById('llmsBlock').innerHTML = s.llmsTxt
+    ? `<div class="panel"><pre id="llms">${esc(s.llmsTxt)}</pre><button class="copy" onclick="copyEl('llms')">Copy llms.txt</button></div>`
+    : empty('Not generated yet','');
+}
+
+function copyEl(id){
+  navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>{
+    const b=event.target; const old=b.textContent; b.textContent='Copied'; setTimeout(()=>b.textContent=old,1400);
+  });
+}
+
+/* ---------- Boot ---------- */
+function boot(latest, history){
+  D = latest||{}; H = history||{};
+  document.getElementById('brandName').textContent = D.brand || 'Eggoz';
+  document.getElementById('stampDaily').textContent = D.date || '—';
+  document.getElementById('stampWeekly').textContent = D.aeoDate || '—';
+  renderOverview(); renderSearch(); renderTechnical(); renderAeo(); renderCitations(); renderContent(); renderSchema();
+  document.getElementById('loader').classList.add('off');
+}
+
+(async()=>{
+  try{
+    const [l,h] = await Promise.all([
+      fetch('../data/latest.json').then(r=>r.json()),
+      fetch('../data/history.json').then(r=>r.json()).catch(()=>({}))
+    ]);
+    boot(l,h);
+  }catch{
+    document.getElementById('loadMsg').innerHTML =
+      'Could not read <code>../data/latest.json</code> — browsers block local file reads. Serve the repo with <code>npx serve</code>, or pick the file below.';
+    document.getElementById('filePick').onchange = e=>{
+      const f=e.target.files[0]; if(!f) return;
+      const fr=new FileReader();
+      fr.onload=()=>{ try{ boot(JSON.parse(fr.result),{}); }catch{ document.getElementById('loadMsg').textContent='That file is not valid JSON.'; } };
+      fr.readAsText(f);
+    };
+  }
+})();
+</script>
+</body>
+</html>

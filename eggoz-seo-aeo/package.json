@@ -1,0 +1,16 @@
+{
+  "name": "eggoz-seo-aeo-engine",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "daily": "node scripts/run-daily.mjs",
+    "weekly": "node scripts/run-weekly.mjs",
+    "check": "node --check scripts/run-daily.mjs && node --check scripts/run-weekly.mjs"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "google-auth-library": "^9.14.0"
+  }
+}

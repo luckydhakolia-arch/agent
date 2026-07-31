@@ -1,0 +1,23 @@
+{
+  "note": "Tracked via Google Search Console (free, real data for your own site). Used to bucket GSC rows and seed content briefs.",
+  "buckets": {
+    "category": [
+      "best egg brand in india", "packaged eggs online", "branded eggs india",
+      "buy eggs online", "fresh eggs delivery", "antibiotic free eggs", "cage free eggs india"
+    ],
+    "nutrition": [
+      "protein in one egg", "how many eggs per day", "brown vs white eggs",
+      "eggs and cholesterol", "omega 3 eggs", "egg nutrition facts", "boiled egg calories"
+    ],
+    "local": [
+      "eggs delivery bengaluru", "eggs delivery gurugram", "eggs delivery mumbai",
+      "eggs delivery hyderabad", "eggs delivery kolkata", "eggs delivery jaipur", "egg brands delhi ncr"
+    ],
+    "branded": [
+      "eggoz", "eggoz eggs", "eggoz review", "eggoz price", "eggoz protein plus", "eggoz nutrition"
+    ],
+    "commerce": [
+      "eggs on blinkit", "eggs on zepto", "eggs on instamart", "10 minute egg delivery"
+    ]
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "note": "Fixed prompt panel fired at answer engines weekly. Keep this list STABLE — changing prompts breaks trend comparability. Add new prompts, avoid editing old ones.",
+  "prompts": [
+    { "id": "cat-01", "bucket": "category", "text": "What is the best egg brand in India?" },
+    { "id": "cat-02", "bucket": "category", "text": "Which packaged egg brands in India are safest to buy?" },
+    { "id": "cat-03", "bucket": "category", "text": "Are branded eggs worth the extra cost over loose eggs in India?" },
+    { "id": "cat-04", "bucket": "category", "text": "Which Indian egg brands are antibiotic-free?" },
+    { "id": "cat-05", "bucket": "category", "text": "Where can I buy cage-free or free-range eggs in India?" },
+    { "id": "cat-06", "bucket": "category", "text": "What should I look for when choosing an egg brand?" },
+    { "id": "cat-07", "bucket": "category", "text": "Which egg brands in India have the freshest supply chain?" },
+    { "id": "cat-08", "bucket": "category", "text": "Best D2C egg companies in India" },
+
+    { "id": "loc-01", "bucket": "local", "text": "Where can I order fresh eggs online in Bengaluru?" },
+    { "id": "loc-02", "bucket": "local", "text": "Best egg delivery service in Gurugram or Delhi NCR" },
+    { "id": "loc-03", "bucket": "local", "text": "Which egg brands are available in Mumbai?" },
+    { "id": "loc-04", "bucket": "local", "text": "Where to buy good quality eggs in Hyderabad" },
+    { "id": "loc-05", "bucket": "local", "text": "Fresh egg delivery in Kolkata" },
+    { "id": "loc-06", "bucket": "local", "text": "Egg brands available in Jaipur" },
+
+    { "id": "nut-01", "bucket": "nutrition", "text": "How much protein is in one egg?" },
+    { "id": "nut-02", "bucket": "nutrition", "text": "Are brown eggs healthier than white eggs?" },
+    { "id": "nut-03", "bucket": "nutrition", "text": "How many eggs can I eat per day?" },
+    { "id": "nut-04", "bucket": "nutrition", "text": "Do eggs raise cholesterol?" },
+    { "id": "nut-05", "bucket": "nutrition", "text": "What are omega-3 enriched eggs and are they worth buying?" },
+    { "id": "nut-06", "bucket": "nutrition", "text": "Best high-protein breakfast options for Indian families" },
+    { "id": "nut-07", "bucket": "nutrition", "text": "Are eggs safe for children to eat daily?" },
+    { "id": "nut-08", "bucket": "nutrition", "text": "How do I check if an egg is fresh?" },
+    { "id": "nut-09", "bucket": "nutrition", "text": "What makes an egg yolk dark orange?" },
+    { "id": "nut-10", "bucket": "nutrition", "text": "Protein-rich foods for vegetarians who eat eggs in India" },
+
+    { "id": "cmp-01", "bucket": "comparison", "text": "Eggoz vs Licious eggs — which is better?" },
+    { "id": "cmp-02", "bucket": "comparison", "text": "Compare the major branded egg companies in India" },
+    { "id": "cmp-03", "bucket": "comparison", "text": "Which eggs should I buy on Blinkit?" },
+    { "id": "cmp-04", "bucket": "comparison", "text": "Best eggs available on Zepto or Swiggy Instamart" },
+    { "id": "cmp-05", "bucket": "comparison", "text": "Is it better to buy eggs from quick commerce apps or local vendors?" },
+
+    { "id": "brd-01", "bucket": "branded", "text": "What is Eggoz?" },
+    { "id": "brd-02", "bucket": "branded", "text": "Is Eggoz a good egg brand?" },
+    { "id": "brd-03", "bucket": "branded", "text": "Eggoz eggs review — are they worth the price?" },
+    { "id": "brd-04", "bucket": "branded", "text": "Where can I buy Eggoz eggs?" },
+    { "id": "brd-05", "bucket": "branded", "text": "What is Eggoz Protein Plus?" },
+    { "id": "brd-06", "bucket": "branded", "text": "Who founded Eggoz and how does its farming model work?" },
+    { "id": "brd-07", "bucket": "branded", "text": "How much do Eggoz eggs cost?" },
+
+    { "id": "trs-01", "bucket": "trust", "text": "How do Indian egg brands ensure their eggs are safe?" },
+    { "id": "trs-02", "bucket": "trust", "text": "What certifications should Indian eggs have?" },
+    { "id": "trs-03", "bucket": "trust", "text": "Are supermarket eggs in India tested for antibiotics?" },
+    { "id": "trs-04", "bucket": "trust", "text": "How long do eggs stay fresh and should they be refrigerated in India?" },
+
+    { "id": "use-01", "bucket": "usage", "text": "Easy egg recipes for a quick Indian breakfast" },
+    { "id": "use-02", "bucket": "usage", "text": "How to store eggs properly in Indian summer" },
+    { "id": "use-03", "bucket": "usage", "text": "Best way to boil eggs so they peel easily" },
+    { "id": "use-04", "bucket": "usage", "text": "High protein egg meal prep ideas for the week" }
+  ],
+  "engines": [
+    { "id": "perplexity", "enabled": true,  "note": "Sonar API. Cheapest real answer engine with citations." },
+    { "id": "gemini",     "enabled": true,  "note": "Free tier with Google Search grounding. Closest proxy to AI Overviews." },
+    { "id": "claude",     "enabled": false, "note": "Enable only if budget allows — web_search tool is billed per search." }
+  ]
+}

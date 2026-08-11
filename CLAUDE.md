@@ -119,3 +119,16 @@ Add a new entry to `PLATFORM_CONFIGS` in `src/platforms.py` and include the plat
 Phase 1: FOUNDATION training program (see `ascend/README.md`). It is unrelated
 to the social media agent above: no Python, no build step — open
 `ascend/index.html` in a browser.
+
+## Eggoz SEO/AEO Engine (separate app)
+
+`eggoz-seo-aeo/` contains an always-on search and answer-engine monitor for
+eggoz.in — Node 20, ESM, no server. It is unrelated to the social media agent
+above and shares nothing with it. Two GitHub Actions crons drive it: a free
+daily collector (Google Search Console + Lighthouse + sitemap crawl) and a
+weekly answer-engine panel (Perplexity + Gemini) that generates content briefs,
+drafts, and an ASCI Addendum II compliance gate. The workflows live at the repo
+root (`.github/workflows/daily.yml`, `weekly.yml`) — Actions only runs them from
+there — but each pins `working-directory: eggoz-seo-aeo`, so run every local
+command (`npm ci`, `npm run daily`, `npm run weekly`) from inside that folder.
+See `eggoz-seo-aeo/README.md` for setup, required secrets, and cost.

@@ -1,0 +1,31 @@
+{
+  "brand": "Eggoz",
+  "legalEntity": "Nupa Technologies Pvt. Ltd.",
+  "domain": "https://eggoz.in",
+  "gscProperty": "sc-domain:eggoz.in",
+  "sitemap": "https://eggoz.in/sitemap.xml",
+  "maxPagesPerCrawl": 60,
+  "cities": ["Delhi NCR", "Bengaluru", "Mumbai", "Hyderabad", "Kolkata", "Jaipur"],
+  "quickCommerce": ["Blinkit", "Zepto", "Instamart"],
+  "brandAliases": ["Eggoz", "Eggoz Nutrition", "eggoz.in", "@eggoznutrition"],
+  "competitors": [
+    "Licious",
+    "Keggfarms",
+    "Kegg",
+    "Suguna Daily Fresh",
+    "Happy Hens Farm",
+    "Fresho",
+    "Zappfresh",
+    "Country Eggs",
+    "Ovo Farm",
+    "Henfruit"
+  ],
+  "priorityPages": ["/", "/products", "/about", "/blog"],
+  "thresholds": {
+    "positionDropAlert": 3,
+    "clicksDropPercentAlert": 25,
+    "psiPerformanceFloor": 60,
+    "psiSeoFloor": 90,
+    "aeoMentionRateFloor": 0.15
+  }
+}

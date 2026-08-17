@@ -36,5 +36,14 @@
       "pagesWithIssues": 60,
       "pagesCrawled": 60
     }
+  ],
+  "aeo": [
+    {
+      "date": "2026-08-17",
+      "mentionRate": 0,
+      "ownDomainCitationRate": 0,
+      "avgBrandRank": null,
+      "responsesCollected": 0
+    }
   ]
 }

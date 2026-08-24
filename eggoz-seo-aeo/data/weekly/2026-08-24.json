@@ -1,0 +1,753 @@
+{
+  "date": "2026-08-24",
+  "kind": "weekly",
+  "brand": "Eggoz",
+  "aeo": {
+    "enginesUsed": [
+      "perplexity",
+      "gemini"
+    ],
+    "promptsRun": 44,
+    "responsesCollected": 0,
+    "errors": 88,
+    "mentionRate": 0,
+    "ownDomainCitationRate": 0,
+    "avgBrandRank": null,
+    "sentimentSplit": {
+      "positive": 0,
+      "neutral": 0,
+      "negative": 0
+    },
+    "byBucket": {},
+    "shareOfVoice": {},
+    "topCitedDomains": [],
+    "citationGap": [],
+    "responses": [
+      {
+        "promptId": "cat-01",
+        "bucket": "category",
+        "prompt": "What is the best egg brand in India?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cat-01",
+        "bucket": "category",
+        "prompt": "What is the best egg brand in India?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cat-02",
+        "bucket": "category",
+        "prompt": "Which packaged egg brands in India are safest to buy?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cat-02",
+        "bucket": "category",
+        "prompt": "Which packaged egg brands in India are safest to buy?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cat-03",
+        "bucket": "category",
+        "prompt": "Are branded eggs worth the extra cost over loose eggs in India?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cat-03",
+        "bucket": "category",
+        "prompt": "Are branded eggs worth the extra cost over loose eggs in India?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cat-04",
+        "bucket": "category",
+        "prompt": "Which Indian egg brands are antibiotic-free?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cat-04",
+        "bucket": "category",
+        "prompt": "Which Indian egg brands are antibiotic-free?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cat-05",
+        "bucket": "category",
+        "prompt": "Where can I buy cage-free or free-range eggs in India?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cat-05",
+        "bucket": "category",
+        "prompt": "Where can I buy cage-free or free-range eggs in India?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cat-06",
+        "bucket": "category",
+        "prompt": "What should I look for when choosing an egg brand?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cat-06",
+        "bucket": "category",
+        "prompt": "What should I look for when choosing an egg brand?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cat-07",
+        "bucket": "category",
+        "prompt": "Which egg brands in India have the freshest supply chain?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cat-07",
+        "bucket": "category",
+        "prompt": "Which egg brands in India have the freshest supply chain?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cat-08",
+        "bucket": "category",
+        "prompt": "Best D2C egg companies in India",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cat-08",
+        "bucket": "category",
+        "prompt": "Best D2C egg companies in India",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "loc-01",
+        "bucket": "local",
+        "prompt": "Where can I order fresh eggs online in Bengaluru?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "loc-01",
+        "bucket": "local",
+        "prompt": "Where can I order fresh eggs online in Bengaluru?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "loc-02",
+        "bucket": "local",
+        "prompt": "Best egg delivery service in Gurugram or Delhi NCR",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "loc-02",
+        "bucket": "local",
+        "prompt": "Best egg delivery service in Gurugram or Delhi NCR",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "loc-03",
+        "bucket": "local",
+        "prompt": "Which egg brands are available in Mumbai?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "loc-03",
+        "bucket": "local",
+        "prompt": "Which egg brands are available in Mumbai?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "loc-04",
+        "bucket": "local",
+        "prompt": "Where to buy good quality eggs in Hyderabad",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "loc-04",
+        "bucket": "local",
+        "prompt": "Where to buy good quality eggs in Hyderabad",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "loc-05",
+        "bucket": "local",
+        "prompt": "Fresh egg delivery in Kolkata",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "loc-05",
+        "bucket": "local",
+        "prompt": "Fresh egg delivery in Kolkata",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "loc-06",
+        "bucket": "local",
+        "prompt": "Egg brands available in Jaipur",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "loc-06",
+        "bucket": "local",
+        "prompt": "Egg brands available in Jaipur",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "nut-01",
+        "bucket": "nutrition",
+        "prompt": "How much protein is in one egg?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "nut-01",
+        "bucket": "nutrition",
+        "prompt": "How much protein is in one egg?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "nut-02",
+        "bucket": "nutrition",
+        "prompt": "Are brown eggs healthier than white eggs?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "nut-02",
+        "bucket": "nutrition",
+        "prompt": "Are brown eggs healthier than white eggs?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "nut-03",
+        "bucket": "nutrition",
+        "prompt": "How many eggs can I eat per day?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "nut-03",
+        "bucket": "nutrition",
+        "prompt": "How many eggs can I eat per day?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "nut-04",
+        "bucket": "nutrition",
+        "prompt": "Do eggs raise cholesterol?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "nut-04",
+        "bucket": "nutrition",
+        "prompt": "Do eggs raise cholesterol?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "nut-05",
+        "bucket": "nutrition",
+        "prompt": "What are omega-3 enriched eggs and are they worth buying?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "nut-05",
+        "bucket": "nutrition",
+        "prompt": "What are omega-3 enriched eggs and are they worth buying?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "nut-06",
+        "bucket": "nutrition",
+        "prompt": "Best high-protein breakfast options for Indian families",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "nut-06",
+        "bucket": "nutrition",
+        "prompt": "Best high-protein breakfast options for Indian families",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "nut-07",
+        "bucket": "nutrition",
+        "prompt": "Are eggs safe for children to eat daily?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "nut-07",
+        "bucket": "nutrition",
+        "prompt": "Are eggs safe for children to eat daily?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "nut-08",
+        "bucket": "nutrition",
+        "prompt": "How do I check if an egg is fresh?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "nut-08",
+        "bucket": "nutrition",
+        "prompt": "How do I check if an egg is fresh?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "nut-09",
+        "bucket": "nutrition",
+        "prompt": "What makes an egg yolk dark orange?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "nut-09",
+        "bucket": "nutrition",
+        "prompt": "What makes an egg yolk dark orange?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "nut-10",
+        "bucket": "nutrition",
+        "prompt": "Protein-rich foods for vegetarians who eat eggs in India",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "nut-10",
+        "bucket": "nutrition",
+        "prompt": "Protein-rich foods for vegetarians who eat eggs in India",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cmp-01",
+        "bucket": "comparison",
+        "prompt": "Eggoz vs Licious eggs — which is better?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cmp-01",
+        "bucket": "comparison",
+        "prompt": "Eggoz vs Licious eggs — which is better?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cmp-02",
+        "bucket": "comparison",
+        "prompt": "Compare the major branded egg companies in India",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cmp-02",
+        "bucket": "comparison",
+        "prompt": "Compare the major branded egg companies in India",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cmp-03",
+        "bucket": "comparison",
+        "prompt": "Which eggs should I buy on Blinkit?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cmp-03",
+        "bucket": "comparison",
+        "prompt": "Which eggs should I buy on Blinkit?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cmp-04",
+        "bucket": "comparison",
+        "prompt": "Best eggs available on Zepto or Swiggy Instamart",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cmp-04",
+        "bucket": "comparison",
+        "prompt": "Best eggs available on Zepto or Swiggy Instamart",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cmp-05",
+        "bucket": "comparison",
+        "prompt": "Is it better to buy eggs from quick commerce apps or local vendors?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "cmp-05",
+        "bucket": "comparison",
+        "prompt": "Is it better to buy eggs from quick commerce apps or local vendors?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "brd-01",
+        "bucket": "branded",
+        "prompt": "What is Eggoz?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "brd-01",
+        "bucket": "branded",
+        "prompt": "What is Eggoz?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "brd-02",
+        "bucket": "branded",
+        "prompt": "Is Eggoz a good egg brand?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "brd-02",
+        "bucket": "branded",
+        "prompt": "Is Eggoz a good egg brand?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "brd-03",
+        "bucket": "branded",
+        "prompt": "Eggoz eggs review — are they worth the price?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "brd-03",
+        "bucket": "branded",
+        "prompt": "Eggoz eggs review — are they worth the price?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "brd-04",
+        "bucket": "branded",
+        "prompt": "Where can I buy Eggoz eggs?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "brd-04",
+        "bucket": "branded",
+        "prompt": "Where can I buy Eggoz eggs?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "brd-05",
+        "bucket": "branded",
+        "prompt": "What is Eggoz Protein Plus?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "brd-05",
+        "bucket": "branded",
+        "prompt": "What is Eggoz Protein Plus?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "brd-06",
+        "bucket": "branded",
+        "prompt": "Who founded Eggoz and how does its farming model work?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "brd-06",
+        "bucket": "branded",
+        "prompt": "Who founded Eggoz and how does its farming model work?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "brd-07",
+        "bucket": "branded",
+        "prompt": "How much do Eggoz eggs cost?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "brd-07",
+        "bucket": "branded",
+        "prompt": "How much do Eggoz eggs cost?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "trs-01",
+        "bucket": "trust",
+        "prompt": "How do Indian egg brands ensure their eggs are safe?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "trs-01",
+        "bucket": "trust",
+        "prompt": "How do Indian egg brands ensure their eggs are safe?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "trs-02",
+        "bucket": "trust",
+        "prompt": "What certifications should Indian eggs have?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "trs-02",
+        "bucket": "trust",
+        "prompt": "What certifications should Indian eggs have?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "trs-03",
+        "bucket": "trust",
+        "prompt": "Are supermarket eggs in India tested for antibiotics?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "trs-03",
+        "bucket": "trust",
+        "prompt": "Are supermarket eggs in India tested for antibiotics?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "trs-04",
+        "bucket": "trust",
+        "prompt": "How long do eggs stay fresh and should they be refrigerated in India?",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "trs-04",
+        "bucket": "trust",
+        "prompt": "How long do eggs stay fresh and should they be refrigerated in India?",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "use-01",
+        "bucket": "usage",
+        "prompt": "Easy egg recipes for a quick Indian breakfast",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "use-01",
+        "bucket": "usage",
+        "prompt": "Easy egg recipes for a quick Indian breakfast",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "use-02",
+        "bucket": "usage",
+        "prompt": "How to store eggs properly in Indian summer",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "use-02",
+        "bucket": "usage",
+        "prompt": "How to store eggs properly in Indian summer",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "use-03",
+        "bucket": "usage",
+        "prompt": "Best way to boil eggs so they peel easily",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "use-03",
+        "bucket": "usage",
+        "prompt": "Best way to boil eggs so they peel easily",
+        "engine": "gemini",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "use-04",
+        "bucket": "usage",
+        "prompt": "High protein egg meal prep ideas for the week",
+        "engine": "perplexity",
+        "error": "engine key missing"
+      },
+      {
+        "promptId": "use-04",
+        "bucket": "usage",
+        "prompt": "High protein egg meal prep ideas for the week",
+        "engine": "gemini",
+        "error": "engine key missing"
+      }
+    ]
+  },
+  "social": {
+    "threadsFound": 0,
+    "brandMentions": 0,
+    "engagementOpportunities": [],
+    "threads": []
+  },
+  "schema": {
+    "coverage": {
+      "Organization": 59,
+      "WebSite": 1,
+      "Product": 4,
+      "Article": 13
+    },
+    "missingTypes": [
+      "FAQPage — no FAQ markup, the highest-leverage AEO schema for your category",
+      "BreadcrumbList — weaker SERP presentation"
+    ],
+    "pagesWithoutSchema": [
+      "https://www.eggoz.com/agents.md"
+    ],
+    "readyToPaste": {
+      "organization": {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "@id": "https://eggoz.in/#organization",
+        "name": "Eggoz",
+        "legalName": "Nupa Technologies Pvt. Ltd.",
+        "url": "https://eggoz.in",
+        "logo": "https://eggoz.in/logo.png",
+        "description": "Eggoz is a branded egg company in India supplying fresh, traceable eggs across Delhi NCR, Bengaluru, Mumbai, Hyderabad, Kolkata, Jaipur.",
+        "areaServed": [
+          {
+            "@type": "City",
+            "name": "Delhi NCR"
+          },
+          {
+            "@type": "City",
+            "name": "Bengaluru"
+          },
+          {
+            "@type": "City",
+            "name": "Mumbai"
+          },
+          {
+            "@type": "City",
+            "name": "Hyderabad"
+          },
+          {
+            "@type": "City",
+            "name": "Kolkata"
+          },
+          {
+            "@type": "City",
+            "name": "Jaipur"
+          }
+        ],
+        "sameAs": [
+          "https://www.instagram.com/eggoznutrition/",
+          "https://www.linkedin.com/company/eggoz/",
+          "https://www.facebook.com/eggoz/"
+        ],
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "IN"
+        }
+      },
+      "website": {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "@id": "https://eggoz.in/#website",
+        "url": "https://eggoz.in",
+        "name": "Eggoz",
+        "publisher": {
+          "@id": "https://eggoz.in/#organization"
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://eggoz.in/search?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      },
+      "faqExample": {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How much protein is in one Eggoz egg?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A single large egg contains roughly 6 grams of protein, along with vitamin B12, choline, selenium and vitamin D. The protein is split between the white and the yolk, so eating the whole egg gives you the full amount."
+            }
+          }
+        ]
+      }
+    },
+    "suggestedFaqs": [],
+    "llmsTxt": "# Eggoz\n\n> Eggoz (Nupa Technologies Pvt. Ltd.) is a branded egg company in India. It runs a farmer-partner network and supplies fresh, traceable, date-stamped eggs across Delhi NCR, Bengaluru, Mumbai, Hyderabad, Kolkata, Jaipur through quick commerce (Blinkit, Zepto, Instamart), its own site, and modern retail.\n\n## What Eggoz sells\nFresh table eggs in branded, dated packs, including protein-enriched and speciality variants. Products are listed on Blinkit, Zepto, Instamart and at https://eggoz.in.\n\n## How Eggoz is different\n- Farmer-partner network with defined feed and husbandry protocols rather than open-market sourcing\n- Date-stamped packs so buyers can see freshness rather than infer it\n- Cold-chain distribution across 6 metros\n\n## Key pages\n- [🥚 Eggoz](https://www.eggoz.com/): Welcome to the World of Eggoz Nutrition, where you will get bright Orange Yolk Eggs which is an indicator of better nutr\n- [Eggoz - Brown Eggs](https://www.eggoz.com/products/brown-eggs): Eggoz provides a premium range of brown eggs, rigorously tested through 11 safety checks, ensuring the finest quality wi\n- [Eggoz - White Eggs](https://www.eggoz.com/products/white-eggs): Eggoz's white eggs are sourced from hens on 100% herbal hen feed, containing bright orange yolk with multiple nutrients.\n- [Eggoz - Free-Range Eggs](https://www.eggoz.com/products/free-range-eggs): Eggoz's free-range eggs come from hens that roam freely, providing a richer taste and higher nutritional value, ideal fo\n- [Everyday White Eggs\n – Eggoz](https://www.eggoz.com/products/everyday-white): \n- [Farm to Plate\n – Eggoz](https://www.eggoz.com/pages/farm-to-plate): Why Choose Eggoz ? Eggoz eggs go through an extensive and thoughtful process straight from our farms so that you receive\n- [Why Choose Eggoz?](https://www.eggoz.com/pages/why-choose-eggoz): Every Eggoz egg is farm-fresh, sourced from hens fed 100% herbal feed, resulting in bright orange yolks. Our range inclu\n- [Terms and Conditions\n – Eggoz](https://www.eggoz.com/pages/terms-and-conditions): TERMS &amp; CONDITION – NUPA technologies Private Limited (Eggoz) 1. WELCOME TO EGGOZ 1.1. Thank you for using www.eggoz\n- [Privacy Policy\n – Eggoz](https://www.eggoz.com/pages/privacy-policy): LEGAL &amp; PRIVACY POLICY Effective date: 2021-11-20 1. Introduction Welcome to NUPA Technologies Private Limited (Eggo\n- [Shipping Policy\n – Eggoz](https://www.eggoz.com/pages/shipping-policy): Shipping Policy Delivery Times When you order products from our website, the delivery of the ordered products depends on\n- [My subscriptions\n – Eggoz](https://www.eggoz.com/pages/spurit-subscriptions): \n- [Subscription cancelled\n – Eggoz](https://www.eggoz.com/pages/spurit-invoices-cancelled): Your subscription has been cancelled We hope to see you soon! Please visit our store again for the valuable gifts and pr\n- [Reminders cancelled\n – Eggoz](https://www.eggoz.com/pages/spurit-reminders-cancelled): Receiving invoice reminders successfully cancelled\n- [Notifications cancelled\n – Eggoz](https://www.eggoz.com/pages/spurit-notifications-cancelled): Receiving these notifications successfully cancelled\n- [Merchant notifications cancelled\n – Eggoz](https://www.eggoz.com/pages/spurit-merchant-notifications-cancelled): Receiving these notifications successfully cancelled You can resume it anytime in the app\n- [Eggoz - About Us](https://www.eggoz.com/pages/about-us): If we had to sum up EGGOZ in one line, we would say - “We’re aiming to make India a protein-positive nation so that when\n- [Track Your Order\n – Eggoz](https://www.eggoz.com/pages/track-your-order): \n- [Blogs\n – Eggoz](https://www.eggoz.com/pages/blogs): \n- [Traceability\n – Eggoz](https://www.eggoz.com/pages/traceability): Connect With Us Reach out to us through any channel — we respond quickly. WhatsApp or Call +91-011-41193222 Email Suppor\n- [About_New\n – Eggoz](https://www.eggoz.com/pages/about_new): \n- [pop-trace\n – Eggoz](https://www.eggoz.com/pages/pop-trace): Your complaint has been successfully submitted. Our team will get back to you as soon as possible.\n- [test-trace\n – Eggoz](https://www.eggoz.com/pages/test-trace): TRACE THE JOURNEY OF YOUR EGGOZ EGG Select Your Batch Number * Select Packed Date (dd/mm/yyyy) Submit Thanks for Purchas\n- [Test trace without date\n – Eggoz](https://www.eggoz.com/pages/test-trace-without-date): TRACE THE JOURNEY OF YOUR EGGOZ EGG Select Your Batch Number * Submit Thanks for Purchasing eggs from us! Your eggs have\n- [Farm Locations\n – Eggoz](https://www.eggoz.com/pages/farm-locations): Welcome to Eggoz! Discover exactly where your eggs come from—check out our farm locations and learn more about our commi\n- [App Privacy Policy\n – Eggoz](https://www.eggoz.com/pages/app-privacy-policy): Privacy PolicyThis privacy policy applies to the Eggoz Sales App (hereby referred to as \"Application\") for mobile device\n\n## Nutrition information\nEggoz publishes nutrition composition for its products. Eggoz does not claim that eggs treat, prevent, cure or manage any medical condition, in line with ASCI's Guidelines for Advertising of Food & Beverage Products, Addendum II.\n\n## Contact\nWebsite: https://eggoz.in\nInstagram: @eggoznutrition\n"
+  },
+  "content": {
+    "generatedAt": "2026-08-24T03:11:00.162Z",
+    "opportunitiesConsidered": 0,
+    "briefsGenerated": 0,
+    "blockedByAsci": 0,
+    "briefs": []
+  }
+}

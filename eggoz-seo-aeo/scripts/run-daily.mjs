@@ -67,8 +67,11 @@ async function main() {
     await appendHistory('speed', { date, performance: speed.avgPerformance, seo: speed.avgSeo });
   }
 
+  // The dated file is this run's self-contained snapshot. latest.json is the
+  // shared view the dashboard reads, so it must MERGE: overwriting it would
+  // discard the weekly run's social, schema and content sections every day.
   await writeJson(`data/daily/${date}.json`, report);
-  await writeJson('data/latest.json', report);
+  await writeJson('data/latest.json', { ...previous, ...report });
 
   console.log(`Done. ${report.alerts.length} alert(s).`);
 }

@@ -35,8 +35,26 @@ export function evaluate(report, site) {
     alerts.push({ level: 'low', area: 'aeo', message: 'No llms.txt on the domain. The weekly run generates one to hand to dev.' });
   }
 
-  if (report.aeo && report.aeo.mentionRate < t.aeoMentionRateFloor) {
+  // Only alert on a mention rate that was actually measured. A run with no
+  // engine keys returns 0% because nothing was asked, not because the brand is
+  // absent — alerting on that is a false alarm that trains you to ignore alerts.
+  const aeoMeasured =
+    report.aeo && !report.aeo.error && !report.aeo.skipped && (report.aeo.responsesCollected || 0) > 0;
+  if (aeoMeasured && report.aeo.mentionRate < t.aeoMentionRateFloor) {
     alerts.push({ level: 'high', area: 'aeo', message: `${site.brand} appears in only ${Math.round(report.aeo.mentionRate * 100)}% of answer-engine responses, below the floor of ${Math.round(t.aeoMentionRateFloor * 100)}%.` });
+  }
+
+  // Sections that could not run are worth surfacing as configuration problems,
+  // distinctly from measured regressions.
+  [['seo', report.seo], ['aeo', report.aeo], ['content', report.content]].forEach(([area, section]) => {
+    if (section?.skipped) {
+      alerts.push({ level: 'low', area, message: `Not measured this run — ${section.reason}` });
+    }
+  });
+
+  // Credential-free performance probe (Google-free mode) reports its own budget.
+  if (report.psi?.method === 'http-probe' && report.psi.pagesOverBudget > 0) {
+    alerts.push({ level: 'medium', area: 'technical', message: `${report.psi.pagesOverBudget} priority page(s) over the performance budget — avg ${report.psi.avgTtfbMs}ms response, ${report.psi.avgTotalKb}KB.` });
   }
 
   return alerts;

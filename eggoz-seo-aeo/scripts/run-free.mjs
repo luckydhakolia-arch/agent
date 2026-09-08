@@ -2,6 +2,7 @@ import { readJson, writeJson, writeText, appendHistory, today } from './lib/stor
 import * as crawl from './lib/crawl.mjs';
 import * as perf from './lib/perf.mjs';
 import * as discover from './lib/discover.mjs';
+import * as gscOauth from './lib/gsc-oauth.mjs';
 import * as aeo from './lib/aeo.mjs';
 import * as reddit from './lib/reddit.mjs';
 import * as schema from './analysers/schema.mjs';
@@ -44,9 +45,20 @@ async function main() {
 
   const hasAnthropic = Boolean(process.env.ANTHROPIC_API_KEY);
   const hasPerplexity = Boolean(process.env.PERPLEXITY_API_KEY);
+  const hasGscOauth = gscOauth.isConfigured();
 
   console.log(`Google-free run for ${site.brand} — ${date}`);
-  console.log(`  keys: anthropic=${hasAnthropic ? 'yes' : 'no'} perplexity=${hasPerplexity ? 'yes' : 'no'}`);
+  console.log(`  keys: anthropic=${hasAnthropic ? 'yes' : 'no'} perplexity=${hasPerplexity ? 'yes' : 'no'} gsc-oauth=${hasGscOauth ? 'yes' : 'no'}`);
+
+  // Search Console via OAuth-as-yourself when configured. This needs no service
+  // account and no verified owner — only the access you already have. Coverage
+  // discovery still runs alongside: one says what you rank for, the other what
+  // you have no content for.
+  const seo = hasGscOauth
+    ? await step('search console (oauth)', () => gscOauth.collect(site, keywords))
+    : skipped('Search Console not connected. Run `npm run auth:gsc` to authorise as yourself — no service account or property owner needed.');
+  if (seo.skipped) console.log(`  skip  search console — ${seo.reason}`);
+  else if (!seo.error) console.log(`        property: ${seo.property} (${seo.auth})`);
 
   // --- always available, no credentials -----------------------------------
   const technical = await step('site crawl', () => crawl.collect(site));
@@ -77,7 +89,7 @@ async function main() {
   // --- generation: needs Anthropic ----------------------------------------
   const content = hasAnthropic
     ? await step('brief and draft generation', () =>
-        briefs.generate(null, answers.skipped || answers.error ? null : answers, site, {
+        briefs.generate(seo.skipped || seo.error ? null : seo, answers.skipped || answers.error ? null : answers, site, {
           limit: 8,
           withDrafts: true,
           extraOpportunities: opportunities.error ? [] : discover.toOpportunities(technical, keywords)
@@ -91,7 +103,7 @@ async function main() {
     kind: 'free',
     mode: 'google-free',
     brand: site.brand,
-    seo: skipped('Search Console needs a service account a verified property owner must grant. Coverage discovery is used instead.'),
+    seo,
     psi: speed,
     crawl: technical,
     discovery: opportunities,
@@ -101,12 +113,22 @@ async function main() {
     schema: structured,
     content,
     briefsDate: content.skipped ? previous.briefsDate || null : date,
-    previous: { seoTotals: null }
+    previous: { seoTotals: previous.seo?.totals || null }
   };
 
   report.alerts = alert.evaluate(report, site);
   await alert.send(report.alerts, site);
 
+  if (!seo.skipped && !seo.error && seo.totals) {
+    await appendHistory('seo', {
+      date,
+      clicks: seo.totals.clicks,
+      impressions: seo.totals.impressions,
+      ctr: seo.totals.ctr,
+      avgPosition: seo.totals.avgPosition,
+      queryCount: seo.totals.queryCount
+    });
+  }
   if (!technical.error) {
     await appendHistory('technical', {
       date,

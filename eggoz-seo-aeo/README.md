@@ -34,7 +34,7 @@ It replaces the two Google collectors with credential-free equivalents:
 
 | Google collector | Replaced by | What you lose |
 |---|---|---|
-| Search Console (`seo`) | **Coverage discovery** — tracked keyword buckets matched against your own crawl, plus long pages with no question-shaped headings | Real demand. Coverage tells you what you have *no content for*; it cannot tell you what people search for or where you rank. |
+| Search Console (`seo`) | **Coverage discovery** — tracked keyword buckets matched against your own crawl, plus long pages with no question-shaped headings. Or connect the real thing with **OAuth as yourself** (below). | Real demand, unless you connect it. Coverage tells you what you have *no content for*; it cannot tell you what people search for or where you rank. |
 | PageSpeed / Lighthouse (`psi`) | **HTTP performance probe** — server response time, transferred page weight, render-blocking scripts, images missing dimensions | LCP, CLS and INP. Those need a real browser; the probe never invents a 0-100 score. |
 | Gemini (answer engine) | **Claude** with web search, and Perplexity if you have it | One engine's perspective. The 45-prompt panel is unchanged, so trends stay comparable. |
 
@@ -54,6 +54,42 @@ run with no engine keys reports "not measured", never "0% mention rate".
 The cron lives at `.github/workflows/free.yml` and needs no Google secret. Run it
 instead of `SEO daily` while Search Console access is pending, and switch back
 (or run both) once an owner grants the service account.
+
+### Search Console without a service account
+
+Search Console data only exists inside Google — nothing free replaces it. What
+you *can* drop is the dependency on **other people**. The service-account path
+needs a **verified owner** to add the robot as a user. If you are a Full or
+Restricted user you cannot do that yourself — but you can already *read* the
+Performance data, and that is all the engine needs.
+
+So authorise as yourself instead:
+
+```bash
+npm run auth:gsc
+```
+
+It walks you through creating an OAuth client **in your own Google Cloud
+project** (free, and needs no access to anyone else's project), opens the
+consent screen, and prints three values to paste into GitHub secrets:
+
+| Secret | |
+|---|---|
+| `GSC_OAUTH_CLIENT_ID` | from your OAuth client |
+| `GSC_OAUTH_CLIENT_SECRET` | from your OAuth client |
+| `GSC_OAUTH_REFRESH_TOKEN` | printed once by `auth:gsc` — treat it like a password |
+
+What this removes: no service account, no verified-owner grant, no admin on
+someone else's Cloud project, no `gscProperty` to get right — the run calls
+`sites.list` and **auto-selects the property** your account can actually read,
+preferring domain properties and resolving a `.com`/`.in` mix-up on its own. The
+chosen property and permission level are printed each run and stored on the
+report as `seo.property` / `seo.auth`.
+
+Both auth paths share one analyser (`lib/gsc-analyse.mjs`), so a service-account
+run and an OAuth run produce identical reports. Coverage discovery keeps running
+alongside either: one tells you what you rank for, the other what you have no
+content for.
 
 ---
 
@@ -158,10 +194,12 @@ config/                site, keywords, AEO prompt panel
 scripts/
   lib/                 collectors: gsc, psi, crawl, aeo, reddit + store, claude, alert
                        credential-free: perf (no PageSpeed key), discover (no Search Console)
+                       gsc-oauth (Search Console as yourself) + gsc-analyse (shared)
   analysers/           asci (compliance gate), briefs (generation), schema (JSON-LD, llms.txt)
   run-daily.mjs        orchestrator
   run-weekly.mjs       orchestrator
   run-free.mjs         orchestrator — Google-free, runs with zero secrets
+  auth-gsc.mjs         one-time local OAuth helper (npm run auth:gsc)
 data/                  committed output — latest.json, history.json, daily/, weekly/, drafts/
 dashboard/index.html   single-file dashboard
 ```

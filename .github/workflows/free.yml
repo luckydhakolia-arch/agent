@@ -37,11 +37,16 @@ jobs:
 
       - name: Run Google-free collection
         env:
-          # Both optional. With neither, the run still does the crawl,
+          # All optional. With none set, the run still does the crawl,
           # performance probe, coverage discovery, schema and llms.txt.
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
           ALERT_WEBHOOK: ${{ secrets.ALERT_WEBHOOK }}
+          # Search Console as yourself — no service account, no verified owner.
+          # Produced once by `npm run auth:gsc`.
+          GSC_OAUTH_CLIENT_ID: ${{ secrets.GSC_OAUTH_CLIENT_ID }}
+          GSC_OAUTH_CLIENT_SECRET: ${{ secrets.GSC_OAUTH_CLIENT_SECRET }}
+          GSC_OAUTH_REFRESH_TOKEN: ${{ secrets.GSC_OAUTH_REFRESH_TOKEN }}
         run: npm run free
 
       - name: Commit results

@@ -3,12 +3,15 @@
   "version": "1.0.0",
   "type": "module",
   "private": true,
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "daily": "node scripts/run-daily.mjs",
     "weekly": "node scripts/run-weekly.mjs",
     "free": "node scripts/run-free.mjs",
-    "check": "node --check scripts/run-daily.mjs && node --check scripts/run-weekly.mjs && node --check scripts/run-free.mjs"
+    "check": "node --check scripts/run-daily.mjs && node --check scripts/run-weekly.mjs && node --check scripts/run-free.mjs && node --check scripts/auth-gsc.mjs",
+    "auth:gsc": "node scripts/auth-gsc.mjs"
   },
   "dependencies": {
     "cheerio": "^1.0.0",

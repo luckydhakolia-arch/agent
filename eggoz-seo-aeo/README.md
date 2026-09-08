@@ -18,6 +18,45 @@ The single most useful output is the **citation gap** — domains that answer en
 
 ---
 
+## Google-free mode
+
+Search Console is the one input you cannot self-serve: the service account has to
+be added to the property by a **verified owner**, and if you are only a Full user
+you cannot grant it yourself. Rather than leave the engine dead until someone else
+acts, there is a third run that uses **no Google credential of any kind** — no
+service account, no PageSpeed key, no Gemini key.
+
+```bash
+npm run free
+```
+
+It replaces the two Google collectors with credential-free equivalents:
+
+| Google collector | Replaced by | What you lose |
+|---|---|---|
+| Search Console (`seo`) | **Coverage discovery** — tracked keyword buckets matched against your own crawl, plus long pages with no question-shaped headings | Real demand. Coverage tells you what you have *no content for*; it cannot tell you what people search for or where you rank. |
+| PageSpeed / Lighthouse (`psi`) | **HTTP performance probe** — server response time, transferred page weight, render-blocking scripts, images missing dimensions | LCP, CLS and INP. Those need a real browser; the probe never invents a 0-100 score. |
+| Gemini (answer engine) | **Claude** with web search, and Perplexity if you have it | One engine's perspective. The 45-prompt panel is unchanged, so trends stay comparable. |
+
+It degrades rather than fails, so it is useful before you hold any key at all:
+
+| You have | You get |
+|---|---|
+| **no keys** | sitemap crawl, performance probe, coverage + extractability gaps, schema gaps, paste-ready JSON-LD, `llms.txt` |
+| `ANTHROPIC_API_KEY` | the above, plus the answer-engine panel, share-of-voice, citation gap, and briefs + drafts behind the ASCI gate |
+| `PERPLEXITY_API_KEY` | a second, citation-bearing answer engine |
+
+Both keys come from **your own accounts** (console.anthropic.com, perplexity.ai) —
+no organisation ownership required. Sections that cannot run are reported as
+`skipped` with the reason, and raise a *low* notice rather than a false alarm; a
+run with no engine keys reports "not measured", never "0% mention rate".
+
+The cron lives at `.github/workflows/free.yml` and needs no Google secret. Run it
+instead of `SEO daily` while Search Console access is pending, and switch back
+(or run both) once an owner grants the service account.
+
+---
+
 ## Setup
 
 ### 1. Repo
@@ -118,9 +157,11 @@ Cron times are UTC in the workflow files. `30 1 * * *` is 07:00 IST.
 config/                site, keywords, AEO prompt panel
 scripts/
   lib/                 collectors: gsc, psi, crawl, aeo, reddit + store, claude, alert
+                       credential-free: perf (no PageSpeed key), discover (no Search Console)
   analysers/           asci (compliance gate), briefs (generation), schema (JSON-LD, llms.txt)
   run-daily.mjs        orchestrator
   run-weekly.mjs       orchestrator
+  run-free.mjs         orchestrator — Google-free, runs with zero secrets
 data/                  committed output — latest.json, history.json, daily/, weekly/, drafts/
 dashboard/index.html   single-file dashboard
 ```

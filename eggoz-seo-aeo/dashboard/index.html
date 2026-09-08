@@ -154,22 +154,22 @@
     </section>
 
     <section class="page" data-page="search">
-      <h2>Search</h2>
-      <p class="sub">Real impressions, clicks and average position for every query eggoz.in already surfaces on. More reliable than any rank tracker, because it is Google reporting on your own property.</p>
+      <h2 id="searchTitle">Search</h2>
+      <p class="sub" id="searchSub">Real impressions, clicks and average position for every query eggoz.in already surfaces on. More reliable than any rank tracker, because it is Google reporting on your own property.</p>
       <div class="grid" id="searchKpis"></div>
-      <h3>Striking distance <span class="chip n">position 5–20, worth one push</span></h3>
+      <h3 id="hStriking">Striking distance <span class="chip n">position 5–20, worth one push</span></h3>
       <div class="panel scroll" id="tStriking"></div>
-      <h3>Weak snippets <span class="chip n">ranking fine, nobody clicking</span></h3>
+      <h3 id="hCtr">Weak snippets <span class="chip n">ranking fine, nobody clicking</span></h3>
       <div class="panel scroll" id="tCtr"></div>
-      <h3>Losing ground</h3>
+      <h3 id="hDecay">Losing ground</h3>
       <div class="panel scroll" id="tDecay"></div>
-      <h3>Top pages</h3>
+      <h3 id="hPages">Top pages</h3>
       <div class="panel scroll" id="tPages"></div>
     </section>
 
     <section class="page" data-page="technical">
       <h2>Technical</h2>
-      <p class="sub">Crawl of the sitemap plus mobile Lighthouse scores on priority pages. The extractability checks matter as much as the classic SEO ones — answer engines lift question-shaped headings with direct answers under them.</p>
+      <p class="sub" id="techSub">Crawl of the sitemap plus mobile Lighthouse scores on priority pages. The extractability checks matter as much as the classic SEO ones — answer engines lift question-shaped headings with direct answers under them.</p>
       <div class="grid" id="techKpis"></div>
       <h3>Issues by frequency</h3>
       <div class="panel scroll" id="tIssues"></div>
@@ -311,7 +311,39 @@ function line(id, labels, sets){
 }
 
 /* ---------- Search ---------- */
+/* Google-free mode: Search Console is unavailable, so the Search page shows
+   crawl-derived coverage discovery instead of empty ranking tables. */
+function renderDiscovery(){
+  const d = D.discovery || {};
+  document.getElementById('searchTitle').textContent = 'Coverage';
+  document.getElementById('searchSub').textContent =
+    (D.seo?.reason ? D.seo.reason + ' ' : '') +
+    'These are coverage gaps derived from the sitemap crawl against your tracked keyword buckets — what you have no content for. They are not search demand; only Search Console measures that.';
+  document.getElementById('searchKpis').innerHTML = [
+    kpi('Pages analysed', n(d.pagesAnalysed), 'from the crawl'),
+    kpi('Coverage gaps', n(d.coverageGapCount), 'tracked terms with no page'),
+    kpi('Extractability gaps', n(d.extractabilityGapCount), 'long pages, no question headings'),
+    kpi('Source', 'Crawl', 'no Google credential used')
+  ].join('');
+
+  document.getElementById('hStriking').innerHTML = 'Coverage gaps <span class="chip n">tracked term, nothing written</span>';
+  table('tStriking',[{label:'Term'},{label:'Bucket'}], d.coverageGaps,
+    r=>`<tr><td>${esc(r.term)}</td><td><span class="chip n">${esc(r.bucket)}</span></td></tr>`);
+
+  document.getElementById('hCtr').innerHTML = 'Extractability gaps <span class="chip n">restructure, do not rewrite</span>';
+  table('tCtr',[{label:'Page'},{label:'Words',num:1},{label:'Schema'}], d.extractabilityGaps,
+    r=>`<tr><td class="truncate"><a href="${esc(r.url)}" target="_blank" rel="noopener" style="color:var(--accent)">${esc(r.title)}</a></td>
+    <td class="num">${n(r.words)}</td>
+    <td>${(r.schemaTypes||[]).length?(r.schemaTypes||[]).map(t=>`<span class="chip i">${esc(t)}</span>`).join(' '):'<span class="chip b">none</span>'}</td></tr>`);
+
+  document.getElementById('hDecay').style.display='none';
+  document.getElementById('tDecay').style.display='none';
+  document.getElementById('hPages').style.display='none';
+  document.getElementById('tPages').style.display='none';
+}
+
 function renderSearch(){
+  if(D.seo?.skipped || (!D.seo?.totals && D.discovery)) return renderDiscovery();
   const s = D.seo, t = s?.totals;
   document.getElementById('searchKpis').innerHTML = t ? [
     kpi('Clicks', n(t.clicks), `${t.ctr}% CTR`),
@@ -340,11 +372,19 @@ function renderSearch(){
 /* ---------- Technical ---------- */
 function renderTechnical(){
   const c = D.crawl, p = D.psi;
+  if(p?.method==='http-probe'){
+    document.getElementById('techSub').textContent =
+      'Crawl of the sitemap plus a credential-free performance probe on priority pages. ' +
+      (p.note||'') + ' The extractability checks matter as much as the classic SEO ones — answer engines lift question-shaped headings with direct answers under them.';
+  }
   document.getElementById('techKpis').innerHTML = [
     kpi('Pages crawled', c?n(c.pagesCrawled):'—',''),
     kpi('Total issues', c?n(c.totalIssues):'—', c?`on ${c.pagesWithIssues} pages`:''),
-    kpi('Mobile performance', p?.avgPerformance??'—','priority pages'),
-    kpi('Lighthouse SEO', p?.avgSeo??'—',''),
+    ...(p?.method==='http-probe'
+      ? [kpi('Server response', p.avgTtfbMs!=null?p.avgTtfbMs+'ms':'—', `budget ${p.budget?.ttfbMs??800}ms`),
+         kpi('Page weight', p.avgTotalKb!=null?n(p.avgTotalKb)+'KB':'—','measured transfer')]
+      : [kpi('Mobile performance', p?.avgPerformance??'—','priority pages'),
+         kpi('Lighthouse SEO', p?.avgSeo??'—','')]),
     kpi('llms.txt', c? (c.hasLlmsTxt?'Present':'Missing') : '—', c && !c.hasLlmsTxt ? 'generated weekly, needs dev to ship' : ''),
     kpi('AI crawlers', c? (c.robotsBlocksAiCrawlers?'Blocked':'Allowed') : '—', c?.robotsBlocksAiCrawlers ? 'robots.txt is blocking them' : '')
   ].join('');
@@ -353,6 +393,16 @@ function renderTechnical(){
   table('tIssues',[{label:'Issue'},{label:'Pages affected',num:1}], issues,
     r=>`<tr><td>${esc(r[0])}</td><td class="num">${r[1]}</td></tr>`);
 
+  if(p?.method==='http-probe'){
+    // Credential-free probe: real transfer measurements, no synthetic score.
+    table('tPsi',[{label:'URL'},{label:'TTFB',num:1},{label:'HTML',num:1},{label:'Total',num:1},{label:'Blocking',num:1},{label:'Flags'}],
+      p.pages, r=>`<tr><td class="truncate">${esc(r.url)}</td>
+      <td class="num">${r.error?'—':`<span class="chip ${r.ttfbMs>(p.budget?.ttfbMs??800)?'b':'g'}">${r.ttfbMs}ms</span>`}</td>
+      <td class="num">${r.error?'—':n(r.htmlKb)+'KB'}</td>
+      <td class="num">${r.error?'—':n(r.totalKb)+'KB'}</td>
+      <td class="num">${r.error?'—':r.blockingScripts}</td>
+      <td style="font-size:12px;color:var(--ink-dim)">${r.error?esc(r.error):((r.issues||[]).map(esc).join('<br>')||'—')}</td></tr>`);
+  } else
   table('tPsi',[{label:'URL'},{label:'Perf',num:1},{label:'SEO',num:1},{label:'A11y',num:1},{label:'LCP',num:1},{label:'CLS',num:1}],
     p?.pages, r=>`<tr><td class="truncate">${esc(r.url)}</td>
     <td class="num">${r.error?'—':scoreChip(r.performance)}</td><td class="num">${r.error?'—':scoreChip(r.seo)}</td>

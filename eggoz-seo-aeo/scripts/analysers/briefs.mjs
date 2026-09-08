@@ -7,8 +7,9 @@ import { sleep } from '../lib/store.mjs';
  * drafts for low-value gaps is the fastest way to make this engine expensive
  * and useless. Only the top N get a brief; only briefs get a draft.
  */
-function rankOpportunities(seo, aeo, site, limit = 8) {
-  const items = [];
+function rankOpportunities(seo, aeo, site, limit = 8, extra = []) {
+  // Credential-free sources (coverage and extractability gaps) arrive pre-shaped.
+  const items = [...extra];
 
   (seo?.strikingDistance || []).forEach((q) => {
     items.push({
@@ -143,8 +144,8 @@ Remember: ASCI Addendum II. Nutrition composition stated as fact is fine. No cla
   );
 }
 
-export async function generate(seo, aeo, site, { limit = 8, withDrafts = true } = {}) {
-  const opportunities = rankOpportunities(seo, aeo, site, limit);
+export async function generate(seo, aeo, site, { limit = 8, withDrafts = true, extraOpportunities = [] } = {}) {
+  const opportunities = rankOpportunities(seo, aeo, site, limit, extraOpportunities);
   const briefs = [];
 
   for (const opp of opportunities) {

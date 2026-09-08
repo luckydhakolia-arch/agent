@@ -7,7 +7,8 @@
   "scripts": {
     "daily": "node scripts/run-daily.mjs",
     "weekly": "node scripts/run-weekly.mjs",
-    "check": "node --check scripts/run-daily.mjs && node --check scripts/run-weekly.mjs"
+    "free": "node scripts/run-free.mjs",
+    "check": "node --check scripts/run-daily.mjs && node --check scripts/run-weekly.mjs && node --check scripts/run-free.mjs"
   },
   "dependencies": {
     "cheerio": "^1.0.0",

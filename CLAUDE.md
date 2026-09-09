@@ -124,11 +124,50 @@ to the social media agent above: no Python, no build step — open
 
 `eggoz-seo-aeo/` contains an always-on search and answer-engine monitor for
 eggoz.in — Node 20, ESM, no server. It is unrelated to the social media agent
-above and shares nothing with it. Two GitHub Actions crons drive it: a free
-daily collector (Google Search Console + Lighthouse + sitemap crawl) and a
-weekly answer-engine panel (Perplexity + Gemini) that generates content briefs,
-drafts, and an ASCI Addendum II compliance gate. The workflows live at the repo
-root (`.github/workflows/daily.yml`, `weekly.yml`) — Actions only runs them from
-there — but each pins `working-directory: eggoz-seo-aeo`, so run every local
-command (`npm ci`, `npm run daily`, `npm run weekly`) from inside that folder.
-See `eggoz-seo-aeo/README.md` for setup, required secrets, and cost.
+above and shares nothing with it.
+
+Three GitHub Actions crons drive it. The workflows live at the repo root —
+Actions only runs them from there — but each pins
+`working-directory: eggoz-seo-aeo`, so run every local command (`npm ci`,
+`npm run free`, …) from inside that folder.
+
+| Workflow | Script | What it does |
+|---|---|---|
+| `free.yml` | `npm run free` | **Google-free daily run. Preferred.** Needs no Google credential and runs with zero secrets. |
+| `daily.yml` | `npm run daily` | Original daily collector. Requires a Search Console service account and a PageSpeed key. |
+| `weekly.yml` | `npm run weekly` | Monday answer-engine panel (Perplexity + Gemini), briefs and drafts. |
+
+**`free.yml` and `daily.yml` share a cron (`30 1 * * *`) and a concurrency
+group, and both write the `seo` key of `data/latest.json` — whichever finishes
+last wins.** Run one or the other, not both.
+
+### Google-free mode
+
+Built because Search Console needs a service account that only a **verified
+property owner** can grant. `run-free.mjs` degrades instead of failing:
+
+- **no keys** — sitemap crawl, HTTP performance probe (`lib/perf.mjs`, replaces
+  PageSpeed), coverage + extractability gaps (`lib/discover.mjs`, replaces
+  Search Console), schema gaps, `llms.txt`
+- **`ANTHROPIC_API_KEY`** — answer-engine panel via Claude, share-of-voice,
+  citation gap, briefs and drafts behind the ASCI Addendum II gate
+- **`PERPLEXITY_API_KEY`** — a second, citation-bearing engine
+
+Search Console can still be connected **without a service account**, via OAuth
+as yourself: `npm run auth:gsc` prints `GSC_OAUTH_CLIENT_ID`,
+`GSC_OAUTH_CLIENT_SECRET` and `GSC_OAUTH_REFRESH_TOKEN`. A Full or Restricted
+user can read Performance data, so no owner grant is needed. The run calls
+`sites.list` and auto-selects the property the account can reach, so
+`config/site.json → gscProperty` does not have to be correct.
+
+Both auth paths (`lib/gsc.mjs` service account, `lib/gsc-oauth.mjs` OAuth)
+share one transform in `lib/gsc-analyse.mjs`, so their reports are identical.
+
+### Conventions worth keeping
+
+- `data/latest.json` is shared across runs — **merge into it, never overwrite**,
+  or one run silently discards another's sections.
+- Never alert on an unmeasured section. A missing key means "not measured", not
+  a measured zero; skipped sections carry a `reason` and raise only a low notice.
+
+See `eggoz-seo-aeo/README.md` for setup, secrets, and cost.

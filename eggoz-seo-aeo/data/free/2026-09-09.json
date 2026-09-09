@@ -1,6 +1,7 @@
 {
   "date": "2026-09-09",
   "kind": "free",
+  "mode": "google-free",
   "brand": "Eggoz",
   "seo": {
     "skipped": true,
@@ -1999,6 +2000,200 @@
       }
     ]
   },
+  "discovery": {
+    "method": "crawl-derived",
+    "note": "Coverage inferred from the sitemap crawl against tracked keyword buckets. Not search demand — Search Console is the only source for that.",
+    "pagesAnalysed": 60,
+    "coverageGapCount": 22,
+    "coverageGapsByBucket": {
+      "category": 6,
+      "nutrition": 4,
+      "local": 7,
+      "branded": 1,
+      "commerce": 4
+    },
+    "coverageGaps": [
+      {
+        "bucket": "category",
+        "term": "best egg brand in india"
+      },
+      {
+        "bucket": "category",
+        "term": "packaged eggs online"
+      },
+      {
+        "bucket": "category",
+        "term": "branded eggs india"
+      },
+      {
+        "bucket": "category",
+        "term": "fresh eggs delivery"
+      },
+      {
+        "bucket": "category",
+        "term": "antibiotic free eggs"
+      },
+      {
+        "bucket": "category",
+        "term": "cage free eggs india"
+      },
+      {
+        "bucket": "nutrition",
+        "term": "eggs and cholesterol"
+      },
+      {
+        "bucket": "nutrition",
+        "term": "omega 3 eggs"
+      },
+      {
+        "bucket": "nutrition",
+        "term": "egg nutrition facts"
+      },
+      {
+        "bucket": "nutrition",
+        "term": "boiled egg calories"
+      },
+      {
+        "bucket": "local",
+        "term": "eggs delivery bengaluru"
+      },
+      {
+        "bucket": "local",
+        "term": "eggs delivery gurugram"
+      },
+      {
+        "bucket": "local",
+        "term": "eggs delivery mumbai"
+      },
+      {
+        "bucket": "local",
+        "term": "eggs delivery hyderabad"
+      },
+      {
+        "bucket": "local",
+        "term": "eggs delivery kolkata"
+      },
+      {
+        "bucket": "local",
+        "term": "eggs delivery jaipur"
+      },
+      {
+        "bucket": "local",
+        "term": "egg brands delhi ncr"
+      },
+      {
+        "bucket": "branded",
+        "term": "eggoz price"
+      },
+      {
+        "bucket": "commerce",
+        "term": "eggs on blinkit"
+      },
+      {
+        "bucket": "commerce",
+        "term": "eggs on zepto"
+      },
+      {
+        "bucket": "commerce",
+        "term": "eggs on instamart"
+      },
+      {
+        "bucket": "commerce",
+        "term": "10 minute egg delivery"
+      }
+    ],
+    "extractabilityGapCount": 10,
+    "extractabilityGaps": [
+      {
+        "url": "https://www.eggoz.com/pages/blogs",
+        "title": "Blogs – Eggoz",
+        "words": 3298,
+        "schemaTypes": [
+          "Organization"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/quality-reports",
+        "title": "Quality Reports – Eggoz",
+        "words": 2505,
+        "schemaTypes": [
+          "Organization"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/products/brown-eggs",
+        "title": "Eggoz - Brown Eggs",
+        "words": 2064,
+        "schemaTypes": [
+          "Organization",
+          "Product"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/",
+        "title": "🥚 Eggoz",
+        "words": 1833,
+        "schemaTypes": [
+          "Organization",
+          "WebSite"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/blogs/lifestyle/what-are-the-benefits-of-eating-eggs-for-athletes",
+        "title": "What are the Benefits of Eating Eggs for Athletes? – Eggoz",
+        "words": 1374,
+        "schemaTypes": [
+          "Organization",
+          "Article"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/blogs/recipes/how-to-make-the-best-egg-soup-recipe-a-quick-easy-guide",
+        "title": "How to Make the Best Egg Soup Recipe: A Quick & Easy Guide – Eggoz",
+        "words": 678,
+        "schemaTypes": [
+          "Organization",
+          "Article"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/blogs/recipes/try-this-egg-burger-recipe-at-your-home",
+        "title": "Try this Egg Burger recipe at your home – Eggoz",
+        "words": 548,
+        "schemaTypes": [
+          "Organization",
+          "Article"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/blogs/recipes/hash-brown-with-eggs-a-perfect-breakfast",
+        "title": "Hash Brown With Eggs A Perfect Breakfast – Eggoz",
+        "words": 523,
+        "schemaTypes": [
+          "Organization",
+          "Article"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/blogs/recipes/egg-biryani-recipe",
+        "title": "Egg Biryani recipe – Eggoz",
+        "words": 454,
+        "schemaTypes": [
+          "Organization",
+          "Article"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/blogs/recipes/yummy-egg-sliders-to-start-your-day",
+        "title": "Yummy Egg Sliders to start your day – Eggoz",
+        "words": 401,
+        "schemaTypes": [
+          "Organization",
+          "Article"
+        ]
+      }
+    ]
+  },
   "aeo": {
     "enginesUsed": [
       "claude"
@@ -2330,217 +2525,6 @@
     ]
   },
   "aeoDate": "2026-09-09",
-  "briefsDate": "2026-09-09",
-  "previous": {
-    "seoTotals": null
-  },
-  "alerts": [
-    {
-      "level": "low",
-      "area": "seo",
-      "message": "Not measured this run — Search Console not connected. Run `npm run auth:gsc` to authorise as yourself — no service account or property owner needed."
-    },
-    {
-      "level": "medium",
-      "area": "technical",
-      "message": "2 priority page(s) over the performance budget — avg 341ms response, 458KB."
-    }
-  ],
-  "mode": "google-free",
-  "discovery": {
-    "method": "crawl-derived",
-    "note": "Coverage inferred from the sitemap crawl against tracked keyword buckets. Not search demand — Search Console is the only source for that.",
-    "pagesAnalysed": 60,
-    "coverageGapCount": 22,
-    "coverageGapsByBucket": {
-      "category": 6,
-      "nutrition": 4,
-      "local": 7,
-      "branded": 1,
-      "commerce": 4
-    },
-    "coverageGaps": [
-      {
-        "bucket": "category",
-        "term": "best egg brand in india"
-      },
-      {
-        "bucket": "category",
-        "term": "packaged eggs online"
-      },
-      {
-        "bucket": "category",
-        "term": "branded eggs india"
-      },
-      {
-        "bucket": "category",
-        "term": "fresh eggs delivery"
-      },
-      {
-        "bucket": "category",
-        "term": "antibiotic free eggs"
-      },
-      {
-        "bucket": "category",
-        "term": "cage free eggs india"
-      },
-      {
-        "bucket": "nutrition",
-        "term": "eggs and cholesterol"
-      },
-      {
-        "bucket": "nutrition",
-        "term": "omega 3 eggs"
-      },
-      {
-        "bucket": "nutrition",
-        "term": "egg nutrition facts"
-      },
-      {
-        "bucket": "nutrition",
-        "term": "boiled egg calories"
-      },
-      {
-        "bucket": "local",
-        "term": "eggs delivery bengaluru"
-      },
-      {
-        "bucket": "local",
-        "term": "eggs delivery gurugram"
-      },
-      {
-        "bucket": "local",
-        "term": "eggs delivery mumbai"
-      },
-      {
-        "bucket": "local",
-        "term": "eggs delivery hyderabad"
-      },
-      {
-        "bucket": "local",
-        "term": "eggs delivery kolkata"
-      },
-      {
-        "bucket": "local",
-        "term": "eggs delivery jaipur"
-      },
-      {
-        "bucket": "local",
-        "term": "egg brands delhi ncr"
-      },
-      {
-        "bucket": "branded",
-        "term": "eggoz price"
-      },
-      {
-        "bucket": "commerce",
-        "term": "eggs on blinkit"
-      },
-      {
-        "bucket": "commerce",
-        "term": "eggs on zepto"
-      },
-      {
-        "bucket": "commerce",
-        "term": "eggs on instamart"
-      },
-      {
-        "bucket": "commerce",
-        "term": "10 minute egg delivery"
-      }
-    ],
-    "extractabilityGapCount": 10,
-    "extractabilityGaps": [
-      {
-        "url": "https://www.eggoz.com/pages/blogs",
-        "title": "Blogs – Eggoz",
-        "words": 3298,
-        "schemaTypes": [
-          "Organization"
-        ]
-      },
-      {
-        "url": "https://www.eggoz.com/pages/quality-reports",
-        "title": "Quality Reports – Eggoz",
-        "words": 2505,
-        "schemaTypes": [
-          "Organization"
-        ]
-      },
-      {
-        "url": "https://www.eggoz.com/products/brown-eggs",
-        "title": "Eggoz - Brown Eggs",
-        "words": 2064,
-        "schemaTypes": [
-          "Organization",
-          "Product"
-        ]
-      },
-      {
-        "url": "https://www.eggoz.com/",
-        "title": "🥚 Eggoz",
-        "words": 1833,
-        "schemaTypes": [
-          "Organization",
-          "WebSite"
-        ]
-      },
-      {
-        "url": "https://www.eggoz.com/blogs/lifestyle/what-are-the-benefits-of-eating-eggs-for-athletes",
-        "title": "What are the Benefits of Eating Eggs for Athletes? – Eggoz",
-        "words": 1374,
-        "schemaTypes": [
-          "Organization",
-          "Article"
-        ]
-      },
-      {
-        "url": "https://www.eggoz.com/blogs/recipes/how-to-make-the-best-egg-soup-recipe-a-quick-easy-guide",
-        "title": "How to Make the Best Egg Soup Recipe: A Quick & Easy Guide – Eggoz",
-        "words": 678,
-        "schemaTypes": [
-          "Organization",
-          "Article"
-        ]
-      },
-      {
-        "url": "https://www.eggoz.com/blogs/recipes/try-this-egg-burger-recipe-at-your-home",
-        "title": "Try this Egg Burger recipe at your home – Eggoz",
-        "words": 548,
-        "schemaTypes": [
-          "Organization",
-          "Article"
-        ]
-      },
-      {
-        "url": "https://www.eggoz.com/blogs/recipes/hash-brown-with-eggs-a-perfect-breakfast",
-        "title": "Hash Brown With Eggs A Perfect Breakfast – Eggoz",
-        "words": 523,
-        "schemaTypes": [
-          "Organization",
-          "Article"
-        ]
-      },
-      {
-        "url": "https://www.eggoz.com/blogs/recipes/egg-biryani-recipe",
-        "title": "Egg Biryani recipe – Eggoz",
-        "words": 454,
-        "schemaTypes": [
-          "Organization",
-          "Article"
-        ]
-      },
-      {
-        "url": "https://www.eggoz.com/blogs/recipes/yummy-egg-sliders-to-start-your-day",
-        "title": "Yummy Egg Sliders to start your day – Eggoz",
-        "words": 401,
-        "schemaTypes": [
-          "Organization",
-          "Article"
-        ]
-      }
-    ]
-  },
   "social": {
     "threadsFound": 0,
     "brandMentions": 0,
@@ -2746,5 +2730,21 @@
         }
       }
     ]
-  }
+  },
+  "briefsDate": "2026-09-09",
+  "previous": {
+    "seoTotals": null
+  },
+  "alerts": [
+    {
+      "level": "low",
+      "area": "seo",
+      "message": "Not measured this run — Search Console not connected. Run `npm run auth:gsc` to authorise as yourself — no service account or property owner needed."
+    },
+    {
+      "level": "medium",
+      "area": "technical",
+      "message": "2 priority page(s) over the performance budget — avg 341ms response, 458KB."
+    }
+  ]
 }

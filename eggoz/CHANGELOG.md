@@ -2,6 +2,13 @@
 
 Single-file dashboard (`index.html`). No build step, CDN-only, localStorage-backed.
 
+## v16.8 — Content buckets split by source
+
+- The Content buckets section now shows three tables — Combined (Own + Influencer),
+  Own account, and Influencer — matching the Week-over-week layout. The All/Own/
+  Influencer toggle was removed (all three are shown at once); the ⚙ Customize keyword
+  editor and per-post overrides are unchanged.
+
 ## v16.7 — Week-over-week split by source
 
 - The Week-over-week section now shows three tables — Combined (Own + Influencer),

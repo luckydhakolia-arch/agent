@@ -1167,26 +1167,41 @@
           <div class="metric-card"><div class="metric-label">Total shares</div><div class="metric-val" id="sc-m-shares">—</div><div class="metric-sub neu">All buckets</div></div>
         </div>
 
-        <!-- Content buckets -->
+        <!-- Content buckets — combined + own + influencer -->
         <div class="card" style="margin-bottom:20px;">
           <div class="card-title" style="flex-wrap:wrap;gap:10px;">
             Content buckets
-            <span class="sub">Posts grouped by theme — classified from captions</span>
-            <div style="display:flex;gap:6px;margin-left:auto;align-items:center;" id="sc-source-pills">
-              <button class="content-filter-pill active" data-src="all"  onclick="setScorecardSource('all',this)">All</button>
-              <button class="content-filter-pill"        data-src="own"  onclick="setScorecardSource('own',this)">Own</button>
-              <button class="content-filter-pill"        data-src="infl" onclick="setScorecardSource('infl',this)">Influencer</button>
+            <span class="sub">Posts grouped by theme — combined, then own and influencer</span>
+            <div style="margin-left:auto;">
               <button class="content-filter-pill" style="border-color:var(--accent);color:var(--accent);" onclick="toggleBucketEditor()">⚙ Customize</button>
             </div>
           </div>
           <div id="sc-bucket-editor" style="display:none;background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:14px;"></div>
+
+          <div class="sc-wow-label">Combined (Own + Influencer)</div>
           <div class="scroll-x">
             <table class="sc-table">
               <thead><tr><th style="text-align:left;">Bucket</th><th>Posts</th><th>Reach</th><th>Views</th><th>Shares</th><th>Avg ER</th><th>100+ sh</th></tr></thead>
-              <tbody id="sc-buckets"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px;">Upload CSV to see buckets</td></tr></tbody>
+              <tbody id="sc-buckets-all"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px;">Upload CSV to see buckets</td></tr></tbody>
             </table>
           </div>
-          <div style="font-size:11px;color:var(--muted);margin-top:10px;">Buckets: Mothers · Traceability · Protein Plus · Recipe · Doctor Content · Other — matched by keywords in each post's caption; unmatched posts fall into “Other”.</div>
+
+          <div class="sc-wow-label" style="margin-top:22px;"><span class="sc-bucket-dot" style="background:var(--green);"></span>Own account (@eggoznutrition)</div>
+          <div class="scroll-x">
+            <table class="sc-table">
+              <thead><tr><th style="text-align:left;">Bucket</th><th>Posts</th><th>Reach</th><th>Views</th><th>Shares</th><th>Avg ER</th><th>100+ sh</th></tr></thead>
+              <tbody id="sc-buckets-own"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px;">Upload CSV to see buckets</td></tr></tbody>
+            </table>
+          </div>
+
+          <div class="sc-wow-label" style="margin-top:22px;"><span class="sc-bucket-dot" style="background:var(--purple);"></span>Influencer</div>
+          <div class="scroll-x">
+            <table class="sc-table">
+              <thead><tr><th style="text-align:left;">Bucket</th><th>Posts</th><th>Reach</th><th>Views</th><th>Shares</th><th>Avg ER</th><th>100+ sh</th></tr></thead>
+              <tbody id="sc-buckets-infl"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px;">Upload CSV to see buckets</td></tr></tbody>
+            </table>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:12px;">Buckets: Mothers · Traceability · Protein Plus · Recipe · Doctor Content · Other — matched by keywords in each post's caption; unmatched posts fall into “Other”. Use ⚙ Customize to edit keywords, or the dropdown on each post in Content to reassign it.</div>
         </div>
 
         <!-- Weekly (WOW) breakdown — combined + own + influencer -->
@@ -4263,29 +4278,13 @@ function renderScorecard(D) {
   setT('sc-m-posts-sub', `${(D.ownPostsSorted || []).length} own · ${(D.inflPostsSorted || []).length} influencer`);
   setT('sc-m-shares', fmt(posts.reduce((s, p) => s + (+p.shares || 0), 0)));
 
-  // ---- Content buckets ----
-  const blank = () => ({ posts:0, reach:0, views:0, shares:0, likes:0, comments:0, follows:0, sh100:0, r50:0, v300:0, v500:0 });
-  const add = (a, p) => {
-    a.posts++; a.reach += (+p.reach||0); a.views += (+p.views||0); a.shares += (+p.shares||0);
-    a.likes += (+p.likes||0); a.comments += (+p.comments||0); a.follows += (+p.follows||0);
-    if (isVid(p)) {
-      if ((+p.shares||0) >= 100)   a.sh100++;
-      if ((+p.reach||0)  >= 50000)  a.r50++;
-      if ((+p.views||0)  >= 300000) a.v300++;
-      if ((+p.views||0)  >= 500000) a.v500++;
-    }
-  };
-  const agg = {}; SC_BUCKETS.forEach(b => agg[b.key] = blank());
-  posts.forEach(p => add(agg[classifyBucket(p)], p));
-  const tb = document.getElementById('sc-buckets');
-  if (tb) {
-    const rows = SC_BUCKETS.filter(b => agg[b.key].posts > 0).map(b => { const a = agg[b.key];
-      return `<tr><td><span class="sc-bucket-dot" style="background:${b.color}"></span>${b.name}</td><td>${a.posts}</td><td>${fmt(a.reach)}</td><td>${fmt(a.views)}</td><td>${fmt(a.shares)}</td><td>${sf(erOf(a),1)}%</td><td>${a.sh100}</td></tr>`;
-    }).join('');
-    const tot = blank(); Object.values(agg).forEach(a => { tot.posts+=a.posts; tot.reach+=a.reach; tot.views+=a.views; tot.shares+=a.shares; tot.likes+=a.likes; tot.comments+=a.comments; tot.sh100+=a.sh100; });
-    const totRow = `<tr class="sc-total"><td>Total</td><td>${tot.posts}</td><td>${fmt(tot.reach)}</td><td>${fmt(tot.views)}</td><td>${fmt(tot.shares)}</td><td>${sf(erOf(tot),1)}%</td><td>${tot.sh100}</td></tr>`;
-    tb.innerHTML = (rows || '') + totRow;
-  }
+  // ---- Content buckets: combined, own, and influencer ----
+  const bAll  = document.getElementById('sc-buckets-all');
+  const bOwn  = document.getElementById('sc-buckets-own');
+  const bInfl = document.getElementById('sc-buckets-infl');
+  if (bAll)  bAll.innerHTML  = _bucketRowsHTML(D.allPostsSorted  || []);
+  if (bOwn)  bOwn.innerHTML  = _bucketRowsHTML(D.ownPostsSorted  || []);
+  if (bInfl) bInfl.innerHTML = _bucketRowsHTML(D.inflPostsSorted || []);
 
   // ---- Week-over-week: combined, own, and influencer (three tables) ----
   const wbAll  = document.getElementById('sc-weekly-all');
@@ -4294,6 +4293,23 @@ function renderScorecard(D) {
   if (wbAll)  wbAll.innerHTML  = _weeklyRowsHTML(D.allPostsSorted  || []);
   if (wbOwn)  wbOwn.innerHTML  = _weeklyRowsHTML(D.ownPostsSorted  || []);
   if (wbInfl) wbInfl.innerHTML = _weeklyRowsHTML(D.inflPostsSorted || []);
+}
+
+// Build the <tr> rows (bucket rows + Total) for one Content-buckets table.
+function _bucketRowsHTML(posts) {
+  const isVid = p => /reel|video/i.test(p.postType || '');
+  const erOf = a => a.views > 0 ? ((a.likes + a.comments + a.shares) / a.views * 100) : 0;
+  const blank = () => ({ posts:0, reach:0, views:0, shares:0, likes:0, comments:0, sh100:0 });
+  const add = (a, p) => { a.posts++; a.reach += (+p.reach||0); a.views += (+p.views||0); a.shares += (+p.shares||0); a.likes += (+p.likes||0); a.comments += (+p.comments||0); if (isVid(p) && (+p.shares||0) >= 100) a.sh100++; };
+  const agg = {}; SC_BUCKETS.forEach(b => agg[b.key] = blank());
+  posts.forEach(p => add(agg[classifyBucket(p)], p));
+  const tot = blank(); Object.values(agg).forEach(a => { tot.posts+=a.posts; tot.reach+=a.reach; tot.views+=a.views; tot.shares+=a.shares; tot.likes+=a.likes; tot.comments+=a.comments; tot.sh100+=a.sh100; });
+  if (!tot.posts) return '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px;">No posts in range</td></tr>';
+  const rows = SC_BUCKETS.filter(b => agg[b.key].posts > 0).map(b => { const a = agg[b.key];
+    return `<tr><td><span class="sc-bucket-dot" style="background:${b.color}"></span>${b.name}</td><td>${a.posts}</td><td>${fmt(a.reach)}</td><td>${fmt(a.views)}</td><td>${fmt(a.shares)}</td><td>${sf(erOf(a),1)}%</td><td>${a.sh100}</td></tr>`;
+  }).join('');
+  const totRow = `<tr class="sc-total"><td>Total</td><td>${tot.posts}</td><td>${fmt(tot.reach)}</td><td>${fmt(tot.views)}</td><td>${fmt(tot.shares)}</td><td>${sf(erOf(tot),1)}%</td><td>${tot.sh100}</td></tr>`;
+  return rows + totRow;
 }
 
 // Build the <tr> rows for one Week-over-week table from a set of posts.

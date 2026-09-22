@@ -1,0 +1,47 @@
+name: Deploy Eggoz dashboard to GitHub Pages
+
+# Publishes the single-file Eggoz Social Command Center (eggoz/index.html) as a
+# static site. The file uses CDN links, so no build step is needed — the eggoz/
+# folder is uploaded as-is and served at the Pages root.
+
+on:
+  push:
+    branches: [ claude/new-session-9u44z1 ]
+    paths:
+      - 'eggoz/**'
+      - '.github/workflows/deploy-eggoz-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent Pages deployment.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Pages (auto-enable)
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Upload eggoz/ as the Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: eggoz
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

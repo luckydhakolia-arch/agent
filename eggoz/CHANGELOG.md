@@ -2,6 +2,14 @@
 
 Single-file dashboard (`index.html`). No build step, CDN-only, localStorage-backed.
 
+## v16.2 — scorecard follower goal + WOW dates
+
+- Follower goal now always shows the total follower count and how many are left
+  to reach 100k (renders on load and updates the instant you save a count in
+  Follower Growth), instead of showing "—" until data was loaded.
+- Week-over-week dates now match the spreadsheet exactly — "11 Aug", "18 Aug",
+  … (day + 3-letter month, no year), with weeks ending on the sheet's weekday.
+
 ## v16.1 — customizable buckets
 
 - **Editable bucket keywords** — a "⚙ Customize" panel in the Weekly Scorecard lets

@@ -1853,6 +1853,7 @@ function nav(id, el) {
   setTimeout(() => {
     initCharts(id);
     if (id === 'scheduler') renderScheduler();
+    if (id === 'scorecard') { try { renderScorecardGoal(); } catch(e){} }
   }, 80);
 }
 
@@ -4059,7 +4060,32 @@ const SC_BUCKETS = [
 ];
 const SC_FOLLOWER_TARGET = 100000;
 const SC_TARGET_DATE = new Date('2027-01-31');
+// Week-ending weekday taken from the WOW sheet's first week (11 Aug 2026) so the
+// weekly table's dates line up with the spreadsheet (11 Aug, 18 Aug, …).
+const SC_WEEK_END_DOW = new Date('2026-08-11T00:00:00').getDay();
 let scorecardSource = 'all';
+
+// Renders just the 100k follower-goal card. Runs independently of post data so the
+// total-followers number and "to go" always show (and update the moment a count is set).
+function renderScorecardGoal() {
+  const setT = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  const followers = Number(localStorage.getItem('eggoz_follower_count')) || 0;
+  const pct = SC_FOLLOWER_TARGET > 0 ? Math.min(100, followers / SC_FOLLOWER_TARGET * 100) : 0;
+  const remain = Math.max(0, SC_FOLLOWER_TARGET - followers);
+  setT('sc-goal-now', fmt(followers));
+  setT('sc-goal-pct', sf(pct, 1) + '%');
+  const bar = document.getElementById('sc-goal-bar'); if (bar) bar.style.width = pct.toFixed(1) + '%';
+  setT('sc-goal-remain', remain > 0 ? fmt(remain) + ' to go' : '🎉 Target reached');
+  const pace = document.getElementById('sc-goal-pace');
+  if (pace) {
+    if (!followers) pace.textContent = 'Enter your current follower count in Follower Growth to track pace toward 100k by Jan 2027.';
+    else if (remain <= 0) pace.textContent = 'Goal reached — nice work.';
+    else {
+      const weeksLeft = Math.max(1, Math.round((SC_TARGET_DATE - new Date()) / (7 * 864e5)));
+      pace.textContent = `Need ~${fmt(Math.ceil(remain / weeksLeft))} new followers/week for ${weeksLeft} weeks to hit 100k by Jan 2027.`;
+    }
+  }
+}
 
 // Editable per-bucket keywords + manual per-post overrides (both persisted).
 function _loadBucketKeywords() {
@@ -4159,22 +4185,8 @@ function renderScorecard(D) {
   const setT = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
   const erOf = a => a.views > 0 ? ((a.likes + a.comments + a.shares) / a.views * 100) : 0;
 
-  // ---- 100k follower goal ----
-  const followers = Number(localStorage.getItem('eggoz_follower_count')) || 0;
-  const pct = SC_FOLLOWER_TARGET > 0 ? Math.min(100, followers / SC_FOLLOWER_TARGET * 100) : 0;
-  setT('sc-goal-now', followers ? fmt(followers) : '—');
-  setT('sc-goal-pct', followers ? sf(pct, 1) + '%' : 'set count');
-  const bar = document.getElementById('sc-goal-bar'); if (bar) bar.style.width = pct.toFixed(1) + '%';
-  setT('sc-goal-remain', followers ? (SC_FOLLOWER_TARGET - followers > 0 ? fmt(SC_FOLLOWER_TARGET - followers) + ' to go' : '🎉 Target reached') : '');
-  const pace = document.getElementById('sc-goal-pace');
-  if (pace) {
-    if (!followers) pace.textContent = 'Set your current follower count in Follower Growth to track pace toward 100k by Jan 2027.';
-    else {
-      const weeksLeft = Math.max(1, Math.round((SC_TARGET_DATE - new Date()) / (7 * 864e5)));
-      const need = Math.max(0, SC_FOLLOWER_TARGET - followers);
-      pace.textContent = need > 0 ? `Need ~${fmt(Math.ceil(need / weeksLeft))} new followers/week for ${weeksLeft} weeks to hit 100k by Jan 2027.` : 'Goal reached — nice work.';
-    }
-  }
+  // ---- 100k follower goal (rendered independently so it always shows) ----
+  renderScorecardGoal();
 
   // ---- Milestone KPIs (video posts) ----
   const vids = posts.filter(isVid);
@@ -4201,10 +4213,10 @@ function renderScorecard(D) {
     tb.innerHTML = (rows || '') + totRow;
   }
 
-  // ---- Week-over-week (weeks ending Sunday) ----
+  // ---- Week-over-week (week-ending aligned to the WOW sheet: 11 Aug, 18 Aug, …) ----
   const wk = {};
   posts.forEach(p => { const d = p.date instanceof Date ? p.date : new Date(p.date); if (isNaN(d)) return;
-    const end = new Date(d); end.setDate(end.getDate() + (7 - end.getDay()) % 7); end.setHours(0,0,0,0);
+    const end = new Date(d); end.setDate(end.getDate() + ((SC_WEEK_END_DOW - end.getDay() + 7) % 7)); end.setHours(0,0,0,0);
     const key = end.getTime();
     if (!wk[key]) { wk[key] = blank(); wk[key].end = end; }
     add(wk[key], p);
@@ -4213,7 +4225,7 @@ function renderScorecard(D) {
   if (wb) {
     const keys = Object.keys(wk).sort((a, b) => a - b);
     wb.innerHTML = keys.length ? keys.map(k => { const a = wk[k];
-      return `<tr><td>${a.end.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</td><td>${a.posts}</td><td>${fmt(a.reach)}</td><td>${fmt(a.views)}</td><td>${fmt(a.shares)}</td><td>${sf(erOf(a),1)}%</td><td>${a.sh100}</td></tr>`;
+      return `<tr><td>${a.end.getDate()} ${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][a.end.getMonth()]}</td><td>${a.posts}</td><td>${fmt(a.reach)}</td><td>${fmt(a.views)}</td><td>${fmt(a.shares)}</td><td>${sf(erOf(a),1)}%</td><td>${a.sh100}</td></tr>`;
     }).join('') : '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px;">No dated posts in range</td></tr>';
   }
 }
@@ -4321,6 +4333,7 @@ function saveFollowerCount() {
   savedFollowerCount = val;
   localStorage.setItem('eggoz_follower_count', val.toString());
   updateFollowerSection();
+  try { renderScorecardGoal(); } catch(e) {}
   showToast('✓ Follower count saved');
 }
 
@@ -4621,6 +4634,7 @@ function initFollowerInput() {
     } else {
       renderEmptyState();
     }
+    try { renderScorecardGoal(); } catch(e) {}
   }, 150);
 })();
 

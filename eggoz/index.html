@@ -4092,7 +4092,10 @@ const SC_FOLLOWER_TARGET = 100000;
 const SC_TARGET_DATE = new Date('2027-01-31');
 // Week-ending weekday taken from the WOW sheet's first week (11 Aug 2026) so the
 // weekly table's dates line up with the spreadsheet (11 Aug, 18 Aug, …).
-const SC_WEEK_END_DOW = new Date('2026-08-11T00:00:00').getDay();
+// Weekday each tracking week starts on, taken from the WOW sheet's first week
+// (11 Aug 2026 = Tuesday). Weeks are grouped Tue→Mon and labelled by the start date
+// (11 Aug, 18 Aug, …), matching the spreadsheet.
+const SC_WEEK_DOW = new Date('2026-08-11T00:00:00').getDay();
 let scorecardSource = 'all';
 
 // Renders just the 100k follower-goal card. Runs independently of post data so the
@@ -4267,12 +4270,12 @@ function renderScorecard(D) {
     tb.innerHTML = (rows || '') + totRow;
   }
 
-  // ---- Week-over-week (week-ending aligned to the WOW sheet: 11 Aug, 18 Aug, …) ----
+  // ---- Week-over-week (weeks grouped Tue→Mon, labelled by start date: 11 Aug, 18 Aug…) ----
   const wk = {};
   posts.forEach(p => { const d = p.date instanceof Date ? p.date : new Date(p.date); if (isNaN(d)) return;
-    const end = new Date(d); end.setDate(end.getDate() + ((SC_WEEK_END_DOW - end.getDay() + 7) % 7)); end.setHours(0,0,0,0);
-    const key = end.getTime();
-    if (!wk[key]) { wk[key] = blank(); wk[key].end = end; }
+    const ws = new Date(d); ws.setDate(ws.getDate() - ((ws.getDay() - SC_WEEK_DOW + 7) % 7)); ws.setHours(0,0,0,0);
+    const key = ws.getTime();
+    if (!wk[key]) { wk[key] = blank(); wk[key].end = ws; }
     add(wk[key], p);
   });
   const wb = document.getElementById('sc-weekly');

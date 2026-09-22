@@ -2,6 +2,15 @@
 
 Single-file dashboard (`index.html`). No build step, CDN-only, localStorage-backed.
 
+## v16.5 — fix weekly grouping direction (label by week start)
+
+- The Week-over-week table grouped posts into the week *ending* on each Tuesday, so a
+  post on Tue 11 Aug sat alone in "11 Aug" and the rest of that week (12-17 Aug) fell
+  into "18 Aug" — a week with 8 posts showed 1. Weeks are now grouped Tue→Mon and
+  labelled by the week's start date, matching the spreadsheet: 11 Aug = the 8 posts
+  from 11-17 Aug. Verified against the real Instagram export (11 Aug → 8, 18 Aug → 6,
+  25 Aug → 6, 1 Sep → 8, 8 Sep → 8, 15 Sep → 8; 35 own + 9 influencer = 44).
+
 ## v16.4 — fix undercount + add missing WOW metrics
 
 - **Fixed posts being dropped from the weekly table.** parseDate only accepted

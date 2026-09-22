@@ -2,6 +2,12 @@
 
 Single-file dashboard (`index.html`). No build step, CDN-only, localStorage-backed.
 
+## v16.3 — follower count editable on the Scorecard
+
+- The Weekly Scorecard's Follower goal card now has its own "Current followers"
+  input + Save, so you can set the count without leaving the section. It's kept
+  in sync with Follower Growth and updates the goal (total, %, and "to go") instantly.
+
 ## v16.2 — scorecard follower goal + WOW dates
 
 - Follower goal now always shows the total follower count and how many are left

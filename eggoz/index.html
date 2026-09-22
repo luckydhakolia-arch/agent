@@ -1146,7 +1146,14 @@
             <div style="margin-left:auto;font-size:13px;color:var(--muted);" id="sc-goal-remain">—</div>
           </div>
           <div class="progress-bar" style="height:12px;"><div class="progress-fill" id="sc-goal-bar" style="width:0%;background:var(--accent);"></div></div>
-          <div style="font-size:11px;color:var(--muted);margin-top:8px;" id="sc-goal-pace">Set your current follower count in Follower Growth to track pace.</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap;">
+            <span style="font-size:12px;color:var(--muted);">Current followers</span>
+            <input type="number" id="sc-follower-input" min="0" placeholder="e.g. 48200" onkeydown="if(event.key==='Enter')saveScorecardFollowers()"
+              style="width:150px;background:var(--bg4);border:1px solid var(--border2);border-radius:8px;padding:6px 10px;color:var(--text);font-size:13px;font-family:var(--font-body);">
+            <button class="btn btn-primary" style="font-size:12px;padding:6px 14px;" onclick="saveScorecardFollowers()">Save</button>
+            <span style="font-size:11px;color:var(--muted);">Synced with Follower Growth</span>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:8px;" id="sc-goal-pace">Enter your current follower count to track pace toward 100k by Jan 2027.</div>
         </div>
 
         <!-- Milestone KPI tiles -->
@@ -4076,6 +4083,8 @@ function renderScorecardGoal() {
   setT('sc-goal-pct', sf(pct, 1) + '%');
   const bar = document.getElementById('sc-goal-bar'); if (bar) bar.style.width = pct.toFixed(1) + '%';
   setT('sc-goal-remain', remain > 0 ? fmt(remain) + ' to go' : '🎉 Target reached');
+  const inp = document.getElementById('sc-follower-input');
+  if (inp && document.activeElement !== inp) inp.value = followers ? followers : '';
   const pace = document.getElementById('sc-goal-pace');
   if (pace) {
     if (!followers) pace.textContent = 'Enter your current follower count in Follower Growth to track pace toward 100k by Jan 2027.';
@@ -4085,6 +4094,19 @@ function renderScorecardGoal() {
       pace.textContent = `Need ~${fmt(Math.ceil(remain / weeksLeft))} new followers/week for ${weeksLeft} weeks to hit 100k by Jan 2027.`;
     }
   }
+}
+
+// Save the follower count from the Scorecard goal card (kept in sync with Follower Growth).
+function saveScorecardFollowers() {
+  const inp = document.getElementById('sc-follower-input');
+  if (!inp) return;
+  const val = Math.max(0, parseInt(inp.value, 10) || 0);
+  localStorage.setItem('eggoz_follower_count', String(val));
+  try { savedFollowerCount = val; } catch(e) {}
+  const fg = document.getElementById('followerCountInput'); if (fg) fg.value = val;
+  try { if (typeof updateFollowerSection === 'function') updateFollowerSection(); } catch(e) {}
+  renderScorecardGoal();
+  showToast('✓ Follower count saved');
 }
 
 // Editable per-bucket keywords + manual per-post overrides (both persisted).

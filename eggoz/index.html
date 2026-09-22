@@ -465,6 +465,9 @@
   .sc-table th:not(:first-child), .sc-table td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
   .sc-table tr.sc-total td { font-weight: 700; border-top: 1.5px solid var(--border2); background: color-mix(in srgb, var(--accent) 6%, transparent); }
   .sc-bucket-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:8px; vertical-align:middle; }
+  .wk-fol-input { width:88px; text-align:right; font-variant-numeric:tabular-nums; background:var(--bg4); border:1px solid var(--border2); border-radius:7px; padding:4px 8px; color:var(--text); font-size:12px; font-family:var(--font-body); }
+  .wk-fol-input:focus { outline:none; border-color:var(--accent); }
+  .wk-fol-input::-webkit-outer-spin-button, .wk-fol-input::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
   .sc-wow-label { font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin:2px 0 8px; }
   .cat-filters { display:flex; gap:14px; flex-wrap:wrap; margin:4px 0 14px; }
   .cat-filters label { display:flex; flex-direction:column; gap:4px; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--muted); font-weight:600; }
@@ -1230,6 +1233,7 @@
               <tbody id="sc-weekly-all"><tr><td colspan="12" style="text-align:center;color:var(--muted);padding:24px;">Upload CSV to see weekly trend</td></tr></tbody>
             </table>
           </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:8px;">💡 <strong style="color:var(--text);">Followers (End)</strong> is the account's total follower count at each week's end. The export only carries per-post <em>Follows</em>, so these cells are <strong>estimated</strong> from that plus your saved current count — type the real Instagram number into any cell to lock it in (it saves automatically). Own &amp; Influencer tables below show the same account total; their <em>Follower Gain</em> is the follows credited to each source.</div>
 
           <div class="sc-wow-label" style="margin-top:22px;"><span class="sc-bucket-dot" style="background:var(--green);"></span>Own account (@eggoznutrition)</div>
           <div class="scroll-x">
@@ -4532,9 +4536,10 @@ function renderScorecard(D) {
   const wbAll  = document.getElementById('sc-weekly-all');
   const wbOwn  = document.getElementById('sc-weekly-own');
   const wbInfl = document.getElementById('sc-weekly-infl');
-  if (wbAll)  wbAll.innerHTML  = _weeklyRowsHTML(D.allPostsSorted  || []);
-  if (wbOwn)  wbOwn.innerHTML  = _weeklyRowsHTML(D.ownPostsSorted  || []);
-  if (wbInfl) wbInfl.innerHTML = _weeklyRowsHTML(D.inflPostsSorted || []);
+  const folEndMap = _accountFollowersEnd(D.allPostsSorted || []);
+  if (wbAll)  wbAll.innerHTML  = _weeklyRowsHTML(D.allPostsSorted  || [], folEndMap, true);
+  if (wbOwn)  wbOwn.innerHTML  = _weeklyRowsHTML(D.ownPostsSorted  || [], folEndMap, false);
+  if (wbInfl) wbInfl.innerHTML = _weeklyRowsHTML(D.inflPostsSorted || [], folEndMap, false);
 }
 
 // Build the <tr> rows (bucket rows + Total) for one Content-buckets table.
@@ -4556,7 +4561,42 @@ function _bucketRowsHTML(posts) {
 
 // Build the <tr> rows for one Week-over-week table from a set of posts.
 // Weeks are grouped Tue→Mon and labelled by the week's start date (11 Aug, 18 Aug…).
-function _weeklyRowsHTML(posts) {
+// Per-week account follower overrides the user has typed in (real Instagram
+// numbers), keyed by week-start ms. These are the source of truth when present.
+function _loadWeekFollowers() { try { return JSON.parse(localStorage.getItem('eggoz_week_followers') || '{}') || {}; } catch(e) { return {}; } }
+function setWeekFollowers(wk, val) {
+  const store = _loadWeekFollowers();
+  const n = String(val).replace(/[^0-9.\-]/g, '');
+  if (n === '' || isNaN(Number(n))) delete store[wk]; else store[wk] = Math.round(Number(n));
+  try { localStorage.setItem('eggoz_week_followers', JSON.stringify(store)); } catch(e) {}
+  try { const d = getFilteredData(); if (d && !d.__noPlatformData && !d.__noDataInRange) renderScorecard(d); } catch(e) {}
+}
+// Account-level follower count at the end of each week, keyed by week-start ms.
+// "Followers (End)" is a single account fact per week, so it is computed ONCE
+// from the combined post set and shown identically in all three tables — never
+// fabricated separately per source. A week the user has typed a real number for
+// wins; otherwise it is estimated from the account's post-level Follows anchored
+// so the latest week equals the saved current follower count. When no current
+// count is saved and no number is typed, the cell shows "—" rather than a guess.
+function _accountFollowersEnd(allPosts) {
+  const wk = {};
+  (allPosts || []).forEach(p => { const d = p.date instanceof Date ? p.date : new Date(p.date); if (isNaN(d)) return;
+    const ws = new Date(d); ws.setDate(ws.getDate() - ((ws.getDay() - SC_WEEK_DOW + 7) % 7)); ws.setHours(0,0,0,0);
+    const k = ws.getTime(); wk[k] = (wk[k] || 0) + (+p.follows || 0);
+  });
+  const keys = Object.keys(wk).map(Number).sort((a, b) => a - b);
+  const savedF = Number(localStorage.getItem('eggoz_follower_count')) || 0;
+  const overrides = _loadWeekFollowers();
+  const derived = {};
+  let after = 0; // follows gained in weeks strictly after the current one
+  for (let i = keys.length - 1; i >= 0; i--) { derived[keys[i]] = savedF > 0 ? Math.max(0, savedF - after) : null; after += wk[keys[i]]; }
+  const out = {};
+  keys.forEach(k => { out[k] = (overrides[k] !== undefined) ? overrides[k] : derived[k]; });
+  return out;
+}
+// Build the weekly <tr> rows for one table. folEndMap is the shared account-level
+// Followers (End) map; editable=true renders those cells as inputs (combined table).
+function _weeklyRowsHTML(posts, folEndMap, editable) {
   const isVid = p => /reel|video/i.test(p.postType || '');
   const erOf = a => a.views > 0 ? ((a.likes + a.comments + a.shares) / a.views * 100) : 0;
   const blank = () => ({ posts:0, reach:0, views:0, shares:0, likes:0, comments:0, follows:0, sh100:0, r50:0, v300:0, v500:0, end:null });
@@ -4579,15 +4619,13 @@ function _weeklyRowsHTML(posts) {
   });
   const keys = Object.keys(wk).sort((a, b) => a - b);
   if (!keys.length) return '<tr><td colspan="12" style="text-align:center;color:var(--muted);padding:24px;">No dated posts in range</td></tr>';
-  // Followers (End): running total of follows in this table, anchored so the latest
-  // week equals the saved current follower count.
-  const savedF = Number(localStorage.getItem('eggoz_follower_count')) || 0;
-  const totalFollows = keys.reduce((s, k) => s + wk[k].follows, 0);
-  let running = savedF > 0 ? Math.max(0, savedF - totalFollows) : 0;
-  keys.forEach(k => { running += wk[k].follows; wk[k].followersEnd = running; });
   const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   return keys.map(k => { const a = wk[k];
-    return `<tr><td>${a.end.getDate()} ${MON[a.end.getMonth()]}</td><td>${a.posts}</td><td>${fmt(a.reach)}</td><td>${fmt(a.views)}</td><td>${fmt(a.shares)}</td><td>${sf(erOf(a),1)}%</td><td>${(savedF>0||a.followersEnd)?fmt(a.followersEnd):'—'}</td><td>${a.follows ? '+'+fmt(a.follows) : '0'}</td><td>${a.sh100}</td><td>${a.r50}</td><td>${a.v300}</td><td>${a.v500}</td></tr>`;
+    const folEnd = folEndMap ? folEndMap[k] : null;
+    const folCell = editable
+      ? `<input type="number" class="wk-fol-input" value="${folEnd != null ? folEnd : ''}" placeholder="—" onchange="setWeekFollowers('${k}', this.value)" title="End-of-week account followers — type the real number from Instagram to override the estimate">`
+      : (folEnd != null ? fmt(folEnd) : '—');
+    return `<tr><td>${a.end.getDate()} ${MON[a.end.getMonth()]}</td><td>${a.posts}</td><td>${fmt(a.reach)}</td><td>${fmt(a.views)}</td><td>${fmt(a.shares)}</td><td>${sf(erOf(a),1)}%</td><td>${folCell}</td><td>${a.follows ? '+'+fmt(a.follows) : '0'}</td><td>${a.sh100}</td><td>${a.r50}</td><td>${a.v300}</td><td>${a.v500}</td></tr>`;
   }).join('');
 }
 

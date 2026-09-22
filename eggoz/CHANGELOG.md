@@ -2,6 +2,22 @@
 
 Single-file dashboard (`index.html`). No build step, CDN-only, localStorage-backed.
 
+## v17.2 — accurate, editable Followers (End)
+
+- **Followers (End) is now a single account fact per week**, computed once from
+  the combined post set and shown identically in the Combined, Own, and
+  Influencer tables — the split tables no longer fabricate a separate absolute
+  count from source-only follows (the Influencer table used to imply the account
+  had ~48k followers from 67 influencer post-follows).
+- Because a per-post export only carries per-post *Follows* (not true weekly
+  follower totals, which ignore unfollows and profile-driven growth), each cell
+  in the Combined table is now an **editable input**: type the real Instagram
+  number for any week to lock it in (persisted to `eggoz_week_followers`), and it
+  flows to all three tables. Untouched weeks fall back to the estimate anchored
+  to your saved current follower count; with no saved count the cell shows "—"
+  instead of a guess.
+- Each table's *Follower Gain* still shows the follows credited to that source.
+
 ## v17.1 — keyword editor on the Influencer card too
 
 - Added a second **⚙ Edit keywords** button (Influencer content card) opening a

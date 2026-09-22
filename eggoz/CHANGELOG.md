@@ -2,6 +2,15 @@
 
 Single-file dashboard (`index.html`). No build step, CDN-only, localStorage-backed.
 
+## v16.1 — customizable buckets
+
+- **Editable bucket keywords** — a "⚙ Customize" panel in the Weekly Scorecard lets
+  you edit the comma-separated keyword list for each bucket; saved to localStorage
+  and re-classifies instantly (Reset restores defaults).
+- **Manual per-post override** — every post in the Content list has a bucket dropdown;
+  picking a bucket pins that post there (highlighted), "↺ Auto" reverts to keyword
+  matching. Overrides always win over keywords and persist across reloads.
+
 ## v16 — Weekly Scorecard (from Content_Dashboard_WOW framework)
 
 New **Weekly Scorecard** section (sidebar + mobile nav) that reproduces the

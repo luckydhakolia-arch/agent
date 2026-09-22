@@ -1164,12 +1164,14 @@
           <div class="card-title" style="flex-wrap:wrap;gap:10px;">
             Content buckets
             <span class="sub">Posts grouped by theme — classified from captions</span>
-            <div style="display:flex;gap:6px;margin-left:auto;" id="sc-source-pills">
+            <div style="display:flex;gap:6px;margin-left:auto;align-items:center;" id="sc-source-pills">
               <button class="content-filter-pill active" data-src="all"  onclick="setScorecardSource('all',this)">All</button>
               <button class="content-filter-pill"        data-src="own"  onclick="setScorecardSource('own',this)">Own</button>
               <button class="content-filter-pill"        data-src="infl" onclick="setScorecardSource('infl',this)">Influencer</button>
+              <button class="content-filter-pill" style="border-color:var(--accent);color:var(--accent);" onclick="toggleBucketEditor()">⚙ Customize</button>
             </div>
           </div>
+          <div id="sc-bucket-editor" style="display:none;background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:14px;"></div>
           <div class="scroll-x">
             <table class="sc-table">
               <thead><tr><th style="text-align:left;">Bucket</th><th>Posts</th><th>Reach</th><th>Views</th><th>Shares</th><th>Avg ER</th><th>100+ sh</th></tr></thead>
@@ -4059,13 +4061,85 @@ const SC_FOLLOWER_TARGET = 100000;
 const SC_TARGET_DATE = new Date('2027-01-31');
 let scorecardSource = 'all';
 
+// Editable per-bucket keywords + manual per-post overrides (both persisted).
+function _loadBucketKeywords() {
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem('eggoz_bucket_keywords') || '{}') || {}; } catch(e) {}
+  const kw = {};
+  SC_BUCKETS.forEach(b => { kw[b.key] = Array.isArray(saved[b.key]) ? saved[b.key] : b.kw.slice(); });
+  return kw;
+}
+function _loadBucketOverrides() { try { return JSON.parse(localStorage.getItem('eggoz_bucket_overrides') || '{}') || {}; } catch(e) { return {}; } }
+let bucketKeywords = _loadBucketKeywords();
+let bucketOverrides = _loadBucketOverrides();
+function bucketMeta(key) { return SC_BUCKETS.find(b => b.key === key) || SC_BUCKETS[SC_BUCKETS.length - 1]; }
+
 function classifyBucket(post) {
+  if (post && post.id && bucketOverrides[post.id]) return bucketOverrides[post.id];
   const t = (post.caption || '').toLowerCase();
   for (const b of SC_BUCKETS) {
     if (b.key === 'other') continue;
-    if (b.kw.some(k => t.includes(k))) return b.key;
+    const kws = bucketKeywords[b.key] || b.kw;
+    if (kws.some(k => k && t.includes(k))) return b.key;
   }
   return 'other';
+}
+function _scRerender() {
+  if (liveData) { const d = getFilteredData(); if (d && !d.__noPlatformData && !d.__noDataInRange) renderScorecard(d); }
+}
+// Per-post override control shown in the Content post list
+function _bucketSelectHTML(p) {
+  const cur = classifyBucket(p);
+  const overridden = !!(p.id && bucketOverrides[p.id]);
+  const opts = SC_BUCKETS.map(b => `<option value="${b.key}" ${b.key === cur ? 'selected' : ''}>${b.name}</option>`).join('');
+  return `<select title="Content bucket${overridden ? ' (manually set)' : ' (auto)'}" onclick="event.stopPropagation()" onchange="setPostBucket('${p.id}', this.value)"
+    style="font-size:10px;padding:1px 5px;border-radius:8px;background:var(--bg4);border:1px solid ${overridden ? 'var(--accent)' : 'var(--border2)'};color:${overridden ? 'var(--accent)' : 'var(--muted)'};font-family:var(--font-body);cursor:pointer;max-width:120px;">
+    <option value="">↺ Auto</option>${opts}</select>`;
+}
+function setPostBucket(id, key) {
+  if (!key) delete bucketOverrides[id]; else bucketOverrides[id] = key;
+  try { localStorage.setItem('eggoz_bucket_overrides', JSON.stringify(bucketOverrides)); } catch(e) {}
+  _scRerender();
+  try { renderContentPosts(); } catch(e) {}
+  showToast(key ? '✓ Moved to ' + bucketMeta(key).name : '✓ Bucket set to Auto');
+}
+// Keyword editor
+function toggleBucketEditor() {
+  const el = document.getElementById('sc-bucket-editor'); if (!el) return;
+  const open = el.style.display === 'none' || !el.style.display;
+  el.style.display = open ? 'block' : 'none';
+  if (open) renderBucketEditor();
+}
+function renderBucketEditor() {
+  const el = document.getElementById('sc-bucket-editor'); if (!el) return;
+  el.innerHTML = SC_BUCKETS.filter(b => b.key !== 'other').map(b => `
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px;flex-wrap:wrap;">
+      <span style="min-width:130px;font-size:12px;font-weight:600;"><span class="sc-bucket-dot" style="background:${b.color}"></span>${b.name}</span>
+      <input id="bk-${b.key}" value="${(bucketKeywords[b.key] || []).join(', ').replace(/"/g,'&quot;')}" placeholder="comma-separated keywords"
+        style="flex:1;min-width:240px;background:var(--bg4);border:1px solid var(--border2);border-radius:8px;padding:6px 10px;color:var(--text);font-size:12px;font-family:var(--font-body);">
+    </div>`).join('')
+    + `<div style="display:flex;gap:8px;margin-top:10px;">
+        <button class="btn btn-primary" style="font-size:12px;padding:6px 14px;" onclick="saveBucketKeywords()">Save keywords</button>
+        <button class="btn btn-ghost" style="font-size:12px;padding:6px 12px;" onclick="resetBucketKeywords()">Reset to defaults</button>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:8px;">Each post is matched to the first bucket whose keywords appear in its caption. Manual per-post overrides (the dropdown on each post in Content) always win.</div>`;
+}
+function saveBucketKeywords() {
+  const out = {};
+  SC_BUCKETS.forEach(b => { if (b.key === 'other') return; const inp = document.getElementById('bk-' + b.key); if (inp) out[b.key] = inp.value.split(',').map(s => s.trim().toLowerCase()).filter(Boolean); });
+  try { localStorage.setItem('eggoz_bucket_keywords', JSON.stringify(out)); } catch(e) {}
+  bucketKeywords = _loadBucketKeywords();
+  _scRerender();
+  try { renderContentPosts(); } catch(e) {}
+  showToast('✓ Bucket keywords saved');
+}
+function resetBucketKeywords() {
+  localStorage.removeItem('eggoz_bucket_keywords');
+  bucketKeywords = _loadBucketKeywords();
+  renderBucketEditor();
+  _scRerender();
+  try { renderContentPosts(); } catch(e) {}
+  showToast('✓ Reset to default keywords');
 }
 function setScorecardSource(src, el) {
   scorecardSource = src;
@@ -4222,6 +4296,7 @@ function renderContentPosts() {
         <div class="post-title" style="font-size:13px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:340px;">${p.caption||'—'}</div>
         <div style="font-size:11px;color:var(--muted);margin-top:3px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
           <span>${dateStr} · ${p.postType||'post'} ${badge}</span>
+          ${_bucketSelectHTML(p)}
         </div>
         <div style="margin-top:5px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
           ${reachLabel}

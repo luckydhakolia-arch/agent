@@ -2,6 +2,13 @@
 
 Single-file dashboard (`index.html`). No build step, CDN-only, localStorage-backed.
 
+## v16.6 — exact numbers everywhere (no 1k/2k)
+
+- Numbers across the dashboard now show in full (e.g. 52,000 instead of 52.0K;
+  4,77,643 instead of 477.6K) — KPI tiles, the Weekly Scorecard tables, the follower
+  goal, chart axis labels, and the downloadable report all use exact values from the
+  uploaded data, grouped with separators.
+
 ## v16.5 — fix weekly grouping direction (label by week start)
 
 - The Week-over-week table grouped posts into the week *ending* on each Tuesday, so a

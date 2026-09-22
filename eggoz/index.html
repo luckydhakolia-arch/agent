@@ -2193,8 +2193,6 @@ function parseDate(v) {
 function fmt(v) {
   const n = Number(v);
   if (v === null || v === undefined || isNaN(n)) return '—';
-  if (n >= 1e6) return (n/1e6).toFixed(1)+'M';
-  if (n >= 1000) return (n/1000).toFixed(1)+'K';
   return Math.round(n).toLocaleString('en-IN');
 }
 
@@ -2440,7 +2438,7 @@ function applyLiveDataToDashboard(D) {
     activeCharts['growth-mini'] = new Chart(gc, {
       type:'line',
       data:{ labels: D.monthKeys, datasets:[{ data: D.monthKeys.map(k=>D.byMonth[k].views), borderColor:G, borderWidth:2, fill:true, backgroundColor:'rgba(76,175,125,0.07)', tension:0.4, pointRadius:3, pointBackgroundColor:G }] },
-      options: chartOpts({ scales:{ x:{ticks:{color:M,font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}}, y:{ticks:{color:M,font:{size:10},callback:v=>v>=1e6?v/1e6+'M':v>=1000?v/1000+'K':v},grid:{color:'rgba(255,255,255,0.04)'}} }})
+      options: chartOpts({ scales:{ x:{ticks:{color:M,font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}}, y:{ticks:{color:M,font:{size:10},callback:v=>fmt(v)},grid:{color:'rgba(255,255,255,0.04)'}} }})
     });
   }
 
@@ -2558,7 +2556,7 @@ function applyLiveDataToDashboard(D) {
     activeCharts['growth-full'] = new Chart(gfc, {
       type:'line',
       data:{ labels: D.monthKeys, datasets:[{ label:'Views', data: D.monthKeys.map(k=>D.byMonth[k].views), borderColor:G, borderWidth:2, fill:true, backgroundColor:'rgba(76,175,125,0.07)', tension:0.4, pointRadius:4, pointBackgroundColor:G }] },
-      options: chartOpts({ scales:{ x:{ticks:{color:M,font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'}}, y:{ticks:{color:M,font:{size:11},callback:v=>v>=1e6?v/1e6+'M':v>=1000?v/1000+'K':v},grid:{color:'rgba(255,255,255,0.04)'}} }})
+      options: chartOpts({ scales:{ x:{ticks:{color:M,font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'}}, y:{ticks:{color:M,font:{size:11},callback:v=>fmt(v)},grid:{color:'rgba(255,255,255,0.04)'}} }})
     });
   }
 
@@ -2582,7 +2580,7 @@ function applyLiveDataToDashboard(D) {
     activeCharts['plat-followers'] = new Chart(plc, {
       type:'bar',
       data:{ labels: D.monthKeys, datasets:[{ label:'Likes', data: D.monthKeys.map(k=>D.byMonth[k].likes||0), backgroundColor:P, borderRadius:5 }] },
-      options: chartOpts({ scales:{ x:{ticks:{color:M,font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'}}, y:{ticks:{color:M,font:{size:11},callback:v=>v>=1000?v/1000+'K':v},grid:{color:'rgba(255,255,255,0.04)'}} }})
+      options: chartOpts({ scales:{ x:{ticks:{color:M,font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'}}, y:{ticks:{color:M,font:{size:11},callback:v=>fmt(v)},grid:{color:'rgba(255,255,255,0.04)'}} }})
     });
   }
 
@@ -2597,7 +2595,7 @@ function applyLiveDataToDashboard(D) {
         { label:'Views', data: D.monthKeys.map(k=>D.byMonth[k].views), borderColor:G, borderWidth:2, fill:false, tension:0.4, pointRadius:3 },
         { label:'Likes', data: D.monthKeys.map(k=>D.byMonth[k].likes), borderColor:P, borderWidth:2, fill:false, tension:0.4, pointRadius:3, borderDash:[4,3] },
       ]},
-      options: chartOpts({ plugins:{ legend:{display:true,labels:{color:M,font:{size:11},boxWidth:10}}}, scales:{ x:{ticks:{color:M,font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'}}, y:{ticks:{color:M,font:{size:11},callback:v=>v>=1e6?v/1e6+'M':v>=1000?v/1000+'K':v},grid:{color:'rgba(255,255,255,0.04)'}} }})
+      options: chartOpts({ plugins:{ legend:{display:true,labels:{color:M,font:{size:11},boxWidth:10}}}, scales:{ x:{ticks:{color:M,font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'}}, y:{ticks:{color:M,font:{size:11},callback:v=>fmt(v)},grid:{color:'rgba(255,255,255,0.04)'}} }})
     });
   }
 
@@ -2619,7 +2617,7 @@ function applyLiveDataToDashboard(D) {
       },
       options: chartOpts({ scales:{
         x:{ ticks:{color:M,font:{size:11}}, grid:{color:'rgba(255,255,255,0.04)'} },
-        y:{ ticks:{color:M,font:{size:11},callback:v=>v>=1000?v/1000+'K':v}, grid:{color:'rgba(255,255,255,0.04)'}, beginAtZero:true }
+        y:{ ticks:{color:M,font:{size:11},callback:v=>fmt(v)}, grid:{color:'rgba(255,255,255,0.04)'}, beginAtZero:true }
       }})
     });
   }
@@ -3798,7 +3796,7 @@ async function generateReport() {
 function buildHTMLReport(data) {
   // Build a standalone HTML report page (can be printed to PDF or downloaded)
   const d = data;
-  const fmt = v => { const n=Number(v); if(isNaN(n)) return '—'; if(n>=1e6) return (n/1e6).toFixed(1)+'M'; if(n>=1000) return (n/1000).toFixed(1)+'K'; return Math.round(n).toLocaleString('en-IN'); };
+  const fmt = v => { const n=Number(v); if(isNaN(n)) return '—'; return Math.round(n).toLocaleString('en-IN'); };
   const sf  = (v,dc) => { const n=Number(v); return isNaN(n)?'0.0':n.toFixed(dc||1); };
   const today = new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
 
@@ -4761,8 +4759,8 @@ function openLivePostAnalysis(postId) {
     var postPct = Math.round((b.post/maxV)*100);
     var avgPct  = Math.round((b.avg /maxV)*100);
     var isEr = b.label === 'ER %';
-    var postFmt = isEr ? sf(b.post,2)+'%' : (b.post>=1e6?(b.post/1e6).toFixed(1)+'M':b.post>=1000?(b.post/1000).toFixed(1)+'K':Math.round(b.post).toString());
-    var avgFmt  = isEr ? sf(b.avg, 2)+'%' : (b.avg >=1e6?(b.avg /1e6).toFixed(1)+'M':b.avg >=1000?(b.avg /1000).toFixed(1)+'K':Math.round(b.avg ).toString());
+    var postFmt = isEr ? sf(b.post,2)+'%' : Math.round(b.post).toLocaleString('en-IN');
+    var avgFmt  = isEr ? sf(b.avg, 2)+'%' : Math.round(b.avg ).toLocaleString('en-IN');
     var col = b.post >= b.avg ? 'var(--green)' : 'var(--red)';
     return '<div style="margin-bottom:10px;"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;"><span style="color:var(--muted);">'+b.label+'</span><span style="color:var(--text);">'+postFmt+' <span style="color:var(--muted);">vs avg '+avgFmt+'</span></span></div><div style="height:6px;background:var(--bg4);border-radius:3px;margin-bottom:2px;"><div style="height:100%;border-radius:3px;background:'+col+';width:'+postPct+'%;"></div></div><div style="height:3px;background:var(--bg4);border-radius:3px;"><div style="height:100%;border-radius:3px;background:var(--muted);opacity:0.5;width:'+avgPct+'%;"></div></div></div>';
   }).join('');
@@ -5733,8 +5731,8 @@ function renderPACharts(postId) {
   document.getElementById('pa-benchmark-bars').innerHTML = d.benchmarks.map((b,i) => {
     const postPct = Math.round((b.post/maxVals[i])*100);
     const avgPct = Math.round((b.avg/maxVals[i])*100);
-    const postFmt = b.post >= 1000000 ? (b.post/1000000).toFixed(1)+'M' : b.post >= 1000 ? (b.post/1000).toFixed(0)+'K' : b.post;
-    const avgFmt = b.avg >= 1000000 ? (b.avg/1000000).toFixed(1)+'M' : b.avg >= 1000 ? (b.avg/1000).toFixed(0)+'K' : b.avg;
+    const postFmt = Math.round(Number(b.post)||0).toLocaleString('en-IN');
+    const avgFmt = Math.round(Number(b.avg)||0).toLocaleString('en-IN');
     return `<div style="margin-bottom:10px;">
       <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="color:var(--muted);">${b.label}</span><span style="color:var(--text);">${postFmt} <span style="color:var(--muted);">vs avg ${avgFmt}</span></span></div>
       <div style="position:relative;height:6px;background:var(--bg4);border-radius:3px;margin-bottom:2px;"><div style="height:100%;border-radius:3px;background:${postPct>avgPct?G:R};width:${postPct}%;"></div></div>

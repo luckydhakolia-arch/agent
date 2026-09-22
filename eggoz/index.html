@@ -1180,7 +1180,9 @@
           <div class="card-title" style="flex-wrap:wrap;gap:10px;">
             <span><span class="sc-bucket-dot" style="background:var(--green);"></span>Own content — categories</span>
             <span class="sub">Filter by category and sub-category</span>
+            <button class="content-filter-pill" style="margin-left:auto;border-color:var(--accent);color:var(--accent);" onclick="toggleCatEditor()">⚙ Edit keywords</button>
           </div>
+          <div id="cat-kw-editor" style="display:none;background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:14px;"></div>
           <div class="cat-filters">
             <label>Category <select id="own-cat-main" onchange="onCatMain('own')"></select></label>
             <label>Sub-category <select id="own-cat-sub" onchange="renderCategories()"></select></label>
@@ -4313,19 +4315,39 @@ try { postCatOverrides = JSON.parse(localStorage.getItem('eggoz_post_cats') || '
 let ownCatFilter  = { main:'all', sub:'all' };
 let inflCatFilter = { main:'all', sub:'all', city:'all' };
 
+// Editable auto-detection keywords (defaults from the taxonomy above, overridable & persisted).
+function _defaultCatKw() {
+  const o = { own:{}, infl:{}, sub:{}, city:{} };
+  OWN_CATS.forEach(c => o.own[c.name] = c.kw.slice());
+  INFL_CATS.forEach(c => o.infl[c.name] = c.kw.slice());
+  Object.keys(CAT_SUB_KW).forEach(k => o.sub[k] = CAT_SUB_KW[k].slice());
+  Object.keys(CAT_CITY_KW).forEach(k => o.city[k] = CAT_CITY_KW[k].slice());
+  return o;
+}
+function _loadCatKw() {
+  const def = _defaultCatKw();
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem('eggoz_cat_keywords') || '{}') || {}; } catch(e) {}
+  ['own','infl','sub','city'].forEach(g => { if (saved[g]) Object.keys(saved[g]).forEach(k => { if (Array.isArray(saved[g][k])) def[g][k] = saved[g][k]; }); });
+  return def;
+}
+let catKw = _loadCatKw();
+
 function _catText(post) { return ((post.caption||'') + ' ' + (post.accountName||'') + ' ' + (post.username||'')).toLowerCase(); }
 function _kwHit(text, list) { return (list||[]).some(k => k && text.indexOf(k) !== -1); }
 function postCategory(post) {
   const ov = (post.id && postCatOverrides[post.id]) || {};
   const text = _catText(post);
-  const cats = post.isInfluencer ? INFL_CATS : OWN_CATS;
-  const main = (ov.main && ov.main !== 'auto') ? ov.main : ((cats.find(c => _kwHit(text, c.kw)) || {}).name || 'Uncategorised');
+  const isInfl = post.isInfluencer;
+  const cats = isInfl ? INFL_CATS : OWN_CATS;
+  const kwOf = isInfl ? catKw.infl : catKw.own;
+  const main = (ov.main && ov.main !== 'auto') ? ov.main : ((cats.find(c => _kwHit(text, kwOf[c.name])) || {}).name || 'Uncategorised');
   const def = cats.find(c => c.name === main);
   const sub = (ov.sub && ov.sub !== 'auto') ? ov.sub
-            : (def && def.subs.length ? (def.subs.find(s => _kwHit(text, CAT_SUB_KW[s] || [s.toLowerCase()])) || '—') : '—');
+            : (def && def.subs.length ? (def.subs.find(s => _kwHit(text, catKw.sub[s] || [s.toLowerCase()])) || '—') : '—');
   let city = '—';
-  if (post.isInfluencer) {
-    city = (ov.city && ov.city !== 'auto') ? ov.city : (INFL_CITIES.find(c => _kwHit(text, CAT_CITY_KW[c])) || 'Unassigned');
+  if (isInfl) {
+    city = (ov.city && ov.city !== 'auto') ? ov.city : (INFL_CITIES.find(c => _kwHit(text, catKw.city[c])) || 'Unassigned');
   }
   return { main, sub, city };
 }
@@ -4424,6 +4446,44 @@ function setPostCat(id, field, value) {
   try { localStorage.setItem('eggoz_post_cats', JSON.stringify(postCatOverrides)); } catch(e) {}
   try { renderCategories(); } catch(e) {}
   try { renderContentPosts(); } catch(e) {}
+}
+
+// ---- Editable auto-detection keyword panel ----
+function toggleCatEditor() {
+  const el = document.getElementById('cat-kw-editor'); if (!el) return;
+  const open = el.style.display === 'none' || !el.style.display;
+  el.style.display = open ? 'block' : 'none';
+  if (open) renderCatEditor();
+}
+function renderCatEditor() {
+  const el = document.getElementById('cat-kw-editor'); if (!el) return;
+  const row = (grp, key) => `<div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;flex-wrap:wrap;">
+    <span style="min-width:160px;font-size:12px;font-weight:600;">${key}</span>
+    <input data-grp="${grp}" data-key="${key}" value="${(catKw[grp][key]||[]).join(', ').replace(/"/g,'&quot;')}" placeholder="comma-separated keywords"
+      style="flex:1;min-width:240px;background:var(--bg4);border:1px solid var(--border2);border-radius:8px;padding:6px 10px;color:var(--text);font-size:12px;font-family:var(--font-body);"></div>`;
+  const section = (title, grp) => `<div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;margin:14px 0 8px;">${title}</div>` + Object.keys(catKw[grp]).map(k => row(grp, k)).join('');
+  el.innerHTML = section('Own categories','own') + section('Influencer categories','infl') + section('Sub-categories','sub') + section('Cities','city')
+    + `<div style="display:flex;gap:8px;margin-top:14px;"><button class="btn btn-primary" style="font-size:12px;padding:6px 14px;" onclick="saveCatKeywords()">Save keywords</button><button class="btn btn-ghost" style="font-size:12px;padding:6px 12px;" onclick="resetCatKeywords()">Reset to defaults</button></div>
+    <div style="font-size:11px;color:var(--muted);margin-top:8px;">A post is auto-tagged to the first category / sub-category / city whose keywords appear in its caption. Manual per-post picks (the dropdowns on each post in Content) always win.</div>`;
+}
+function saveCatKeywords() {
+  const out = { own:{}, infl:{}, sub:{}, city:{} };
+  document.querySelectorAll('#cat-kw-editor input[data-grp]').forEach(inp => {
+    out[inp.dataset.grp][inp.dataset.key] = inp.value.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+  });
+  try { localStorage.setItem('eggoz_cat_keywords', JSON.stringify(out)); } catch(e) {}
+  catKw = _loadCatKw();
+  try { renderCategories(); } catch(e) {}
+  try { renderContentPosts(); } catch(e) {}
+  showToast('✓ Category keywords saved');
+}
+function resetCatKeywords() {
+  localStorage.removeItem('eggoz_cat_keywords');
+  catKw = _loadCatKw();
+  renderCatEditor();
+  try { renderCategories(); } catch(e) {}
+  try { renderContentPosts(); } catch(e) {}
+  showToast('✓ Reset to default keywords');
 }
 
 function renderScorecard(D) {

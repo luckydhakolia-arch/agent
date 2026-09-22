@@ -2,6 +2,15 @@
 
 Single-file dashboard (`index.html`). No build step, CDN-only, localStorage-backed.
 
+## v17.0 — editable category keywords
+
+- Added an **⚙ Edit keywords** panel (in the Own content card) that exposes every
+  keyword list driving auto-classification: Own categories, Influencer categories,
+  Sub-categories, and Cities. Each field is a comma-separated list you can tune,
+  with **Save** (persists to localStorage `eggoz_cat_keywords` and re-classifies
+  live) and **Reset to defaults**. Per-post dropdown overrides still win over
+  keyword matches.
+
 ## v16.9 — hierarchical content categories with filters
 
 - Replaced the flat bucket tables with a proper category taxonomy, split into

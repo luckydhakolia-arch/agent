@@ -2,6 +2,21 @@
 
 Single-file dashboard (`index.html`). No build step, CDN-only, localStorage-backed.
 
+## v16.9 — hierarchical content categories with filters
+
+- Replaced the flat bucket tables with a proper category taxonomy, split into
+  **Own content** and **Influencer content** cards, each with cascading filter
+  dropdowns and a breakdown table that re-groups by the deepest unselected level:
+  - Own: Category (Informational, Mythbuster, Trending, Chosen By Champion, Gym,
+    VoxPop, Recipe, Product Launch) → Sub-category (Protein Plus, Traceability,
+    Brown, Nutrition, App / Egg Head Chronicles / Red Flag).
+  - Influencer: Category (Nutritionist, Fitness, Doctors, Mothers, PCOS/PCOD, UGC,
+    Lifestyle) → Sub-category → City (Delhi/NCR, Bangalore, Hyderabad, Mumbai,
+    Chennai, Kolkata).
+- Posts auto-classify from caption keywords; each post in the Content list has
+  Category / Sub-category (/ City for influencer) dropdowns to set it exactly.
+  Assignments persist in localStorage (eggoz_post_cats).
+
 ## v16.8 — Content buckets split by source
 
 - The Content buckets section now shows three tables — Combined (Own + Influencer),

@@ -466,6 +466,14 @@
   .sc-table tr.sc-total td { font-weight: 700; border-top: 1.5px solid var(--border2); background: color-mix(in srgb, var(--accent) 6%, transparent); }
   .sc-bucket-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:8px; vertical-align:middle; }
   .sc-wow-label { font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin:2px 0 8px; }
+  .cat-filters { display:flex; gap:14px; flex-wrap:wrap; margin:4px 0 14px; }
+  .cat-filters label { display:flex; flex-direction:column; gap:4px; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--muted); font-weight:600; }
+  .cat-filters select { background:var(--bg4); border:1px solid var(--border2); border-radius:8px; padding:7px 10px; color:var(--text); font-size:13px; font-family:var(--font-body); cursor:pointer; min-width:150px; text-transform:none; letter-spacing:0; font-weight:400; }
+  .cat-filters select:focus { outline:none; border-color:var(--accent); }
+  .cat-summary { display:flex; gap:18px; flex-wrap:wrap; font-size:12.5px; color:var(--muted); margin-bottom:12px; }
+  .cat-summary b { color:var(--text); font-variant-numeric:tabular-nums; }
+  .post-cat-selects { display:inline-flex; gap:4px; flex-wrap:wrap; }
+  .post-cat-selects select { font-size:10px; padding:1px 4px; border-radius:8px; background:var(--bg4); border:1px solid var(--border2); color:var(--muted); font-family:var(--font-body); cursor:pointer; max-width:130px; }
 
   .trend-up::before { content:'▲ '; color: var(--green); }
   .trend-dn::before { content:'▼ '; color: var(--red); }
@@ -1167,41 +1175,44 @@
           <div class="metric-card"><div class="metric-label">Total shares</div><div class="metric-val" id="sc-m-shares">—</div><div class="metric-sub neu">All buckets</div></div>
         </div>
 
-        <!-- Content buckets — combined + own + influencer -->
+        <!-- Own content — categories -->
         <div class="card" style="margin-bottom:20px;">
           <div class="card-title" style="flex-wrap:wrap;gap:10px;">
-            Content buckets
-            <span class="sub">Posts grouped by theme — combined, then own and influencer</span>
-            <div style="margin-left:auto;">
-              <button class="content-filter-pill" style="border-color:var(--accent);color:var(--accent);" onclick="toggleBucketEditor()">⚙ Customize</button>
-            </div>
+            <span><span class="sc-bucket-dot" style="background:var(--green);"></span>Own content — categories</span>
+            <span class="sub">Filter by category and sub-category</span>
           </div>
-          <div id="sc-bucket-editor" style="display:none;background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:14px;"></div>
-
-          <div class="sc-wow-label">Combined (Own + Influencer)</div>
+          <div class="cat-filters">
+            <label>Category <select id="own-cat-main" onchange="onCatMain('own')"></select></label>
+            <label>Sub-category <select id="own-cat-sub" onchange="renderCategories()"></select></label>
+          </div>
+          <div id="own-cat-summary" class="cat-summary"></div>
           <div class="scroll-x">
             <table class="sc-table">
-              <thead><tr><th style="text-align:left;">Bucket</th><th>Posts</th><th>Reach</th><th>Views</th><th>Shares</th><th>Avg ER</th><th>100+ sh</th></tr></thead>
-              <tbody id="sc-buckets-all"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px;">Upload CSV to see buckets</td></tr></tbody>
+              <thead id="own-cat-head"></thead>
+              <tbody id="own-cat-body"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px;">Upload CSV to see categories</td></tr></tbody>
             </table>
           </div>
+        </div>
 
-          <div class="sc-wow-label" style="margin-top:22px;"><span class="sc-bucket-dot" style="background:var(--green);"></span>Own account (@eggoznutrition)</div>
+        <!-- Influencer content — categories -->
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-title" style="flex-wrap:wrap;gap:10px;">
+            <span><span class="sc-bucket-dot" style="background:var(--purple);"></span>Influencer content — categories</span>
+            <span class="sub">Filter by category, sub-category and city</span>
+          </div>
+          <div class="cat-filters">
+            <label>Category <select id="infl-cat-main" onchange="onCatMain('infl')"></select></label>
+            <label>Sub-category <select id="infl-cat-sub" onchange="renderCategories()"></select></label>
+            <label>City <select id="infl-cat-city" onchange="renderCategories()"></select></label>
+          </div>
+          <div id="infl-cat-summary" class="cat-summary"></div>
           <div class="scroll-x">
             <table class="sc-table">
-              <thead><tr><th style="text-align:left;">Bucket</th><th>Posts</th><th>Reach</th><th>Views</th><th>Shares</th><th>Avg ER</th><th>100+ sh</th></tr></thead>
-              <tbody id="sc-buckets-own"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px;">Upload CSV to see buckets</td></tr></tbody>
+              <thead id="infl-cat-head"></thead>
+              <tbody id="infl-cat-body"><tr><td colspan="8" style="text-align:center;color:var(--muted);padding:24px;">Upload CSV to see categories</td></tr></tbody>
             </table>
           </div>
-
-          <div class="sc-wow-label" style="margin-top:22px;"><span class="sc-bucket-dot" style="background:var(--purple);"></span>Influencer</div>
-          <div class="scroll-x">
-            <table class="sc-table">
-              <thead><tr><th style="text-align:left;">Bucket</th><th>Posts</th><th>Reach</th><th>Views</th><th>Shares</th><th>Avg ER</th><th>100+ sh</th></tr></thead>
-              <tbody id="sc-buckets-infl"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px;">Upload CSV to see buckets</td></tr></tbody>
-            </table>
-          </div>
-          <div style="font-size:11px;color:var(--muted);margin-top:12px;">Buckets: Mothers · Traceability · Protein Plus · Recipe · Doctor Content · Other — matched by keywords in each post's caption; unmatched posts fall into “Other”. Use ⚙ Customize to edit keywords, or the dropdown on each post in Content to reassign it.</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:10px;">Categories are auto-detected from each post's caption; set any post exactly using the category dropdowns in the Content list. City is detected when a city name appears in the caption, otherwise “Unassigned”.</div>
         </div>
 
         <!-- Weekly (WOW) breakdown — combined + own + influencer -->
@@ -1894,7 +1905,7 @@ function nav(id, el) {
   setTimeout(() => {
     initCharts(id);
     if (id === 'scheduler') renderScheduler();
-    if (id === 'scorecard') { try { renderScorecardGoal(); } catch(e){} }
+    if (id === 'scorecard') { try { renderScorecardGoal(); populateCatFilters(); } catch(e){} }
   }, 80);
 }
 
@@ -4258,6 +4269,163 @@ function _scPosts(D) {
   if (scorecardSource === 'infl') return D.inflPostsSorted || [];
   return D.allPostsSorted || [];
 }
+// ===== CONTENT CATEGORY TAXONOMY (Own & Influencer) =====
+const CAT_PL = ['Protein Plus','Traceability','Brown','Nutrition','App'];
+const OWN_CATS = [
+  { name:'Informational',      subs:['Protein Plus','Traceability','Brown','Nutrition','Egg Head Chronicles'], kw:['did you know','fact','learn','egghead','egg head','chronicle','know more','explain','swipe to','the science','myth of'] },
+  { name:'Mythbuster',         subs:['Red Flag'], kw:['myth','mythbuster','red flag','not a red flag','villain','misconception','crack the','blaming','wrong culprit'] },
+  { name:'Trending',           subs:['Protein Plus','Traceability','Brown','Nutrition','App'], kw:['trending','viral','fyp','challenge','one lyric','80s','tokyo','trend','vaat'] },
+  { name:'Chosen By Champion', subs:[], kw:['champion','medal','shooting','athlete','olympic','world championship','congratulations','silver','gold ','conquer'] },
+  { name:'Gym',                subs:['Protein Plus','Traceability','Brown','Nutrition','App'], kw:['gym','workout','muscle','bicep','gains','training','flex','gym war','recovery','competition'] },
+  { name:'VoxPop',             subs:['Protein Plus','Traceability','Brown','Nutrition','App'], kw:['voxpop','vox pop','we asked','interview','what people','eggozians','hear what'] },
+  { name:'Recipe',             subs:['Protein Plus','Brown','Nutrition','App'], kw:['recipe','omelette','omelet','bhurji','sandwich','cook','dish','snack','spicy','saucy','breakfast favourite'] },
+  { name:'Product Launch',     subs:['Protein Plus','Traceability','Brown','Nutrition','App'], kw:['launch','introducing','new member','welcome','presenting','farm & fable','bigger on protein','meet eggoz'] },
+];
+const INFL_CATS = [
+  { name:'Nutritionist', subs:CAT_PL, kw:['nutritionist','dietitian','nutrition coach','registered dietitian'] },
+  { name:'Fitness',      subs:CAT_PL, kw:['fitness','gym','coach','trainer','workout','lifts','muscle','bodybuild','athlete'] },
+  { name:'Doctors',      subs:CAT_PL, kw:['doctor','dr ','dr.','mbbs','physician'] },
+  { name:'Mothers',      subs:CAT_PL, kw:['mom','mother','kids','parenting','baby'] },
+  { name:'PCOS/PCOD',    subs:CAT_PL, kw:['pcos','pcod','hormone','hormonal'] },
+  { name:'UGC',          subs:CAT_PL, kw:['ugc','user generated','my experience','i switched','i tried'] },
+  { name:'Lifestyle',    subs:CAT_PL, kw:['lifestyle','vlog','day in','routine','what i eat','grwm'] },
+];
+const INFL_CITIES = ['Delhi/NCR','Bangalore','Hyderabad','Mumbai','Chennai','Kolkata'];
+const CAT_SUB_KW = {
+  'Protein Plus':['protein plus','protein','70g','amino','high protein','∼25%','25% of'],
+  'Traceability':['traceab','farm','source','transparen','antibiotic','grading','quality check'],
+  'Brown':['brown egg','brown','orange yolk','red blood','yolk'],
+  'Nutrition':['nutrition','vitamin','b12','cholesterol','healthy','omega','serotonin','wellness','choline'],
+  'App':['app','zepto','instamart','amazon','order now','milkbasket','swiggy','blinkit'],
+  'Egg Head Chronicles':['egghead','egg head','chronicle','serotonin'],
+  'Red Flag':['red flag'],
+};
+const CAT_CITY_KW = {
+  'Delhi/NCR':['delhi','ncr','gurgaon','gurugram','noida'],
+  'Bangalore':['bangalore','bengaluru'],
+  'Hyderabad':['hyderabad'],
+  'Mumbai':['mumbai','bombay'],
+  'Chennai':['chennai'],
+  'Kolkata':['kolkata','calcutta'],
+};
+let postCatOverrides = {};
+try { postCatOverrides = JSON.parse(localStorage.getItem('eggoz_post_cats') || '{}') || {}; } catch(e) { postCatOverrides = {}; }
+let ownCatFilter  = { main:'all', sub:'all' };
+let inflCatFilter = { main:'all', sub:'all', city:'all' };
+
+function _catText(post) { return ((post.caption||'') + ' ' + (post.accountName||'') + ' ' + (post.username||'')).toLowerCase(); }
+function _kwHit(text, list) { return (list||[]).some(k => k && text.indexOf(k) !== -1); }
+function postCategory(post) {
+  const ov = (post.id && postCatOverrides[post.id]) || {};
+  const text = _catText(post);
+  const cats = post.isInfluencer ? INFL_CATS : OWN_CATS;
+  const main = (ov.main && ov.main !== 'auto') ? ov.main : ((cats.find(c => _kwHit(text, c.kw)) || {}).name || 'Uncategorised');
+  const def = cats.find(c => c.name === main);
+  const sub = (ov.sub && ov.sub !== 'auto') ? ov.sub
+            : (def && def.subs.length ? (def.subs.find(s => _kwHit(text, CAT_SUB_KW[s] || [s.toLowerCase()])) || '—') : '—');
+  let city = '—';
+  if (post.isInfluencer) {
+    city = (ov.city && ov.city !== 'auto') ? ov.city : (INFL_CITIES.find(c => _kwHit(text, CAT_CITY_KW[c])) || 'Unassigned');
+  }
+  return { main, sub, city };
+}
+
+function populateCatFilters() {
+  const mk = (arr, allLabel) => `<option value="all">${allLabel}</option>` + arr.map(x => `<option value="${x}">${x}</option>`).join('');
+  const om = document.getElementById('own-cat-main');
+  if (om && !om.dataset.filled) { om.innerHTML = mk(OWN_CATS.map(c=>c.name), 'All categories'); om.dataset.filled='1'; }
+  const im = document.getElementById('infl-cat-main');
+  if (im && !im.dataset.filled) { im.innerHTML = mk(INFL_CATS.map(c=>c.name), 'All categories'); im.dataset.filled='1'; }
+  const ic = document.getElementById('infl-cat-city');
+  if (ic && !ic.dataset.filled) { ic.innerHTML = mk(INFL_CITIES.concat(['Unassigned']), 'All cities'); ic.dataset.filled='1'; }
+  _fillSubFilter('own'); _fillSubFilter('infl');
+}
+function _fillSubFilter(which) {
+  const cats = which === 'own' ? OWN_CATS : INFL_CATS;
+  const main = document.getElementById(which+'-cat-main')?.value || 'all';
+  const subSel = document.getElementById(which+'-cat-sub'); if (!subSel) return;
+  let subs;
+  if (main === 'all') { const set = new Set(); cats.forEach(c => c.subs.forEach(s => set.add(s))); subs = [...set]; }
+  else subs = (cats.find(c => c.name === main) || { subs:[] }).subs;
+  subSel.innerHTML = `<option value="all">All sub-categories</option>` + subs.map(s => `<option value="${s}">${s}</option>`).join('');
+}
+function onCatMain(which) { _fillSubFilter(which); renderCategories(); }
+
+function renderCategories() {
+  if (!liveData) return;
+  const D = getFilteredData();
+  if (!D || D.__noPlatformData || D.__noDataInRange) return;
+  _renderCatTable('own',  D.ownPostsSorted  || []);
+  _renderCatTable('infl', D.inflPostsSorted || []);
+}
+function _renderCatTable(which, posts) {
+  const isInfl = which === 'infl';
+  const fMain = document.getElementById(which+'-cat-main')?.value || 'all';
+  const fSub  = document.getElementById(which+'-cat-sub')?.value  || 'all';
+  const fCity = isInfl ? (document.getElementById('infl-cat-city')?.value || 'all') : 'all';
+  const isVid = p => /reel|video/i.test(p.postType || '');
+  const blank = () => ({ posts:0, reach:0, views:0, shares:0, likes:0, comments:0, sh100:0 });
+  const add = (a, p) => { a.posts++; a.reach+=(+p.reach||0); a.views+=(+p.views||0); a.shares+=(+p.shares||0); a.likes+=(+p.likes||0); a.comments+=(+p.comments||0); if (isVid(p) && (+p.shares||0)>=100) a.sh100++; };
+  const erOf = a => a.views>0 ? ((a.likes+a.comments+a.shares)/a.views*100) : 0;
+
+  const tagged = posts.map(p => ({ p, c: postCategory(p) }));
+  const filtered = tagged.filter(({c}) => (fMain==='all'||c.main===fMain) && (fSub==='all'||c.sub===fSub) && (!isInfl || fCity==='all' || c.city===fCity));
+
+  let dim = null, dimLabel = 'Selection';
+  if (fMain==='all') { dim = x => x.c.main; dimLabel = 'Category'; }
+  else if (fSub==='all') { dim = x => x.c.sub; dimLabel = 'Sub-category'; }
+  else if (isInfl && fCity==='all') { dim = x => x.c.city; dimLabel = 'City'; }
+
+  const tot = blank(); filtered.forEach(({p}) => add(tot, p));
+  const sumEl = document.getElementById(which+'-cat-summary');
+  if (sumEl) sumEl.innerHTML = `<span>Posts <b>${tot.posts}</b></span><span>Reach <b>${fmt(tot.reach)}</b></span><span>Views <b>${fmt(tot.views)}</b></span><span>Shares <b>${fmt(tot.shares)}</b></span><span>Avg ER <b>${sf(erOf(tot),1)}%</b></span><span>100+ shares <b>${tot.sh100}</b></span>`;
+
+  const cols = `<th>Posts</th><th>Reach</th><th>Views</th><th>Shares</th><th>Avg ER</th><th>100+ sh</th>`;
+  const head = document.getElementById(which+'-cat-head');
+  const body = document.getElementById(which+'-cat-body');
+  const rowFor = (label, a) => `<td>${label}</td><td>${a.posts}</td><td>${fmt(a.reach)}</td><td>${fmt(a.views)}</td><td>${fmt(a.shares)}</td><td>${sf(erOf(a),1)}%</td><td>${a.sh100}</td>`;
+  if (head) head.innerHTML = `<tr><th style="text-align:left;">${dimLabel}</th>${cols}</tr>`;
+  if (!filtered.length) { if (body) body.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px;">No posts match this filter</td></tr>`; return; }
+  if (!dim) { // fully drilled down
+    const label = [fMain, fSub!=='all'?fSub:null, isInfl&&fCity!=='all'?fCity:null].filter(Boolean).join(' · ') || 'All';
+    if (body) body.innerHTML = `<tr class="sc-total">${rowFor(label, tot)}</tr>`;
+    return;
+  }
+  const groups = {};
+  filtered.forEach(x => { const k = dim(x) || '—'; if (!groups[k]) groups[k] = blank(); add(groups[k], x.p); });
+  const keys = Object.keys(groups).sort((a,b) => groups[b].posts - groups[a].posts);
+  const rows = keys.map(k => `<tr>${rowFor(k, groups[k])}</tr>`).join('');
+  if (body) body.innerHTML = rows + `<tr class="sc-total">${rowFor('Total', tot)}</tr>`;
+}
+
+// Per-post category selectors shown in the Content post list
+function _postCatSelectHTML(p) {
+  const c = postCategory(p);
+  const cats = p.isInfluencer ? INFL_CATS : OWN_CATS;
+  const def = cats.find(x => x.name === c.main);
+  const ov = (p.id && postCatOverrides[p.id]) || {};
+  const bd = (f) => (ov[f] && ov[f] !== 'auto') ? 'var(--accent)' : 'var(--border2)';
+  const mainOpts = `<option value="auto">↺ Auto</option>` + cats.map(x => `<option value="${x.name}" ${x.name===c.main?'selected':''}>${x.name}</option>`).join('');
+  const subs = def ? def.subs : [];
+  const subOpts = `<option value="auto">Sub…</option>` + subs.map(s => `<option value="${s}" ${s===c.sub?'selected':''}>${s}</option>`).join('');
+  let h = `<span class="post-cat-selects" onclick="event.stopPropagation()">`;
+  h += `<select title="Category" onchange="setPostCat('${p.id}','main',this.value)" style="border-color:${bd('main')};color:${ov.main&&ov.main!=='auto'?'var(--accent)':'var(--muted)'};">${mainOpts}</select>`;
+  h += `<select title="Sub-category" onchange="setPostCat('${p.id}','sub',this.value)" style="border-color:${bd('sub')};">${subOpts}</select>`;
+  if (p.isInfluencer) {
+    const cityOpts = `<option value="auto">City…</option>` + INFL_CITIES.concat(['Unassigned']).map(ci => `<option value="${ci}" ${ci===c.city?'selected':''}>${ci}</option>`).join('');
+    h += `<select title="City" onchange="setPostCat('${p.id}','city',this.value)" style="border-color:${bd('city')};">${cityOpts}</select>`;
+  }
+  return h + `</span>`;
+}
+function setPostCat(id, field, value) {
+  const o = postCatOverrides[id] || (postCatOverrides[id] = {});
+  if (value === 'auto') delete o[field]; else o[field] = value;
+  if (!Object.keys(o).length) delete postCatOverrides[id];
+  try { localStorage.setItem('eggoz_post_cats', JSON.stringify(postCatOverrides)); } catch(e) {}
+  try { renderCategories(); } catch(e) {}
+  try { renderContentPosts(); } catch(e) {}
+}
+
 function renderScorecard(D) {
   if (!D || D.__noPlatformData || D.__noDataInRange) return;
   const posts = _scPosts(D);
@@ -4278,13 +4446,9 @@ function renderScorecard(D) {
   setT('sc-m-posts-sub', `${(D.ownPostsSorted || []).length} own · ${(D.inflPostsSorted || []).length} influencer`);
   setT('sc-m-shares', fmt(posts.reduce((s, p) => s + (+p.shares || 0), 0)));
 
-  // ---- Content buckets: combined, own, and influencer ----
-  const bAll  = document.getElementById('sc-buckets-all');
-  const bOwn  = document.getElementById('sc-buckets-own');
-  const bInfl = document.getElementById('sc-buckets-infl');
-  if (bAll)  bAll.innerHTML  = _bucketRowsHTML(D.allPostsSorted  || []);
-  if (bOwn)  bOwn.innerHTML  = _bucketRowsHTML(D.ownPostsSorted  || []);
-  if (bInfl) bInfl.innerHTML = _bucketRowsHTML(D.inflPostsSorted || []);
+  // ---- Content categories (own & influencer, filterable) ----
+  populateCatFilters();
+  renderCategories();
 
   // ---- Week-over-week: combined, own, and influencer (three tables) ----
   const wbAll  = document.getElementById('sc-weekly-all');
@@ -4427,7 +4591,7 @@ function renderContentPosts() {
         <div class="post-title" style="font-size:13px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:340px;">${p.caption||'—'}</div>
         <div style="font-size:11px;color:var(--muted);margin-top:3px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
           <span>${dateStr} · ${p.postType||'post'} ${badge}</span>
-          ${_bucketSelectHTML(p)}
+          ${_postCatSelectHTML(p)}
         </div>
         <div style="margin-top:5px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
           ${reachLabel}

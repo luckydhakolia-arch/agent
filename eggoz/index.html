@@ -1201,7 +1201,9 @@
           <div class="card-title" style="flex-wrap:wrap;gap:10px;">
             <span><span class="sc-bucket-dot" style="background:var(--purple);"></span>Influencer content — categories</span>
             <span class="sub">Filter by category, sub-category and city</span>
+            <button class="content-filter-pill" style="margin-left:auto;border-color:var(--accent);color:var(--accent);" onclick="toggleCatEditor('infl')">⚙ Edit keywords</button>
           </div>
+          <div id="cat-kw-editor-infl" style="display:none;background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:14px;"></div>
           <div class="cat-filters">
             <label>Category <select id="infl-cat-main" onchange="onCatMain('infl')"></select></label>
             <label>Sub-category <select id="infl-cat-sub" onchange="renderCategories()"></select></label>
@@ -4449,38 +4451,54 @@ function setPostCat(id, field, value) {
 }
 
 // ---- Editable auto-detection keyword panel ----
-function toggleCatEditor() {
-  const el = document.getElementById('cat-kw-editor'); if (!el) return;
+// The keyword editor can render in the Own card (all groups) or the Influencer
+// card (Influencer categories, Sub-categories, Cities). `which` = 'own' | 'infl'.
+function _catEditorId(which) { return which === 'infl' ? 'cat-kw-editor-infl' : 'cat-kw-editor'; }
+function toggleCatEditor(which) {
+  which = which || 'own';
+  const el = document.getElementById(_catEditorId(which)); if (!el) return;
   const open = el.style.display === 'none' || !el.style.display;
   el.style.display = open ? 'block' : 'none';
-  if (open) renderCatEditor();
+  if (open) renderCatEditor(which);
 }
-function renderCatEditor() {
-  const el = document.getElementById('cat-kw-editor'); if (!el) return;
+function renderCatEditor(which) {
+  which = which || 'own';
+  const id = _catEditorId(which);
+  const el = document.getElementById(id); if (!el) return;
   const row = (grp, key) => `<div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;flex-wrap:wrap;">
     <span style="min-width:160px;font-size:12px;font-weight:600;">${key}</span>
     <input data-grp="${grp}" data-key="${key}" value="${(catKw[grp][key]||[]).join(', ').replace(/"/g,'&quot;')}" placeholder="comma-separated keywords"
       style="flex:1;min-width:240px;background:var(--bg4);border:1px solid var(--border2);border-radius:8px;padding:6px 10px;color:var(--text);font-size:12px;font-family:var(--font-body);"></div>`;
   const section = (title, grp) => `<div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;margin:14px 0 8px;">${title}</div>` + Object.keys(catKw[grp]).map(k => row(grp, k)).join('');
-  el.innerHTML = section('Own categories','own') + section('Influencer categories','infl') + section('Sub-categories','sub') + section('Cities','city')
-    + `<div style="display:flex;gap:8px;margin-top:14px;"><button class="btn btn-primary" style="font-size:12px;padding:6px 14px;" onclick="saveCatKeywords()">Save keywords</button><button class="btn btn-ghost" style="font-size:12px;padding:6px 12px;" onclick="resetCatKeywords()">Reset to defaults</button></div>
+  const body = which === 'infl'
+    ? section('Influencer categories','infl') + section('Sub-categories','sub') + section('Cities','city')
+    : section('Own categories','own') + section('Influencer categories','infl') + section('Sub-categories','sub') + section('Cities','city');
+  el.innerHTML = body
+    + `<div style="display:flex;gap:8px;margin-top:14px;"><button class="btn btn-primary" style="font-size:12px;padding:6px 14px;" onclick="saveCatKeywords('${which}')">Save keywords</button><button class="btn btn-ghost" style="font-size:12px;padding:6px 12px;" onclick="resetCatKeywords('${which}')">Reset to defaults</button></div>
     <div style="font-size:11px;color:var(--muted);margin-top:8px;">A post is auto-tagged to the first category / sub-category / city whose keywords appear in its caption. Manual per-post picks (the dropdowns on each post in Content) always win.</div>`;
 }
-function saveCatKeywords() {
-  const out = { own:{}, infl:{}, sub:{}, city:{} };
-  document.querySelectorAll('#cat-kw-editor input[data-grp]').forEach(inp => {
+function saveCatKeywords(which) {
+  which = which || 'own';
+  // Start from the current full store so a panel that shows only some groups
+  // (the Influencer editor) doesn't wipe the groups it doesn't display.
+  const out = JSON.parse(JSON.stringify(catKw));
+  document.querySelectorAll('#' + _catEditorId(which) + ' input[data-grp]').forEach(inp => {
+    if (!out[inp.dataset.grp]) out[inp.dataset.grp] = {};
     out[inp.dataset.grp][inp.dataset.key] = inp.value.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
   });
   try { localStorage.setItem('eggoz_cat_keywords', JSON.stringify(out)); } catch(e) {}
   catKw = _loadCatKw();
+  // Keep both editors in sync if the other one is also open.
+  ['own','infl'].forEach(w => { const e = document.getElementById(_catEditorId(w)); if (e && e.style.display === 'block') renderCatEditor(w); });
   try { renderCategories(); } catch(e) {}
   try { renderContentPosts(); } catch(e) {}
   showToast('✓ Category keywords saved');
 }
-function resetCatKeywords() {
+function resetCatKeywords(which) {
+  which = which || 'own';
   localStorage.removeItem('eggoz_cat_keywords');
   catKw = _loadCatKw();
-  renderCatEditor();
+  ['own','infl'].forEach(w => { const e = document.getElementById(_catEditorId(w)); if (e && e.style.display === 'block') renderCatEditor(w); });
   try { renderCategories(); } catch(e) {}
   try { renderContentPosts(); } catch(e) {}
   showToast('✓ Reset to default keywords');

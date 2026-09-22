@@ -2,6 +2,16 @@
 
 Single-file dashboard (`index.html`). No build step, CDN-only, localStorage-backed.
 
+## v17.1 — keyword editor on the Influencer card too
+
+- Added a second **⚙ Edit keywords** button (Influencer content card) opening a
+  panel scoped to the groups that card uses: Influencer categories,
+  Sub-categories, and Cities. The Own card's editor still shows all four groups.
+- Saving from either panel merges into the shared keyword store, so editing one
+  card never wipes the other's groups; both open panels re-render in sync.
+- Also renamed the page title to **"Social Media Dashboard"** (tab, bookmark,
+  and link preview).
+
 ## v17.0 — editable category keywords
 
 - Added an **⚙ Edit keywords** panel (in the Own content card) that exposes every

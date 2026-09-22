@@ -462,6 +462,9 @@
   td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: var(--bg3); }
+  .sc-table th:not(:first-child), .sc-table td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+  .sc-table tr.sc-total td { font-weight: 700; border-top: 1.5px solid var(--border2); background: color-mix(in srgb, var(--accent) 6%, transparent); }
+  .sc-bucket-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:8px; vertical-align:middle; }
 
   .trend-up::before { content:'▲ '; color: var(--green); }
   .trend-dn::before { content:'▼ '; color: var(--red); }
@@ -815,6 +818,7 @@
       <div class="nav-item active" onclick="nav('overview',this)"><span class="icon">📊</span><span>Overview</span></div>
       <div class="nav-item" onclick="nav('growth',this)"><span class="icon">📈</span><span>Follower Growth</span></div>
       <div class="nav-item" onclick="nav('content',this)"><span class="icon">🎨</span><span>Content</span></div>
+      <div class="nav-item" onclick="nav('scorecard',this)"><span class="icon">🎯</span><span>Weekly Scorecard</span></div>
       <div class="nav-label">Intelligence</div>
       <div class="nav-item" onclick="nav('keywords',this)"><span class="icon">🔍</span><span>Keywords</span></div>
       <div class="nav-item" onclick="nav('hooks',this)"><span class="icon">🪝</span><span>Hook Analyser</span></div>
@@ -1127,6 +1131,62 @@
           <div class="card">
             <div class="card-title">Best posting times <span class="sub">By avg engagement</span></div>
             <div class="chart-wrap" style="height:200px;"><canvas id="c-best-times" role="img" aria-label="Best posting times heatmap">Peak engagement at 7–9 AM and 7–9 PM.</canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== WEEKLY SCORECARD (from Content_Dashboard_WOW framework) ===== -->
+      <div class="section" id="sec-scorecard">
+        <!-- Goal toward 100k followers by Jan 2027 -->
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-title">🎯 Follower goal <span class="sub" id="sc-goal-sub">Target: 100,000 followers by Jan 2027</span></div>
+          <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+            <div class="metric-val" id="sc-goal-now" style="font-size:40px;">—</div>
+            <div style="font-size:13px;color:var(--muted);">of <strong style="color:var(--text);">100,000</strong> · <span id="sc-goal-pct">—</span></div>
+            <div style="margin-left:auto;font-size:13px;color:var(--muted);" id="sc-goal-remain">—</div>
+          </div>
+          <div class="progress-bar" style="height:12px;"><div class="progress-fill" id="sc-goal-bar" style="width:0%;background:var(--accent);"></div></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:8px;" id="sc-goal-pace">Set your current follower count in Follower Growth to track pace.</div>
+        </div>
+
+        <!-- Milestone KPI tiles -->
+        <div class="metric-grid" id="sc-milestones">
+          <div class="metric-card"><div class="metric-label">Videos · 100+ shares</div><div class="metric-val" id="sc-m-shares100">—</div><div class="metric-sub neu">Viral share tier</div></div>
+          <div class="metric-card"><div class="metric-label">Videos · 50k+ reach</div><div class="metric-val" id="sc-m-reach50k">—</div><div class="metric-sub neu">Breakout reach</div></div>
+          <div class="metric-card"><div class="metric-label">Videos · 300k+ views</div><div class="metric-val" id="sc-m-views300k">—</div><div class="metric-sub neu">High views</div></div>
+          <div class="metric-card"><div class="metric-label">Videos · 500k+ views</div><div class="metric-val" id="sc-m-views500k">—</div><div class="metric-sub neu">Hero videos</div></div>
+          <div class="metric-card"><div class="metric-label">Posts published</div><div class="metric-val" id="sc-m-posts">—</div><div class="metric-sub neu" id="sc-m-posts-sub">Own + influencer</div></div>
+          <div class="metric-card"><div class="metric-label">Total shares</div><div class="metric-val" id="sc-m-shares">—</div><div class="metric-sub neu">All buckets</div></div>
+        </div>
+
+        <!-- Content buckets -->
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-title" style="flex-wrap:wrap;gap:10px;">
+            Content buckets
+            <span class="sub">Posts grouped by theme — classified from captions</span>
+            <div style="display:flex;gap:6px;margin-left:auto;" id="sc-source-pills">
+              <button class="content-filter-pill active" data-src="all"  onclick="setScorecardSource('all',this)">All</button>
+              <button class="content-filter-pill"        data-src="own"  onclick="setScorecardSource('own',this)">Own</button>
+              <button class="content-filter-pill"        data-src="infl" onclick="setScorecardSource('infl',this)">Influencer</button>
+            </div>
+          </div>
+          <div class="scroll-x">
+            <table class="sc-table">
+              <thead><tr><th style="text-align:left;">Bucket</th><th>Posts</th><th>Reach</th><th>Views</th><th>Shares</th><th>Avg ER</th><th>100+ sh</th></tr></thead>
+              <tbody id="sc-buckets"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px;">Upload CSV to see buckets</td></tr></tbody>
+            </table>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:10px;">Buckets: Mothers · Traceability · Protein Plus · Recipe · Doctor Content · Other — matched by keywords in each post's caption; unmatched posts fall into “Other”.</div>
+        </div>
+
+        <!-- Weekly (WOW) breakdown -->
+        <div class="card">
+          <div class="card-title">Week-over-week <span class="sub">Own + influencer, by week ending</span></div>
+          <div class="scroll-x">
+            <table class="sc-table">
+              <thead><tr><th style="text-align:left;">Week ending</th><th>Posts</th><th>Reach</th><th>Views</th><th>Shares</th><th>Avg ER</th><th>100+ sh</th></tr></thead>
+              <tbody id="sc-weekly"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px;">Upload CSV to see weekly trend</td></tr></tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -1768,7 +1828,7 @@
 
 <script>
 const CLAUDE_MODEL = 'claude-sonnet-4-20250514';
-const titles = { overview:'Overview', growth:'Follower Growth', content:'Content Performance', keywords:'Keyword Tracker', hooks:'Hook Analyser', sentiment:'Sentiment Analysis', escalation:'Escalation Centre', influencer:'Influencer Impact', scheduler:'Content Scheduler', upload:'Data Upload', settings:'Settings' };
+const titles = { overview:'Overview', growth:'Follower Growth', content:'Content Performance', scorecard:'Weekly Scorecard', keywords:'Keyword Tracker', hooks:'Hook Analyser', sentiment:'Sentiment Analysis', escalation:'Escalation Centre', influencer:'Influencer Impact', scheduler:'Content Scheduler', upload:'Data Upload', settings:'Settings' };
 let currentSection = 'overview';
 let chartsInited = {};
 let uploadedFiles = [];
@@ -2417,6 +2477,9 @@ function applyLiveDataToDashboard(D) {
 
   // ---- POST LIST ----
   renderContentPosts();
+
+  // ---- WEEKLY SCORECARD ----
+  renderScorecard(D);
 
   // Format performance chart (real ER by type)
   const fmtCanvas = document.getElementById('c-format-perf');
@@ -3980,6 +4043,105 @@ function setContentFilter(filter, el) {
   document.querySelectorAll('.content-filter-pill').forEach(p => p.classList.remove('active'));
   if (el) el.classList.add('active');
   renderContentPosts();
+}
+
+// ===== WEEKLY SCORECARD (Content_Dashboard_WOW framework) =====
+// Content buckets + Own/Influencer split + milestone KPIs + WOW weekly table + 100k goal.
+const SC_BUCKETS = [
+  { key:'mothers', name:'Mothers',        color:'#f472b6', kw:['mother','mom','mumm','maa ','kids','child','baby','toddler','family','tiffin','lunchbox','school'] },
+  { key:'trace',   name:'Traceability',   color:'#5b9cf6', kw:['traceab','farm','source','origin','transparen','trace','qr code','where your','from farm','fresh from','no antibiotic'] },
+  { key:'protein', name:'Protein Plus',   color:'#34d399', kw:['protein','gym','muscle','fitness','workout','macro','gains','egg white','bodybuild','athlete','strength'] },
+  { key:'recipe',  name:'Recipe',         color:'#e8c547', kw:['recipe','cook','dish','bhurji','omelette','omelet','scrambl','boil','fry','breakfast','snack','ingredient','kitchen','how to make'] },
+  { key:'doctor',  name:'Doctor Content', color:'#a78bfa', kw:['doctor','dr ','dr.','mbbs','nutrition','vitamin','cholesterol','health','b12','omega','expert','clinical','dietitian'] },
+  { key:'other',   name:'Other',          color:'#888784', kw:[] },
+];
+const SC_FOLLOWER_TARGET = 100000;
+const SC_TARGET_DATE = new Date('2027-01-31');
+let scorecardSource = 'all';
+
+function classifyBucket(post) {
+  const t = (post.caption || '').toLowerCase();
+  for (const b of SC_BUCKETS) {
+    if (b.key === 'other') continue;
+    if (b.kw.some(k => t.includes(k))) return b.key;
+  }
+  return 'other';
+}
+function setScorecardSource(src, el) {
+  scorecardSource = src;
+  document.querySelectorAll('#sc-source-pills .content-filter-pill').forEach(p => p.classList.remove('active'));
+  if (el) el.classList.add('active');
+  if (liveData) { const d = getFilteredData(); if (d && !d.__noPlatformData && !d.__noDataInRange) renderScorecard(d); }
+}
+function _scPosts(D) {
+  if (scorecardSource === 'own')  return D.ownPostsSorted  || [];
+  if (scorecardSource === 'infl') return D.inflPostsSorted || [];
+  return D.allPostsSorted || [];
+}
+function renderScorecard(D) {
+  if (!D || D.__noPlatformData || D.__noDataInRange) return;
+  const posts = _scPosts(D);
+  const isVid = p => /reel|video/i.test(p.postType || '');
+  const setT = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  const erOf = a => a.views > 0 ? ((a.likes + a.comments + a.shares) / a.views * 100) : 0;
+
+  // ---- 100k follower goal ----
+  const followers = Number(localStorage.getItem('eggoz_follower_count')) || 0;
+  const pct = SC_FOLLOWER_TARGET > 0 ? Math.min(100, followers / SC_FOLLOWER_TARGET * 100) : 0;
+  setT('sc-goal-now', followers ? fmt(followers) : '—');
+  setT('sc-goal-pct', followers ? sf(pct, 1) + '%' : 'set count');
+  const bar = document.getElementById('sc-goal-bar'); if (bar) bar.style.width = pct.toFixed(1) + '%';
+  setT('sc-goal-remain', followers ? (SC_FOLLOWER_TARGET - followers > 0 ? fmt(SC_FOLLOWER_TARGET - followers) + ' to go' : '🎉 Target reached') : '');
+  const pace = document.getElementById('sc-goal-pace');
+  if (pace) {
+    if (!followers) pace.textContent = 'Set your current follower count in Follower Growth to track pace toward 100k by Jan 2027.';
+    else {
+      const weeksLeft = Math.max(1, Math.round((SC_TARGET_DATE - new Date()) / (7 * 864e5)));
+      const need = Math.max(0, SC_FOLLOWER_TARGET - followers);
+      pace.textContent = need > 0 ? `Need ~${fmt(Math.ceil(need / weeksLeft))} new followers/week for ${weeksLeft} weeks to hit 100k by Jan 2027.` : 'Goal reached — nice work.';
+    }
+  }
+
+  // ---- Milestone KPIs (video posts) ----
+  const vids = posts.filter(isVid);
+  setT('sc-m-shares100', vids.filter(p => (+p.shares || 0) >= 100).length);
+  setT('sc-m-reach50k',  vids.filter(p => (+p.reach || 0) >= 50000).length);
+  setT('sc-m-views300k', vids.filter(p => (+p.views || 0) >= 300000).length);
+  setT('sc-m-views500k', vids.filter(p => (+p.views || 0) >= 500000).length);
+  setT('sc-m-posts', posts.length);
+  setT('sc-m-posts-sub', `${(D.ownPostsSorted || []).length} own · ${(D.inflPostsSorted || []).length} influencer`);
+  setT('sc-m-shares', fmt(posts.reduce((s, p) => s + (+p.shares || 0), 0)));
+
+  // ---- Content buckets ----
+  const blank = () => ({ posts:0, reach:0, views:0, shares:0, likes:0, comments:0, sh100:0 });
+  const add = (a, p) => { a.posts++; a.reach += (+p.reach||0); a.views += (+p.views||0); a.shares += (+p.shares||0); a.likes += (+p.likes||0); a.comments += (+p.comments||0); if (isVid(p) && (+p.shares||0) >= 100) a.sh100++; };
+  const agg = {}; SC_BUCKETS.forEach(b => agg[b.key] = blank());
+  posts.forEach(p => add(agg[classifyBucket(p)], p));
+  const tb = document.getElementById('sc-buckets');
+  if (tb) {
+    const rows = SC_BUCKETS.filter(b => agg[b.key].posts > 0).map(b => { const a = agg[b.key];
+      return `<tr><td><span class="sc-bucket-dot" style="background:${b.color}"></span>${b.name}</td><td>${a.posts}</td><td>${fmt(a.reach)}</td><td>${fmt(a.views)}</td><td>${fmt(a.shares)}</td><td>${sf(erOf(a),1)}%</td><td>${a.sh100}</td></tr>`;
+    }).join('');
+    const tot = blank(); Object.values(agg).forEach(a => { tot.posts+=a.posts; tot.reach+=a.reach; tot.views+=a.views; tot.shares+=a.shares; tot.likes+=a.likes; tot.comments+=a.comments; tot.sh100+=a.sh100; });
+    const totRow = `<tr class="sc-total"><td>Total</td><td>${tot.posts}</td><td>${fmt(tot.reach)}</td><td>${fmt(tot.views)}</td><td>${fmt(tot.shares)}</td><td>${sf(erOf(tot),1)}%</td><td>${tot.sh100}</td></tr>`;
+    tb.innerHTML = (rows || '') + totRow;
+  }
+
+  // ---- Week-over-week (weeks ending Sunday) ----
+  const wk = {};
+  posts.forEach(p => { const d = p.date instanceof Date ? p.date : new Date(p.date); if (isNaN(d)) return;
+    const end = new Date(d); end.setDate(end.getDate() + (7 - end.getDay()) % 7); end.setHours(0,0,0,0);
+    const key = end.getTime();
+    if (!wk[key]) { wk[key] = blank(); wk[key].end = end; }
+    add(wk[key], p);
+  });
+  const wb = document.getElementById('sc-weekly');
+  if (wb) {
+    const keys = Object.keys(wk).sort((a, b) => a - b);
+    wb.innerHTML = keys.length ? keys.map(k => { const a = wk[k];
+      return `<tr><td>${a.end.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</td><td>${a.posts}</td><td>${fmt(a.reach)}</td><td>${fmt(a.views)}</td><td>${fmt(a.shares)}</td><td>${sf(erOf(a),1)}%</td><td>${a.sh100}</td></tr>`;
+    }).join('') : '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px;">No dated posts in range</td></tr>';
+  }
 }
 
 function renderContentPosts() {
@@ -6235,6 +6397,9 @@ setTimeout(()=>{ initCharts('overview'); renderTeamChips(); },200);
     </div>
     <div class="bnav-item" onclick="mobileNav('content',this)">
       <span class="bnav-icon">🎨</span><span class="bnav-label">Content</span>
+    </div>
+    <div class="bnav-item" onclick="mobileNav('scorecard',this)">
+      <span class="bnav-icon">🎯</span><span class="bnav-label">Scorecard</span>
     </div>
     <div class="bnav-item" onclick="mobileNav('keywords',this)">
       <span class="bnav-icon">🔍</span><span class="bnav-label">Keywords</span>

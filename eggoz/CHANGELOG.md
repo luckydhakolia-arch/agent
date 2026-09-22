@@ -2,6 +2,21 @@
 
 Single-file dashboard (`index.html`). No build step, CDN-only, localStorage-backed.
 
+## v16 — Weekly Scorecard (from Content_Dashboard_WOW framework)
+
+New **Weekly Scorecard** section (sidebar + mobile nav) that reproduces the
+weekly-tracking spreadsheet's structure, computed live from the loaded posts:
+- **100k follower goal** — progress bar vs the "100,000 by Jan 2027" target, with
+  a pace estimate (new followers/week needed) from the saved follower count.
+- **Milestone KPI tiles** — Videos with 100+ shares, 50k+ reach, 300k+ views,
+  500k+ views, plus posts published and total shares.
+- **Content buckets** — every post is classified by caption keywords into
+  Mothers · Traceability · Protein Plus · Recipe · Doctor Content · Other, shown
+  as a table (Posts / Reach / Views / Shares / Avg ER / 100+‑share videos) with a
+  Total row and an All / Own / Influencer source toggle.
+- **Week-over-week table** — the same metrics aggregated per week (week ending
+  Sunday), mirroring the spreadsheet's weekly columns.
+
 ## v15.1 — bolder, interactive 3D
 
 - **Interactive 3D tilt:** every glass card now rotates in perspective toward the

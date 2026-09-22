@@ -465,6 +465,7 @@
   .sc-table th:not(:first-child), .sc-table td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
   .sc-table tr.sc-total td { font-weight: 700; border-top: 1.5px solid var(--border2); background: color-mix(in srgb, var(--accent) 6%, transparent); }
   .sc-bucket-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:8px; vertical-align:middle; }
+  .sc-wow-label { font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin:2px 0 8px; }
 
   .trend-up::before { content:'▲ '; color: var(--green); }
   .trend-dn::before { content:'▼ '; color: var(--red); }
@@ -1188,13 +1189,31 @@
           <div style="font-size:11px;color:var(--muted);margin-top:10px;">Buckets: Mothers · Traceability · Protein Plus · Recipe · Doctor Content · Other — matched by keywords in each post's caption; unmatched posts fall into “Other”.</div>
         </div>
 
-        <!-- Weekly (WOW) breakdown -->
+        <!-- Weekly (WOW) breakdown — combined + own + influencer -->
         <div class="card">
-          <div class="card-title">Week-over-week <span class="sub">Own + influencer, by week ending</span></div>
+          <div class="card-title">Week-over-week <span class="sub">By week — combined, then own and influencer</span></div>
+
+          <div class="sc-wow-label">Combined (Own + Influencer)</div>
           <div class="scroll-x">
             <table class="sc-table">
-              <thead><tr><th style="text-align:left;">Week ending</th><th>Posts</th><th>Reach</th><th>Views</th><th>Shares</th><th>Avg ER</th><th title="Follower count at end of week">Followers (End)</th><th title="Follows gained that week">Follower Gain</th><th title="Videos with 100+ shares">100+ shares</th><th title="Videos reaching 50k+ accounts">50k reach</th><th title="Videos with 300k+ views">300k views</th><th title="Videos with 500k+ views">500k views</th></tr></thead>
-              <tbody id="sc-weekly"><tr><td colspan="12" style="text-align:center;color:var(--muted);padding:24px;">Upload CSV to see weekly trend</td></tr></tbody>
+              <thead><tr><th style="text-align:left;">Week</th><th>Posts</th><th>Reach</th><th>Views</th><th>Shares</th><th>Avg ER</th><th title="Follower count at end of week">Followers (End)</th><th title="Follows gained that week">Follower Gain</th><th title="Videos with 100+ shares">100+ shares</th><th title="Videos reaching 50k+ accounts">50k reach</th><th title="Videos with 300k+ views">300k views</th><th title="Videos with 500k+ views">500k views</th></tr></thead>
+              <tbody id="sc-weekly-all"><tr><td colspan="12" style="text-align:center;color:var(--muted);padding:24px;">Upload CSV to see weekly trend</td></tr></tbody>
+            </table>
+          </div>
+
+          <div class="sc-wow-label" style="margin-top:22px;"><span class="sc-bucket-dot" style="background:var(--green);"></span>Own account (@eggoznutrition)</div>
+          <div class="scroll-x">
+            <table class="sc-table">
+              <thead><tr><th style="text-align:left;">Week</th><th>Posts</th><th>Reach</th><th>Views</th><th>Shares</th><th>Avg ER</th><th title="Follower count at end of week">Followers (End)</th><th title="Follows from own posts">Follower Gain</th><th>100+ shares</th><th>50k reach</th><th>300k views</th><th>500k views</th></tr></thead>
+              <tbody id="sc-weekly-own"><tr><td colspan="12" style="text-align:center;color:var(--muted);padding:24px;">Upload CSV to see weekly trend</td></tr></tbody>
+            </table>
+          </div>
+
+          <div class="sc-wow-label" style="margin-top:22px;"><span class="sc-bucket-dot" style="background:var(--purple);"></span>Influencer</div>
+          <div class="scroll-x">
+            <table class="sc-table">
+              <thead><tr><th style="text-align:left;">Week</th><th>Posts</th><th>Reach</th><th>Views</th><th>Shares</th><th>Avg ER</th><th title="Follower count at end of week">Followers (End)</th><th title="Follows from influencer posts">Follower Gain</th><th>100+ shares</th><th>50k reach</th><th>300k views</th><th>500k views</th></tr></thead>
+              <tbody id="sc-weekly-infl"><tr><td colspan="12" style="text-align:center;color:var(--muted);padding:24px;">Upload CSV to see weekly trend</td></tr></tbody>
             </table>
           </div>
         </div>
@@ -4268,7 +4287,31 @@ function renderScorecard(D) {
     tb.innerHTML = (rows || '') + totRow;
   }
 
-  // ---- Week-over-week (weeks grouped Tue→Mon, labelled by start date: 11 Aug, 18 Aug…) ----
+  // ---- Week-over-week: combined, own, and influencer (three tables) ----
+  const wbAll  = document.getElementById('sc-weekly-all');
+  const wbOwn  = document.getElementById('sc-weekly-own');
+  const wbInfl = document.getElementById('sc-weekly-infl');
+  if (wbAll)  wbAll.innerHTML  = _weeklyRowsHTML(D.allPostsSorted  || []);
+  if (wbOwn)  wbOwn.innerHTML  = _weeklyRowsHTML(D.ownPostsSorted  || []);
+  if (wbInfl) wbInfl.innerHTML = _weeklyRowsHTML(D.inflPostsSorted || []);
+}
+
+// Build the <tr> rows for one Week-over-week table from a set of posts.
+// Weeks are grouped Tue→Mon and labelled by the week's start date (11 Aug, 18 Aug…).
+function _weeklyRowsHTML(posts) {
+  const isVid = p => /reel|video/i.test(p.postType || '');
+  const erOf = a => a.views > 0 ? ((a.likes + a.comments + a.shares) / a.views * 100) : 0;
+  const blank = () => ({ posts:0, reach:0, views:0, shares:0, likes:0, comments:0, follows:0, sh100:0, r50:0, v300:0, v500:0, end:null });
+  const add = (a, p) => {
+    a.posts++; a.reach += (+p.reach||0); a.views += (+p.views||0); a.shares += (+p.shares||0);
+    a.likes += (+p.likes||0); a.comments += (+p.comments||0); a.follows += (+p.follows||0);
+    if (isVid(p)) {
+      if ((+p.shares||0) >= 100)   a.sh100++;
+      if ((+p.reach||0)  >= 50000)  a.r50++;
+      if ((+p.views||0)  >= 300000) a.v300++;
+      if ((+p.views||0)  >= 500000) a.v500++;
+    }
+  };
   const wk = {};
   posts.forEach(p => { const d = p.date instanceof Date ? p.date : new Date(p.date); if (isNaN(d)) return;
     const ws = new Date(d); ws.setDate(ws.getDate() - ((ws.getDay() - SC_WEEK_DOW + 7) % 7)); ws.setHours(0,0,0,0);
@@ -4276,20 +4319,18 @@ function renderScorecard(D) {
     if (!wk[key]) { wk[key] = blank(); wk[key].end = ws; }
     add(wk[key], p);
   });
-  const wb = document.getElementById('sc-weekly');
-  if (wb) {
-    const keys = Object.keys(wk).sort((a, b) => a - b);
-    // Followers (End): running total of follows gained, anchored so the latest week
-    // equals the saved current follower count. Falls back to cumulative follows.
-    const savedF = Number(localStorage.getItem('eggoz_follower_count')) || 0;
-    const totalFollows = keys.reduce((s, k) => s + wk[k].follows, 0);
-    let running = savedF > 0 ? Math.max(0, savedF - totalFollows) : 0;
-    keys.forEach(k => { running += wk[k].follows; wk[k].followersEnd = running; });
-    const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    wb.innerHTML = keys.length ? keys.map(k => { const a = wk[k];
-      return `<tr><td>${a.end.getDate()} ${MON[a.end.getMonth()]}</td><td>${a.posts}</td><td>${fmt(a.reach)}</td><td>${fmt(a.views)}</td><td>${fmt(a.shares)}</td><td>${sf(erOf(a),1)}%</td><td>${(savedF>0||a.followersEnd)?fmt(a.followersEnd):'—'}</td><td>${a.follows ? '+'+fmt(a.follows) : '0'}</td><td>${a.sh100}</td><td>${a.r50}</td><td>${a.v300}</td><td>${a.v500}</td></tr>`;
-    }).join('') : '<tr><td colspan="12" style="text-align:center;color:var(--muted);padding:24px;">No dated posts in range</td></tr>';
-  }
+  const keys = Object.keys(wk).sort((a, b) => a - b);
+  if (!keys.length) return '<tr><td colspan="12" style="text-align:center;color:var(--muted);padding:24px;">No dated posts in range</td></tr>';
+  // Followers (End): running total of follows in this table, anchored so the latest
+  // week equals the saved current follower count.
+  const savedF = Number(localStorage.getItem('eggoz_follower_count')) || 0;
+  const totalFollows = keys.reduce((s, k) => s + wk[k].follows, 0);
+  let running = savedF > 0 ? Math.max(0, savedF - totalFollows) : 0;
+  keys.forEach(k => { running += wk[k].follows; wk[k].followersEnd = running; });
+  const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return keys.map(k => { const a = wk[k];
+    return `<tr><td>${a.end.getDate()} ${MON[a.end.getMonth()]}</td><td>${a.posts}</td><td>${fmt(a.reach)}</td><td>${fmt(a.views)}</td><td>${fmt(a.shares)}</td><td>${sf(erOf(a),1)}%</td><td>${(savedF>0||a.followersEnd)?fmt(a.followersEnd):'—'}</td><td>${a.follows ? '+'+fmt(a.follows) : '0'}</td><td>${a.sh100}</td><td>${a.r50}</td><td>${a.v300}</td><td>${a.v500}</td></tr>`;
+  }).join('');
 }
 
 function renderContentPosts() {

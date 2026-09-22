@@ -2,6 +2,12 @@
 
 Single-file dashboard (`index.html`). No build step, CDN-only, localStorage-backed.
 
+## v16.7 — Week-over-week split by source
+
+- The Week-over-week section now shows three tables — Combined (Own + Influencer),
+  Own account, and Influencer — each with the full metric set, so you can read the
+  own vs influencer breakdown separately while keeping the combined totals.
+
 ## v16.6 — exact numbers everywhere (no 1k/2k)
 
 - Numbers across the dashboard now show in full (e.g. 52,000 instead of 52.0K;

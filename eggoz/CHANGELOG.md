@@ -2,6 +2,20 @@
 
 Single-file dashboard (`index.html`). No build step, CDN-only, localStorage-backed.
 
+## v16.4 — fix undercount + add missing WOW metrics
+
+- **Fixed posts being dropped from the weekly table.** parseDate only accepted
+  `MM/DD/YYYY HH:MM` (a time was required), so any post whose date lacked a time or
+  used another format (ISO `YYYY-MM-DD`, `11-Aug-2026`, `Aug 5, 2026`, `DD/MM`) got
+  no date and silently vanished from the week-over-week table and monthly charts —
+  a week with 8-10 posts could show 1. parseDate now handles all these formats
+  (with a native fallback), pn parses `4.3K`/`1.2M`/`45,000`/`%`, and the row filter
+  keeps any post with reach/shares/comments/saves (not only views/likes).
+- **Added the spreadsheet's remaining weekly metrics** to the Week-over-week table:
+  Followers (End), Follower Gain, plus per-week video counts for 100+ shares,
+  50k reach, 300k views and 500k views. Followers (End) is a running total anchored
+  to your saved current follower count.
+
 ## v16.3 — follower count editable on the Scorecard
 
 - The Weekly Scorecard's Follower goal card now has its own "Current followers"

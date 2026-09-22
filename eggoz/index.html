@@ -1193,8 +1193,8 @@
           <div class="card-title">Week-over-week <span class="sub">Own + influencer, by week ending</span></div>
           <div class="scroll-x">
             <table class="sc-table">
-              <thead><tr><th style="text-align:left;">Week ending</th><th>Posts</th><th>Reach</th><th>Views</th><th>Shares</th><th>Avg ER</th><th>100+ sh</th></tr></thead>
-              <tbody id="sc-weekly"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px;">Upload CSV to see weekly trend</td></tr></tbody>
+              <thead><tr><th style="text-align:left;">Week ending</th><th>Posts</th><th>Reach</th><th>Views</th><th>Shares</th><th>Avg ER</th><th title="Follower count at end of week">Followers (End)</th><th title="Follows gained that week">Follower Gain</th><th title="Videos with 100+ shares">100+ shares</th><th title="Videos reaching 50k+ accounts">50k reach</th><th title="Videos with 300k+ views">300k views</th><th title="Videos with 500k+ views">500k views</th></tr></thead>
+              <tbody id="sc-weekly"><tr><td colspan="12" style="text-align:center;color:var(--muted);padding:24px;">Upload CSV to see weekly trend</td></tr></tbody>
             </table>
           </div>
         </div>
@@ -2152,19 +2152,42 @@ function loadSavedData() {
 
 // Parse number — handles empty, dash, "Lifetime", commas
 function pn(v) {
-  if (!v || typeof v !== 'string') return 0;
-  const s = v.trim();
-  if (!s || s === '-' || s === 'Lifetime' || s === 'N/A') return 0;
-  return parseFloat(s.replace(/,/g,'')) || 0;
+  if (v === null || v === undefined) return 0;
+  let s = String(v).trim();
+  if (!s || s === '-' || /^(lifetime|n\/?a)$/i.test(s)) return 0;
+  s = s.replace(/,/g, '').replace(/%/g, '').replace(/\s+/g, '');
+  const suf = s.slice(-1).toLowerCase();
+  const mult = suf === 'k' ? 1e3 : suf === 'm' ? 1e6 : suf === 'b' ? 1e9 : 1;
+  if (mult !== 1) s = s.slice(0, -1);
+  const n = parseFloat(s);
+  return isNaN(n) ? 0 : n * mult;
 }
 
 // Parse date — handles MM/DD/YYYY HH:MM format from Instagram exports
+const _MON3 = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
 function parseDate(v) {
-  if (!v || !v.trim()) return null;
-  // Try MM/DD/YYYY HH:MM
-  const m = v.trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2})/);
-  if (m) return new Date(+m[3], +m[1]-1, +m[2], +m[4], +m[5]);
-  return null;
+  if (v === null || v === undefined) return null;
+  const s = String(v).trim();
+  if (!s || s === '-' || /^lifetime$/i.test(s)) return null;
+  let m;
+  // MM/DD/YYYY [HH:MM] or M/D/YY — US / Meta export (time optional)
+  m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})(?:[ T,]+(\d{1,2}):(\d{2}))?/);
+  if (m) {
+    let mo = +m[1] - 1, day = +m[2];
+    if (+m[1] > 12 && +m[2] <= 12) { mo = +m[2] - 1; day = +m[1]; } // handle DD/MM when day > 12
+    let yr = +m[3]; if (yr < 100) yr += 2000;
+    const d = new Date(yr, mo, day, +(m[4]||0), +(m[5]||0));
+    if (!isNaN(d)) return d;
+  }
+  // YYYY-MM-DD [HH:MM] — ISO (time optional, with T or space)
+  m = s.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})(?:[ T]+(\d{1,2}):(\d{2}))?/);
+  if (m) { const d = new Date(+m[1], +m[2]-1, +m[3], +(m[4]||0), +(m[5]||0)); if (!isNaN(d)) return d; }
+  // DD-MMM-YYYY or DD MMM YYYY — e.g. 11-Aug-2026
+  m = s.match(/^(\d{1,2})[ \-]([A-Za-z]{3,})[ \-,]+(\d{4})/);
+  if (m) { const mo = _MON3.indexOf(m[2].slice(0,3).toLowerCase()); if (mo >= 0) { const d = new Date(+m[3], mo, +m[1]); if (!isNaN(d)) return d; } }
+  // Native fallback — handles "Aug 5, 2026", ISO with timezone, etc.
+  const d = new Date(s);
+  return isNaN(d) ? null : d;
 }
 
 function fmt(v) {
@@ -2208,7 +2231,7 @@ function calcER(likes, comments, shares, views) {
 function processInstagramCSV(rows) {
   // Filter rows with valid data (skip error rows)
   const valid = rows.filter(r => {
-    const hasData = pn(r['Views']) > 0 || pn(r['Likes']) > 0;
+    const hasData = pn(r['Views']) > 0 || pn(r['Likes']) > 0 || pn(r['Reactions']) > 0 || pn(r['Reach']) > 0 || pn(r['Comments']) > 0 || pn(r['Shares']) > 0 || pn(r['Saves']) > 0;
     const notError = !r['Data comment'] || !r['Data comment'].includes('error');
     return hasData && notError;
   });
@@ -4221,8 +4244,17 @@ function renderScorecard(D) {
   setT('sc-m-shares', fmt(posts.reduce((s, p) => s + (+p.shares || 0), 0)));
 
   // ---- Content buckets ----
-  const blank = () => ({ posts:0, reach:0, views:0, shares:0, likes:0, comments:0, sh100:0 });
-  const add = (a, p) => { a.posts++; a.reach += (+p.reach||0); a.views += (+p.views||0); a.shares += (+p.shares||0); a.likes += (+p.likes||0); a.comments += (+p.comments||0); if (isVid(p) && (+p.shares||0) >= 100) a.sh100++; };
+  const blank = () => ({ posts:0, reach:0, views:0, shares:0, likes:0, comments:0, follows:0, sh100:0, r50:0, v300:0, v500:0 });
+  const add = (a, p) => {
+    a.posts++; a.reach += (+p.reach||0); a.views += (+p.views||0); a.shares += (+p.shares||0);
+    a.likes += (+p.likes||0); a.comments += (+p.comments||0); a.follows += (+p.follows||0);
+    if (isVid(p)) {
+      if ((+p.shares||0) >= 100)   a.sh100++;
+      if ((+p.reach||0)  >= 50000)  a.r50++;
+      if ((+p.views||0)  >= 300000) a.v300++;
+      if ((+p.views||0)  >= 500000) a.v500++;
+    }
+  };
   const agg = {}; SC_BUCKETS.forEach(b => agg[b.key] = blank());
   posts.forEach(p => add(agg[classifyBucket(p)], p));
   const tb = document.getElementById('sc-buckets');
@@ -4246,9 +4278,16 @@ function renderScorecard(D) {
   const wb = document.getElementById('sc-weekly');
   if (wb) {
     const keys = Object.keys(wk).sort((a, b) => a - b);
+    // Followers (End): running total of follows gained, anchored so the latest week
+    // equals the saved current follower count. Falls back to cumulative follows.
+    const savedF = Number(localStorage.getItem('eggoz_follower_count')) || 0;
+    const totalFollows = keys.reduce((s, k) => s + wk[k].follows, 0);
+    let running = savedF > 0 ? Math.max(0, savedF - totalFollows) : 0;
+    keys.forEach(k => { running += wk[k].follows; wk[k].followersEnd = running; });
+    const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     wb.innerHTML = keys.length ? keys.map(k => { const a = wk[k];
-      return `<tr><td>${a.end.getDate()} ${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][a.end.getMonth()]}</td><td>${a.posts}</td><td>${fmt(a.reach)}</td><td>${fmt(a.views)}</td><td>${fmt(a.shares)}</td><td>${sf(erOf(a),1)}%</td><td>${a.sh100}</td></tr>`;
-    }).join('') : '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px;">No dated posts in range</td></tr>';
+      return `<tr><td>${a.end.getDate()} ${MON[a.end.getMonth()]}</td><td>${a.posts}</td><td>${fmt(a.reach)}</td><td>${fmt(a.views)}</td><td>${fmt(a.shares)}</td><td>${sf(erOf(a),1)}%</td><td>${(savedF>0||a.followersEnd)?fmt(a.followersEnd):'—'}</td><td>${a.follows ? '+'+fmt(a.follows) : '0'}</td><td>${a.sh100}</td><td>${a.r50}</td><td>${a.v300}</td><td>${a.v500}</td></tr>`;
+    }).join('') : '<tr><td colspan="12" style="text-align:center;color:var(--muted);padding:24px;">No dated posts in range</td></tr>';
   }
 }
 

@@ -1,72 +1,35 @@
 {
   "date": "2026-10-12",
-  "kind": "free",
+  "kind": "daily",
   "brand": "Eggoz",
   "seo": {
-    "skipped": true,
-    "reason": "Search Console not connected. Run `npm run auth:gsc` to authorise as yourself — no service account or property owner needed."
+    "error": "GSC_SERVICE_ACCOUNT_JSON is not set"
   },
   "psi": {
-    "method": "http-probe",
-    "note": "Credential-free measurement. Server timing and transferred weight are real; LCP/CLS/INP need a browser and are not measured.",
-    "budget": {
-      "ttfbMs": 800,
-      "htmlKb": 150,
-      "totalKb": 2048,
-      "blockingScripts": 5
-    },
     "pages": [
       {
         "url": "https://eggoz.in/",
-        "ttfbMs": 164,
-        "loadMs": 169,
-        "htmlKb": 455,
-        "totalKb": 484,
-        "weightMeasured": 21,
-        "weightUnknown": 165,
-        "blockingScripts": 3,
-        "scripts": 40,
-        "stylesheets": 41,
-        "images": 105,
-        "imagesNoDims": 100,
-        "imagesNoLazy": 99,
-        "issues": [
-          "Heavy HTML (455KB, budget 150KB)",
-          "100 images without width/height — layout shift risk"
-        ]
+        "strategy": "mobile",
+        "error": "HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"Quota exceeded for quota metric 'Queries' and limit 'Queries per day' of service 'pagespeedonline.googleapis.com' for consumer 'project_number"
       },
       {
         "url": "https://eggoz.in/products",
-        "ttfbMs": 462,
-        "loadMs": 469,
-        "htmlKb": 418,
-        "totalKb": 447,
-        "weightMeasured": 21,
-        "weightUnknown": 69,
-        "blockingScripts": 3,
-        "scripts": 36,
-        "stylesheets": 36,
-        "images": 18,
-        "imagesNoDims": 1,
-        "imagesNoLazy": 2,
-        "issues": [
-          "Heavy HTML (418KB, budget 150KB)",
-          "1 images without width/height — layout shift risk"
-        ]
+        "strategy": "mobile",
+        "error": "HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"Quota exceeded for quota metric 'Queries' and limit 'Queries per day' of service 'pagespeedonline.googleapis.com' for consumer 'project_number"
       },
       {
         "url": "https://eggoz.in/about",
-        "error": "HTTP 404"
+        "strategy": "mobile",
+        "error": "HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"Quota exceeded for quota metric 'Queries' and limit 'Queries per day' of service 'pagespeedonline.googleapis.com' for consumer 'project_number"
       },
       {
         "url": "https://eggoz.in/blog",
-        "error": "HTTP 404"
+        "strategy": "mobile",
+        "error": "HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"Quota exceeded for quota metric 'Queries' and limit 'Queries per day' of service 'pagespeedonline.googleapis.com' for consumer 'project_number"
       }
     ],
-    "avgTtfbMs": 313,
-    "avgTotalKb": 466,
-    "pagesOverBudget": 2,
-    "totalIssues": 4
+    "avgPerformance": null,
+    "avgSeo": null
   },
   "crawl": {
     "pagesCrawled": 60,
@@ -2309,18 +2272,7 @@
   "previous": {
     "seoTotals": null
   },
-  "alerts": [
-    {
-      "level": "low",
-      "area": "seo",
-      "message": "Not measured this run — Search Console not connected. Run `npm run auth:gsc` to authorise as yourself — no service account or property owner needed."
-    },
-    {
-      "level": "medium",
-      "area": "technical",
-      "message": "2 priority page(s) over the performance budget — avg 313ms response, 466KB."
-    }
-  ],
+  "alerts": [],
   "mode": "google-free",
   "discovery": {
     "method": "crawl-derived",

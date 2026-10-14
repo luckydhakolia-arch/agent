@@ -1,81 +1,58 @@
 {
   "date": "2026-10-14",
-  "kind": "free",
+  "kind": "daily",
   "brand": "Eggoz",
   "seo": {
-    "skipped": true,
-    "reason": "Search Console not connected. Run `npm run auth:gsc` to authorise as yourself — no service account or property owner needed."
+    "error": "GSC_SERVICE_ACCOUNT_JSON is not set"
   },
   "psi": {
-    "method": "http-probe",
-    "note": "Credential-free measurement. Server timing and transferred weight are real; LCP/CLS/INP need a browser and are not measured.",
-    "budget": {
-      "ttfbMs": 800,
-      "htmlKb": 150,
-      "totalKb": 2048,
-      "blockingScripts": 5
-    },
     "pages": [
       {
         "url": "https://eggoz.in/",
-        "error": "HTTP 503"
+        "strategy": "mobile",
+        "error": "HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"Quota exceeded for quota metric 'Queries' and limit 'Queries per day' of service 'pagespeedonline.googleapis.com' for consumer 'project_number"
       },
       {
         "url": "https://eggoz.in/products",
-        "ttfbMs": 756,
-        "loadMs": 760,
-        "htmlKb": 419,
-        "totalKb": 448,
-        "weightMeasured": 21,
-        "weightUnknown": 69,
-        "blockingScripts": 3,
-        "scripts": 36,
-        "stylesheets": 36,
-        "images": 18,
-        "imagesNoDims": 1,
-        "imagesNoLazy": 2,
-        "issues": [
-          "Heavy HTML (419KB, budget 150KB)",
-          "1 images without width/height — layout shift risk"
-        ]
+        "strategy": "mobile",
+        "error": "HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"Quota exceeded for quota metric 'Queries' and limit 'Queries per day' of service 'pagespeedonline.googleapis.com' for consumer 'project_number"
       },
       {
         "url": "https://eggoz.in/about",
-        "error": "HTTP 404"
+        "strategy": "mobile",
+        "error": "HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"Quota exceeded for quota metric 'Queries' and limit 'Queries per day' of service 'pagespeedonline.googleapis.com' for consumer 'project_number"
       },
       {
         "url": "https://eggoz.in/blog",
-        "error": "HTTP 404"
+        "strategy": "mobile",
+        "error": "HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"Quota exceeded for quota metric 'Queries' and limit 'Queries per day' of service 'pagespeedonline.googleapis.com' for consumer 'project_number"
       }
     ],
-    "avgTtfbMs": 756,
-    "avgTotalKb": 448,
-    "pagesOverBudget": 1,
-    "totalIssues": 2
+    "avgPerformance": null,
+    "avgSeo": null
   },
   "crawl": {
     "pagesCrawled": 60,
     "pagesWithIssues": 60,
-    "totalIssues": 201,
+    "totalIssues": 204,
     "hasLlmsTxt": true,
-    "hasRobotsTxt": false,
+    "hasRobotsTxt": true,
     "robotsBlocksAiCrawlers": false,
     "issueCounts": {
       "Missing title": 1,
-      "Missing meta description": 34,
+      "Missing meta description": 35,
       "No H1": 24,
       "Missing canonical": 1,
       "Missing Open Graph tags": 1,
       "No structured data (JSON-LD)": 1,
-      "No question-shaped headings — poor answer-engine extractability": 40,
-      "images missing alt text": 58,
+      "No question-shaped headings — poor answer-engine extractability": 41,
+      "images missing alt text": 59,
       "Meta description too long": 13,
       "Thin content": 24,
-      "Multiple H1 tags": 3,
-      "Page could not be fetched": 1
+      "Multiple H1 tags": 4
     },
     "schemaCoverage": {
-      "Organization": 58,
+      "Organization": 59,
       "WebSite": 1,
       "Product": 8
     },
@@ -1044,9 +1021,50 @@
       },
       {
         "url": "https://www.eggoz.com/pages/quality-reports",
-        "error": "HTTP 503",
+        "title": "Quality Reports\n – Eggoz",
+        "titleLength": 24,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report"
+        ],
+        "h2": [
+          "Your cart is empty",
+          "Your cart",
+          "Estimated total",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Frequently Asked Questions (FAQ)",
+          "Main Menu"
+        ],
+        "questionHeadings": [],
+        "words": 2671,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 2,
         "issues": [
-          "Page could not be fetched"
+          "Missing meta description",
+          "Multiple H1 tags (10)",
+          "No question-shaped headings — poor answer-engine extractability",
+          "2 images missing alt text"
         ]
       },
       {
@@ -2249,18 +2267,7 @@
   "previous": {
     "seoTotals": null
   },
-  "alerts": [
-    {
-      "level": "low",
-      "area": "seo",
-      "message": "Not measured this run — Search Console not connected. Run `npm run auth:gsc` to authorise as yourself — no service account or property owner needed."
-    },
-    {
-      "level": "medium",
-      "area": "technical",
-      "message": "1 priority page(s) over the performance budget — avg 756ms response, 448KB."
-    }
-  ],
+  "alerts": [],
   "mode": "google-free",
   "discovery": {
     "method": "crawl-derived",

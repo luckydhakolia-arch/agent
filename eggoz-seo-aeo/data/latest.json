@@ -1,35 +1,71 @@
 {
-  "date": "2026-10-23",
-  "kind": "daily",
+  "date": "2026-10-24",
+  "kind": "free",
   "brand": "Eggoz",
   "seo": {
-    "error": "GSC_SERVICE_ACCOUNT_JSON is not set"
+    "skipped": true,
+    "reason": "Search Console not connected. Run `npm run auth:gsc` to authorise as yourself — no service account or property owner needed."
   },
   "psi": {
+    "method": "http-probe",
+    "note": "Credential-free measurement. Server timing and transferred weight are real; LCP/CLS/INP need a browser and are not measured.",
+    "budget": {
+      "ttfbMs": 800,
+      "htmlKb": 150,
+      "totalKb": 2048,
+      "blockingScripts": 5
+    },
     "pages": [
       {
         "url": "https://eggoz.in/",
-        "strategy": "mobile",
-        "error": "HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"Quota exceeded for quota metric 'Queries' and limit 'Queries per day' of service 'pagespeedonline.googleapis.com' for consumer 'project_number"
+        "ttfbMs": 195,
+        "loadMs": 197,
+        "htmlKb": 177,
+        "totalKb": 214,
+        "weightMeasured": 24,
+        "weightUnknown": 41,
+        "blockingScripts": 0,
+        "scripts": 19,
+        "stylesheets": 15,
+        "images": 31,
+        "imagesNoDims": 29,
+        "imagesNoLazy": 12,
+        "issues": [
+          "Heavy HTML (177KB, budget 150KB)",
+          "29 images without width/height — layout shift risk"
+        ]
       },
       {
         "url": "https://eggoz.in/products",
-        "strategy": "mobile",
-        "error": "HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"Quota exceeded for quota metric 'Queries' and limit 'Queries per day' of service 'pagespeedonline.googleapis.com' for consumer 'project_number"
+        "ttfbMs": 412,
+        "loadMs": 415,
+        "htmlKb": 123,
+        "totalKb": 159,
+        "weightMeasured": 24,
+        "weightUnknown": 24,
+        "blockingScripts": 0,
+        "scripts": 19,
+        "stylesheets": 17,
+        "images": 12,
+        "imagesNoDims": 1,
+        "imagesNoLazy": 1,
+        "issues": [
+          "1 images without width/height — layout shift risk"
+        ]
       },
       {
         "url": "https://eggoz.in/about",
-        "strategy": "mobile",
-        "error": "HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"Quota exceeded for quota metric 'Queries' and limit 'Queries per day' of service 'pagespeedonline.googleapis.com' for consumer 'project_number"
+        "error": "HTTP 404"
       },
       {
         "url": "https://eggoz.in/blog",
-        "strategy": "mobile",
-        "error": "HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"Quota exceeded for quota metric 'Queries' and limit 'Queries per day' of service 'pagespeedonline.googleapis.com' for consumer 'project_number"
+        "error": "HTTP 404"
       }
     ],
-    "avgPerformance": null,
-    "avgSeo": null
+    "avgTtfbMs": 304,
+    "avgTotalKb": 187,
+    "pagesOverBudget": 2,
+    "totalIssues": 3
   },
   "crawl": {
     "pagesCrawled": 60,
@@ -2180,12 +2216,23 @@
       }
     ]
   },
-  "aeoDate": "2026-10-23",
-  "briefsDate": "2026-10-23",
+  "aeoDate": "2026-10-24",
+  "briefsDate": "2026-10-24",
   "previous": {
     "seoTotals": null
   },
-  "alerts": [],
+  "alerts": [
+    {
+      "level": "low",
+      "area": "seo",
+      "message": "Not measured this run — Search Console not connected. Run `npm run auth:gsc` to authorise as yourself — no service account or property owner needed."
+    },
+    {
+      "level": "medium",
+      "area": "technical",
+      "message": "2 priority page(s) over the performance budget — avg 304ms response, 187KB."
+    }
+  ],
   "mode": "google-free",
   "discovery": {
     "method": "crawl-derived",
@@ -2417,7 +2464,7 @@
     "llmsTxt": "# Eggoz\n\n> Eggoz (Nupa Technologies Pvt. Ltd.) is a branded egg company in India. It runs a farmer-partner network and supplies fresh, traceable, date-stamped eggs across Delhi NCR, Bengaluru, Mumbai, Hyderabad, Kolkata, Jaipur through quick commerce (Blinkit, Zepto, Instamart), its own site, and modern retail.\n\n## What Eggoz sells\nFresh table eggs in branded, dated packs, including protein-enriched and speciality variants. Products are listed on Blinkit, Zepto, Instamart and at https://eggoz.in.\n\n## How Eggoz is different\n- Farmer-partner network with defined feed and husbandry protocols rather than open-market sourcing\n- Date-stamped packs so buyers can see freshness rather than infer it\n- Cold-chain distribution across 6 metros\n\n## Key pages\n- [Eggoz Nutrition | Farm Fresh Eggs You Can Trace](https://www.eggoz.com/): Eggoz Nutrition brings you farm-fresh eggs, tested with 11 safety checks and traced from farm to pack.\n- [Eggoz - Brown Eggs](https://www.eggoz.com/products/brown-eggs): Eggoz provides a premium range of brown eggs, rigorously tested through 11 safety checks, ensuring the finest quality wi\n- [Eggoz - White Eggs](https://www.eggoz.com/products/white-eggs): Eggoz's white eggs are sourced from hens on 100% herbal hen feed, containing bright orange yolk with multiple nutrients.\n- [Farm & Fable Free Range Brown Eggs\n – Eggoz](https://www.eggoz.com/products/farm-fable-eggs): Enjoy our free range eggs from Farm &amp; Fable, which are sourced from free-roaming hens to deliver exceptional taste, \n- [Protein Plus Eggs\n – Eggoz](https://www.eggoz.com/products/protein-plus-eggs): Fuel your day with Eggoz Protein Plus Eggs, delivering approximately 7 g of quality protein and all 9 essential amino ac\n- [Eggoz Nutrition White Eggs](https://www.eggoz.com/products/eggoz-premium-white-eggs): Power your day with Eggoz Nutrition White Eggs, farm-fresh eggs featuring rich, signature orange yolks and 6.5g of prote\n- [Nutrition Brown Eggs\n – Eggoz](https://www.eggoz.com/products/nutrition-brown-eggs): Fuel your day with farm-fresh brown eggs featuring signature orange yolks &amp; approximately 6.75 g of quality protein \n- [Farm to Plate\n – Eggoz](https://www.eggoz.com/pages/farm-to-plate): Why Choose Eggoz ? Eggoz eggs go through an extensive and thoughtful process straight from our farms so that you receive\n- [Why Choose Eggoz?](https://www.eggoz.com/pages/why-choose-eggoz): Every Eggoz egg is farm-fresh, sourced from hens fed 100% herbal feed, resulting in bright orange yolks. Our range inclu\n- [Terms and Conditions\n – Eggoz](https://www.eggoz.com/pages/terms-and-conditions): TERMS &amp; CONDITION – NUPA technologies Private Limited (Eggoz) 1. WELCOME TO EGGOZ 1.1. Thank you for using www.eggoz\n- [Privacy Policy\n – Eggoz](https://www.eggoz.com/pages/privacy-policy): LEGAL &amp; PRIVACY POLICY Effective date: 2021-11-20 1. Introduction Welcome to NUPA Technologies Private Limited (Eggo\n- [Shipping Policy\n – Eggoz](https://www.eggoz.com/pages/shipping-policy): Shipping Policy Delivery Times When you order products from our website, the delivery of the ordered products depends on\n- [My subscriptions\n – Eggoz](https://www.eggoz.com/pages/spurit-subscriptions): \n- [Subscription cancelled\n – Eggoz](https://www.eggoz.com/pages/spurit-invoices-cancelled): Your subscription has been cancelled We hope to see you soon! Please visit our store again for the valuable gifts and pr\n- [Reminders cancelled\n – Eggoz](https://www.eggoz.com/pages/spurit-reminders-cancelled): Receiving invoice reminders successfully cancelled\n- [Notifications cancelled\n – Eggoz](https://www.eggoz.com/pages/spurit-notifications-cancelled): Receiving these notifications successfully cancelled\n- [Merchant notifications cancelled\n – Eggoz](https://www.eggoz.com/pages/spurit-merchant-notifications-cancelled): Receiving these notifications successfully cancelled You can resume it anytime in the app\n- [Track Your Order\n – Eggoz](https://www.eggoz.com/pages/track-your-order): \n- [Blogs\n – Eggoz](https://www.eggoz.com/pages/blogs): \n- [Contact Us\n – Eggoz](https://www.eggoz.com/pages/contact-us): Call or WhatsApp Eggoz on 011 4119 3222 or email support@eggoz.in, Mon-Sat, 10 AM-7 PM IST. Share feedback or raise a co\n- [About_New\n – Eggoz](https://www.eggoz.com/pages/about_new): \n- [pop-trace\n – Eggoz](https://www.eggoz.com/pages/pop-trace): Your complaint has been successfully submitted. Our team will get back to you as soon as possible.\n- [test-trace\n – Eggoz](https://www.eggoz.com/pages/test-trace): TRACE THE JOURNEY OF YOUR EGGOZ EGG Select Your Batch Number * Select Packed Date (dd/mm/yyyy) Submit Thanks for Purchas\n- [Test trace without date\n – Eggoz](https://www.eggoz.com/pages/test-trace-without-date): TRACE THE JOURNEY OF YOUR EGGOZ EGG Select Your Batch Number * Submit Thanks for Purchasing eggs from us! Your eggs have\n- [Farm Locations\n – Eggoz](https://www.eggoz.com/pages/farm-locations): Welcome to Eggoz! Discover exactly where your eggs come from—check out our farm locations and learn more about our commi\n\n## Nutrition information\nEggoz publishes nutrition composition for its products. Eggoz does not claim that eggs treat, prevent, cure or manage any medical condition, in line with ASCI's Guidelines for Advertising of Food & Beverage Products, Addendum II.\n\n## Contact\nWebsite: https://eggoz.in\nInstagram: @eggoznutrition\n"
   },
   "content": {
-    "generatedAt": "2026-10-23T06:18:35.067Z",
+    "generatedAt": "2026-10-24T06:13:31.966Z",
     "opportunitiesConsidered": 8,
     "briefsGenerated": 0,
     "blockedByAsci": 0,
@@ -2425,7 +2472,7 @@
       {
         "id": "best egg brand in india",
         "status": "error",
-        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgJgVJbtNX3Pfc6o5qv",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgLZutL36WMUJfxuVfa",
         "opportunity": {
           "source": "gap-coverage",
           "topic": "best egg brand in india",
@@ -2437,7 +2484,7 @@
       {
         "id": "packaged eggs online",
         "status": "error",
-        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgJgVmknN3xSEkaY1fo",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgLZvMLytcnYPesu7s6",
         "opportunity": {
           "source": "gap-coverage",
           "topic": "packaged eggs online",
@@ -2449,7 +2496,7 @@
       {
         "id": "branded eggs india",
         "status": "error",
-        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgJgWEqwszcorop4pNT",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgLZvpQARY9Wbx3TwbA",
         "opportunity": {
           "source": "gap-coverage",
           "topic": "branded eggs india",
@@ -2461,7 +2508,7 @@
       {
         "id": "antibiotic free eggs",
         "status": "error",
-        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgJgWi1amcqpS8fAk1f",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgLZwHT6kHbEqQqvKdf",
         "opportunity": {
           "source": "gap-coverage",
           "topic": "antibiotic free eggs",
@@ -2473,7 +2520,7 @@
       {
         "id": "cage free eggs india",
         "status": "error",
-        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgJgXB6kZGMYj3PTpYR",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgLZwkWHW1f9ZnfpaJy",
         "opportunity": {
           "source": "gap-coverage",
           "topic": "cage free eggs india",
@@ -2485,7 +2532,7 @@
       {
         "id": "protein in one egg",
         "status": "error",
-        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgJgXePKgQTPeRDS6vk",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgLZxDhQTKWCYcYCJxf",
         "opportunity": {
           "source": "gap-coverage",
           "topic": "protein in one egg",
@@ -2497,7 +2544,7 @@
       {
         "id": "eggs and cholesterol",
         "status": "error",
-        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgJgY7VVGsEyd66q8P9",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgLZxgk6kQDf7intnSa",
         "opportunity": {
           "source": "gap-coverage",
           "topic": "eggs and cholesterol",
@@ -2509,7 +2556,7 @@
       {
         "id": "egg nutrition facts",
         "status": "error",
-        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgJgYaZQti3zNwGFVkq",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgLZy9pGoTddN7w6if9",
         "opportunity": {
           "source": "gap-coverage",
           "topic": "egg nutrition facts",

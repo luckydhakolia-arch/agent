@@ -1,0 +1,2553 @@
+{
+  "date": "2026-10-25",
+  "kind": "free",
+  "mode": "google-free",
+  "brand": "Eggoz",
+  "seo": {
+    "skipped": true,
+    "reason": "Search Console not connected. Run `npm run auth:gsc` to authorise as yourself — no service account or property owner needed."
+  },
+  "psi": {
+    "method": "http-probe",
+    "note": "Credential-free measurement. Server timing and transferred weight are real; LCP/CLS/INP need a browser and are not measured.",
+    "budget": {
+      "ttfbMs": 800,
+      "htmlKb": 150,
+      "totalKb": 2048,
+      "blockingScripts": 5
+    },
+    "pages": [
+      {
+        "url": "https://eggoz.in/",
+        "ttfbMs": 264,
+        "loadMs": 265,
+        "htmlKb": 180,
+        "totalKb": 217,
+        "weightMeasured": 24,
+        "weightUnknown": 41,
+        "blockingScripts": 0,
+        "scripts": 19,
+        "stylesheets": 15,
+        "images": 31,
+        "imagesNoDims": 29,
+        "imagesNoLazy": 12,
+        "issues": [
+          "Heavy HTML (180KB, budget 150KB)",
+          "29 images without width/height — layout shift risk"
+        ]
+      },
+      {
+        "url": "https://eggoz.in/products",
+        "ttfbMs": 941,
+        "loadMs": 944,
+        "htmlKb": 125,
+        "totalKb": 162,
+        "weightMeasured": 24,
+        "weightUnknown": 24,
+        "blockingScripts": 0,
+        "scripts": 19,
+        "stylesheets": 17,
+        "images": 12,
+        "imagesNoDims": 1,
+        "imagesNoLazy": 1,
+        "issues": [
+          "Slow server response (941ms, budget 800ms)",
+          "1 images without width/height — layout shift risk"
+        ]
+      },
+      {
+        "url": "https://eggoz.in/about",
+        "error": "HTTP 404"
+      },
+      {
+        "url": "https://eggoz.in/blog",
+        "error": "HTTP 404"
+      }
+    ],
+    "avgTtfbMs": 603,
+    "avgTotalKb": 190,
+    "pagesOverBudget": 2,
+    "totalIssues": 4
+  },
+  "crawl": {
+    "pagesCrawled": 60,
+    "pagesWithIssues": 60,
+    "totalIssues": 194,
+    "hasLlmsTxt": true,
+    "hasRobotsTxt": false,
+    "robotsBlocksAiCrawlers": false,
+    "issueCounts": {
+      "Missing title": 1,
+      "Missing meta description": 30,
+      "No H1": 24,
+      "Missing canonical": 1,
+      "Missing Open Graph tags": 1,
+      "No structured data (JSON-LD)": 1,
+      "No question-shaped headings — poor answer-engine extractability": 51,
+      "images missing alt text": 15,
+      "Meta description too long": 16,
+      "Thin content": 47,
+      "Page could not be fetched": 1,
+      "Multiple H1 tags": 6
+    },
+    "schemaCoverage": {
+      "Organization": 58,
+      "WebSite": 1,
+      "Article": 2
+    },
+    "pages": [
+      {
+        "url": "https://www.eggoz.com/agents.md",
+        "title": "",
+        "titleLength": 0,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [],
+        "h2": [],
+        "questionHeadings": [],
+        "words": 752,
+        "schemaTypes": [],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing title",
+          "Missing meta description",
+          "No H1",
+          "Missing canonical",
+          "Missing Open Graph tags",
+          "No structured data (JSON-LD)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/",
+        "title": "Eggoz Nutrition | Farm Fresh Eggs You Can Trace",
+        "titleLength": 47,
+        "description": "Eggoz Nutrition brings you farm-fresh eggs, tested with 11 safety checks and traced from farm to pack.",
+        "descriptionLength": 102,
+        "h1": [
+          ""
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Everyday nutrition, backed by quality you can trust.",
+          "What makes our yolks orange",
+          "A Promise of Quality, Every Day",
+          "Our Most Loved Products",
+          "Order fresh, track your delivery, and unlock exclusive offers",
+          "11 Safety Checks",
+          "Where good nutrition brings us together.",
+          "Thoughtful reads for everyday nutrition.",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [
+          "What makes our yolks orange"
+        ],
+        "words": 436,
+        "schemaTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "imagesMissingAlt": 11,
+        "issues": [
+          "11 images missing alt text"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/products/brown-eggs",
+        "title": "Eggoz - Brown Eggs",
+        "titleLength": 18,
+        "description": "Eggoz provides a premium range of brown eggs, rigorously tested through 11 safety checks, ensuring the finest quality with a bright orange yolk enriched with multiple nutrients.",
+        "descriptionLength": 177,
+        "h1": [
+          "Nutrition Brown Eggs"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Our Most Loved Products",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 83,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 18,
+        "issues": [
+          "Meta description too long (177 chars)",
+          "Thin content (83 words)",
+          "No question-shaped headings — poor answer-engine extractability",
+          "18 images missing alt text"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/products/white-eggs",
+        "title": "Eggoz - White Eggs",
+        "titleLength": 18,
+        "description": "Eggoz's white eggs are sourced from hens on 100% herbal hen feed, containing bright orange yolk with multiple nutrients.",
+        "descriptionLength": 120,
+        "h1": [
+          "Nutrition White Eggs"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Our Most Loved Products",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 83,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 15,
+        "issues": [
+          "Thin content (83 words)",
+          "No question-shaped headings — poor answer-engine extractability",
+          "15 images missing alt text"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/products/farm-fable-eggs",
+        "title": "Farm & Fable Free Range Brown Eggs\n – Eggoz",
+        "titleLength": 43,
+        "description": "Enjoy our free range eggs from Farm &amp; Fable, which are sourced from free-roaming hens to deliver exceptional taste, rich orange yolk colour. Our eggs are packed with Vitamins A , D and E &amp; are fully traceable from farm to pack. Our hens are fed with herbal feed along with natural pasture &amp; forge with safe w",
+        "descriptionLength": 320,
+        "h1": [
+          "Farm & Fable Free Range Brown Eggs"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Our Most Loved Products",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 147,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 8,
+        "issues": [
+          "Meta description too long (320 chars)",
+          "Thin content (147 words)",
+          "No question-shaped headings — poor answer-engine extractability",
+          "8 images missing alt text"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/products/protein-plus-eggs",
+        "title": "Protein Plus Eggs\n – Eggoz",
+        "titleLength": 26,
+        "description": "Fuel your day with Eggoz Protein Plus Eggs, delivering approximately 7 g of quality protein and all 9 essential amino acids per egg, along with omega-3, lutein, calcium and iron. From hens fed on a herbal diet, these eggs undergo 11 quality checks &amp; are tested for 30+ pesticides, 20+ antibiotics, 15+ heavy metals &",
+        "descriptionLength": 320,
+        "h1": [
+          "Protein Plus Eggs"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Our Most Loved Products",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 151,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 12,
+        "issues": [
+          "Meta description too long (320 chars)",
+          "Thin content (151 words)",
+          "No question-shaped headings — poor answer-engine extractability",
+          "12 images missing alt text"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/products/eggoz-premium-white-eggs",
+        "title": "Eggoz Nutrition White Eggs",
+        "titleLength": 26,
+        "description": "Power your day with Eggoz Nutrition White Eggs, farm-fresh eggs featuring rich, signature orange yolks and 6.5g of protein per egg packed with Vitamins A and D. Our hens are fed on a herbal feed, these eggs undergo 11 quality checks &amp; are tested for 30+ pesticides, 20+ antibiotics, 15+ heavy metals &amp; microbiolo",
+        "descriptionLength": 320,
+        "h1": [
+          "Eggoz Nutrition White Eggs"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Our Most Loved Products",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 153,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 10,
+        "issues": [
+          "Meta description too long (320 chars)",
+          "Thin content (153 words)",
+          "No question-shaped headings — poor answer-engine extractability",
+          "10 images missing alt text"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/products/nutrition-brown-eggs",
+        "title": "Nutrition Brown Eggs\n – Eggoz",
+        "titleLength": 29,
+        "description": "Fuel your day with farm-fresh brown eggs featuring signature orange yolks &amp; approximately 6.75 g of quality protein per egg with omega-3, lutein, calcium and iron to complement your daily nutritional needs. Our hens are fed on a herbal feed, these eggs undergo 11 quality checks &amp; are tested for 30+ pesticides,",
+        "descriptionLength": 319,
+        "h1": [
+          "Nutrition Brown Eggs"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Our Most Loved Products",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 156,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 10,
+        "issues": [
+          "Meta description too long (319 chars)",
+          "Thin content (156 words)",
+          "No question-shaped headings — poor answer-engine extractability",
+          "10 images missing alt text"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/farm-to-plate",
+        "title": "Farm to Plate\n – Eggoz",
+        "titleLength": 22,
+        "description": "Why Choose Eggoz ? Eggoz eggs go through an extensive and thoughtful process straight from our farms so that you receive every bit of nutritional goodness on your plate. Biosecurity Check Strict biosecurity measures ensure hens live in a clean and secure environment. Hens remain healthy, stress-free, and well cared for",
+        "descriptionLength": 320,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Get in touch",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 59,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Meta description too long (320 chars)",
+          "No H1",
+          "Thin content (59 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/why-choose-eggoz",
+        "title": "Why Choose Eggoz?",
+        "titleLength": 17,
+        "description": "Every Eggoz egg is farm-fresh, sourced from hens fed 100% herbal feed, resulting in bright orange yolks. Our range includes white eggs, brown eggs, free-range eggs, and Nutra Plus eggs, all of which undergo 11 safety checks. Visit our website to buy eggs online and elevate your protein intake with nutrition.",
+        "descriptionLength": 309,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Get in touch",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 59,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Meta description too long (309 chars)",
+          "No H1",
+          "Thin content (59 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/terms-and-conditions",
+        "title": "Terms and Conditions\n – Eggoz",
+        "titleLength": 29,
+        "description": "TERMS &amp; CONDITION – NUPA technologies Private Limited (Eggoz) 1. WELCOME TO EGGOZ 1.1. Thank you for using www.eggoz.com. The Website is an online platform that (i) facilitates the online selling of Eggs and Eggs Products. 1.2. The Website and the Services are provided by Nupa Technologies Private Limited, a compan",
+        "descriptionLength": 320,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Terms and Conditions",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 3281,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Meta description too long (320 chars)",
+          "No H1",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/privacy-policy",
+        "title": "Privacy Policy\n – Eggoz",
+        "titleLength": 23,
+        "description": "LEGAL &amp; PRIVACY POLICY Effective date: 2021-11-20 1. Introduction Welcome to NUPA Technologies Private Limited (Eggoz) an IT Company in the field of Organic Eggs Distribution. NUPA Technologies Private Limited (Eggoz) (“us”, “we”, or “our”) operates http://eggoz.in (hereinafter referred to as “Service”) having the",
+        "descriptionLength": 319,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Get in touch",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 59,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Meta description too long (319 chars)",
+          "No H1",
+          "Thin content (59 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/shipping-policy",
+        "title": "Shipping Policy\n – Eggoz",
+        "titleLength": 24,
+        "description": "Shipping Policy Delivery Times When you order products from our website, the delivery of the ordered products depends on the location, otherwise, we always make sure to deliver your order as soon as possible to your doorstep. Your order confirmation is sent to you immediately after your purchase. If you haven't receive",
+        "descriptionLength": 320,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Shipping Policy",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 227,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Meta description too long (320 chars)",
+          "No H1",
+          "Thin content (227 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/spurit-subscriptions",
+        "title": "My subscriptions\n – Eggoz",
+        "titleLength": 25,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Get in touch",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 59,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "No H1",
+          "Thin content (59 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/spurit-invoices-cancelled",
+        "title": "Subscription cancelled\n – Eggoz",
+        "titleLength": 31,
+        "description": "Your subscription has been cancelled We hope to see you soon! Please visit our store again for the valuable gifts and promotions!",
+        "descriptionLength": 129,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Get in touch",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 59,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "No H1",
+          "Thin content (59 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/spurit-reminders-cancelled",
+        "title": "Reminders cancelled\n – Eggoz",
+        "titleLength": 28,
+        "description": "Receiving invoice reminders successfully cancelled",
+        "descriptionLength": 50,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Get in touch",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 59,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "No H1",
+          "Thin content (59 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/spurit-notifications-cancelled",
+        "title": "Notifications cancelled\n – Eggoz",
+        "titleLength": 32,
+        "description": "Receiving these notifications successfully cancelled",
+        "descriptionLength": 52,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Get in touch",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 59,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "No H1",
+          "Thin content (59 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/spurit-merchant-notifications-cancelled",
+        "error": "HTTP 503",
+        "issues": [
+          "Page could not be fetched"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/track-your-order",
+        "title": "Track Your Order\n – Eggoz",
+        "titleLength": 25,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Get in touch",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 59,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "No H1",
+          "Thin content (59 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/blogs",
+        "title": "Blogs\n – Eggoz",
+        "titleLength": 14,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Get in touch",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 59,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "No H1",
+          "Thin content (59 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/contact-us",
+        "title": "Contact Us\n – Eggoz",
+        "titleLength": 19,
+        "description": "Call or WhatsApp Eggoz on 011 4119 3222 or email support@eggoz.in, Mon-Sat, 10 AM-7 PM IST. Share feedback or raise a concern with our team.",
+        "descriptionLength": 140,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Get in touch",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 59,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "No H1",
+          "Thin content (59 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/about_new",
+        "title": "About_New\n – Eggoz",
+        "titleLength": 18,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "About us"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Note from our founders",
+          "Our Team & Moments",
+          "Meet Our Farmers",
+          "Production Team",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 320,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 1,
+        "issues": [
+          "Missing meta description",
+          "No question-shaped headings — poor answer-engine extractability",
+          "1 images missing alt text"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/pop-trace",
+        "title": "pop-trace\n – Eggoz",
+        "titleLength": 18,
+        "description": "Your complaint has been successfully submitted. Our team will get back to you as soon as possible.",
+        "descriptionLength": 98,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Get in touch",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 59,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "No H1",
+          "Thin content (59 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/test-trace",
+        "title": "test-trace\n – Eggoz",
+        "titleLength": 19,
+        "description": "TRACE THE JOURNEY OF YOUR EGGOZ EGG Select Your Batch Number * Select Packed Date (dd/mm/yyyy) Submit Thanks for Purchasing eggs from us! Your eggs have gone through 11 safety checks, and are delivered farm fresh. Here's the journey of your egg. EGGS LAID ON : Place of origin : Location of the farm : , EGGS RECEIVED &a",
+        "descriptionLength": 320,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Get in touch",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 59,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Meta description too long (320 chars)",
+          "No H1",
+          "Thin content (59 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/test-trace-without-date",
+        "title": "Test trace without date\n – Eggoz",
+        "titleLength": 32,
+        "description": "TRACE THE JOURNEY OF YOUR EGGOZ EGG Select Your Batch Number * Submit Thanks for Purchasing eggs from us! Your eggs have gone through 11 safety checks, and are delivered farm fresh. Here's the journey of your egg. EGGS LAID ON : Place of origin : Location of the farm : , EGGS RECEIVED &amp; QUALITY CHECK DONE ON : Proc",
+        "descriptionLength": 320,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Get in touch",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 59,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Meta description too long (320 chars)",
+          "No H1",
+          "Thin content (59 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/farm-locations",
+        "title": "Farm Locations\n – Eggoz",
+        "titleLength": 23,
+        "description": "Welcome to Eggoz! Discover exactly where your eggs come from—check out our farm locations and learn more about our commitment to freshness and traceability.",
+        "descriptionLength": 156,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Farm Locations",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 200,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "No H1",
+          "Thin content (200 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/app-privacy-policy",
+        "title": "App Privacy Policy\n – Eggoz",
+        "titleLength": 27,
+        "description": "Privacy PolicyThis privacy policy applies to the Eggoz Sales App (hereby referred to as \"Application\") for mobile devices that was created by Nupa Technologies Private Limited (hereby referred to as \"Service Provider\") as a Free service. This service is intended for use \"AS IS\". Information Collection and UseThe Applic",
+        "descriptionLength": 320,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Get in touch",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 59,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Meta description too long (320 chars)",
+          "No H1",
+          "Thin content (59 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/know-your-eggs",
+        "title": "Know Your Eggs: Trace Your Batch From Farm to Pack\n – Eggoz",
+        "titleLength": 59,
+        "description": "Enter the batch ID on your Eggoz pack to see its farm, processing and lab results and the 11 safety checks.",
+        "descriptionLength": 107,
+        "h1": [
+          "Every Egg Has A Story.",
+          "Every Egg Has A Story"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "—",
+          "—",
+          "Your Egg’s Journey",
+          "Meet —",
+          "What Did The Hen Eat?",
+          "Why This Matters",
+          "11 Safety Checks.Every Batch. Every Time.",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [
+          "What Did The Hen Eat?",
+          "Why This Matters"
+        ],
+        "words": 546,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 23,
+        "issues": [
+          "Multiple H1 tags (2)",
+          "23 images missing alt text"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/eggoz-careers",
+        "title": "Eggoz Careers",
+        "titleLength": 13,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Get in touch",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 59,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "No H1",
+          "Thin content (59 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/quality-reports",
+        "title": "Egg Quality Lab Reports: Antibiotics & Pesticides\n – Eggoz",
+        "titleLength": 58,
+        "description": "Read Eggoz lab reports on antibiotics, banned substances and pesticides in white and brown eggs, checked against FSSR 2011 limits. Download the PDFs.",
+        "descriptionLength": 149,
+        "h1": [
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Frequently Asked Questions (FAQ)",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 2600,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 1,
+        "issues": [
+          "Multiple H1 tags (10)",
+          "No question-shaped headings — poor answer-engine extractability",
+          "1 images missing alt text"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/account-deletion-process",
+        "title": "Account Deletion Process\n – Eggoz",
+        "titleLength": 33,
+        "description": "Steps to Delete Your Eggoz Account: Open the Eggoz App and log in to your account. Navigate to the Profile section. Tap the Delete Account button. Review the confirmation message and confirm your request to permanently delete your account.",
+        "descriptionLength": 239,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Get in touch",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 59,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Meta description too long (239 chars)",
+          "No H1",
+          "Thin content (59 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/testing",
+        "title": "testing\n – Eggoz",
+        "titleLength": 16,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "Every Egg Has A Story.",
+          "Every Egg Has A Story"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "—",
+          "—",
+          "Your Egg’s Journey",
+          "Meet —",
+          "What Did The Hen Eat?",
+          "Why This Matters",
+          "11 Safety Checks.Every Batch. Every Time.",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [
+          "What Did The Hen Eat?",
+          "Why This Matters"
+        ],
+        "words": 546,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 23,
+        "issues": [
+          "Missing meta description",
+          "Multiple H1 tags (2)",
+          "23 images missing alt text"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/download-the-eggoz-app",
+        "title": "Download the Eggoz App",
+        "titleLength": 22,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Get in touch",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 59,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "No H1",
+          "Thin content (59 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/blogs-new",
+        "title": "Blogs new\n – Eggoz",
+        "titleLength": 18,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Get in touch",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 59,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "No H1",
+          "Thin content (59 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/contact-us-new",
+        "title": "contact us\n – Eggoz",
+        "titleLength": 19,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "Get in Touch"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "We're here to help you out!",
+          "Tell Us What Happened",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 240,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "Thin content (240 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/about-us",
+        "title": "About Us\n – Eggoz",
+        "titleLength": 17,
+        "description": "Eggoz aims to make India a protein-positive nation. Learn our story, farms and quality checks.",
+        "descriptionLength": 94,
+        "h1": [
+          "About us"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Note from our founders",
+          "Our Team & Moments",
+          "Meet Our Farmers",
+          "Production Team",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 320,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 1,
+        "issues": [
+          "No question-shaped headings — poor answer-engine extractability",
+          "1 images missing alt text"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/testing_new",
+        "title": "testing_new\n – Eggoz",
+        "titleLength": 20,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Get in touch",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 59,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "No H1",
+          "Thin content (59 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/trace-new-yash",
+        "title": "trace new yash\n – Eggoz",
+        "titleLength": 23,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "Every Egg Has A Story.",
+          "Every Egg Has A Story"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "—",
+          "—",
+          "Your Egg’s Journey",
+          "Meet —",
+          "What Did The Hen Eat?",
+          "Why This Matters",
+          "11 Safety Checks.Every Batch. Every Time.",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [
+          "What Did The Hen Eat?",
+          "Why This Matters"
+        ],
+        "words": 546,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 23,
+        "issues": [
+          "Missing meta description",
+          "Multiple H1 tags (2)",
+          "23 images missing alt text"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/privacy-policy-new",
+        "title": "privacy policy new\n – Eggoz",
+        "titleLength": 27,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Privacy Policy",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 4269,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "No H1",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/copy-of-quality-reports",
+        "title": "Copy of Quality Reports\n – Eggoz",
+        "titleLength": 32,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report",
+          "Antibiotics, Drugs & Pesticides Report"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Key Highlights",
+          "Frequently Asked Questions (FAQ)",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 2600,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 1,
+        "issues": [
+          "Missing meta description",
+          "Multiple H1 tags (10)",
+          "No question-shaped headings — poor answer-engine extractability",
+          "1 images missing alt text"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/download-app",
+        "title": "app redirect\n – Eggoz",
+        "titleLength": 21,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "Get farm-fresh eggs on your phone"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 48,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "Thin content (48 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/collections/eggoz-frozen",
+        "title": "Eggoz - Frozen Range",
+        "titleLength": 20,
+        "description": "Indulge in Eggoz's frozen delights – egg burger patties, nuggets, and bites. Crafted with farm-fresh eggs for a taste that's simply egg-cellent!",
+        "descriptionLength": 144,
+        "h1": [
+          "Shop the Eggoz range"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Nutrition Brown Eggs",
+          "Eggoz Nutrition White Eggs",
+          "Protein Plus Eggs",
+          "Farm & Fable Free Range Brown Eggs",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 104,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Thin content (104 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/collections/our-bestsellers",
+        "title": "Our Bestsellers\n – Eggoz",
+        "titleLength": 24,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "Shop the Eggoz range"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Nutrition Brown Eggs",
+          "Eggoz Nutrition White Eggs",
+          "Protein Plus Eggs",
+          "Farm & Fable Free Range Brown Eggs",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 104,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "Thin content (104 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/collections/bestsellers-new",
+        "title": "Bestsellers New\n – Eggoz",
+        "titleLength": 24,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "Shop the Eggoz range"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Nutrition Brown Eggs",
+          "Eggoz Nutrition White Eggs",
+          "Protein Plus Eggs",
+          "Farm & Fable Free Range Brown Eggs",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 104,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "Thin content (104 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/collections/only-eggoz-eggs-collection-range",
+        "title": "Only Eggoz Eggs Collection Range",
+        "titleLength": 32,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "Shop the Eggoz range"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Nutrition Brown Eggs",
+          "Eggoz Nutrition White Eggs",
+          "Protein Plus Eggs",
+          "Farm & Fable Free Range Brown Eggs",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 104,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "Thin content (104 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/collections/only-frozen-collection",
+        "title": "Only Frozen Collection\n – Eggoz",
+        "titleLength": 31,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "Shop the Eggoz range"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Nutrition Brown Eggs",
+          "Eggoz Nutrition White Eggs",
+          "Protein Plus Eggs",
+          "Farm & Fable Free Range Brown Eggs",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 104,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "Thin content (104 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/collections/white-eggs",
+        "title": "White Eggs\n – Eggoz",
+        "titleLength": 19,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "Shop the Eggoz range"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Nutrition Brown Eggs",
+          "Eggoz Nutrition White Eggs",
+          "Protein Plus Eggs",
+          "Farm & Fable Free Range Brown Eggs",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 104,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "Thin content (104 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/collections/brown-eggs",
+        "title": "Brown Eggs\n – Eggoz",
+        "titleLength": 19,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "Shop the Eggoz range"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Nutrition Brown Eggs",
+          "Eggoz Nutrition White Eggs",
+          "Protein Plus Eggs",
+          "Farm & Fable Free Range Brown Eggs",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 104,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "Thin content (104 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/collections/nutra-eggs",
+        "title": "Nutra Eggs\n – Eggoz",
+        "titleLength": 19,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "Shop the Eggoz range"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Nutrition Brown Eggs",
+          "Eggoz Nutrition White Eggs",
+          "Protein Plus Eggs",
+          "Farm & Fable Free Range Brown Eggs",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 104,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "Thin content (104 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/collections/free-range-eggs",
+        "title": "Free-Range Eggs\n – Eggoz",
+        "titleLength": 24,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "Shop the Eggoz range"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Nutrition Brown Eggs",
+          "Eggoz Nutrition White Eggs",
+          "Protein Plus Eggs",
+          "Farm & Fable Free Range Brown Eggs",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 104,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "Thin content (104 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/collections/test",
+        "title": "test\n – Eggoz",
+        "titleLength": 13,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "Shop the Eggoz range"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Nutrition Brown Eggs",
+          "Eggoz Nutrition White Eggs",
+          "Protein Plus Eggs",
+          "Farm & Fable Free Range Brown Eggs",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 104,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "Thin content (104 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/collections/choose-fresh-everyday",
+        "title": "choose fresh everyday\n – Eggoz",
+        "titleLength": 30,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "Shop the Eggoz range"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Nutrition Brown Eggs",
+          "Eggoz Nutrition White Eggs",
+          "Protein Plus Eggs",
+          "Farm & Fable Free Range Brown Eggs",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 104,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "Thin content (104 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/collections/website-catalogue",
+        "title": "Website Catalogue\n – Eggoz",
+        "titleLength": 26,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "Shop the Eggoz range"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Nutrition Brown Eggs",
+          "Eggoz Nutrition White Eggs",
+          "Protein Plus Eggs",
+          "Farm & Fable Free Range Brown Eggs",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 104,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "Thin content (104 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/collections/shop-all",
+        "title": "Shop Eggoz",
+        "titleLength": 10,
+        "description": "Browse Eggoz Brown, White, Protein Plus and Farm & Fable Free Range eggs. See pack sizes and get them on the Eggoz app.",
+        "descriptionLength": 119,
+        "h1": [
+          "Shop the Eggoz range"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Nutrition Brown Eggs",
+          "Eggoz Nutrition White Eggs",
+          "Protein Plus Eggs",
+          "Farm & Fable Free Range Brown Eggs",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 104,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Thin content (104 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/blogs/recipes",
+        "title": "Recipes\n – Eggoz",
+        "titleLength": 16,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "Our Blog"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "The Cheese Chilli Omelette Recipe",
+          "Ideas for a healthier everyday",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [
+          "Why Egg Whites Turn Runny in Summer",
+          "How Choline in Eggs Supports Fetal Development",
+          "Are Eggs Good For Your Bone Health?"
+        ],
+        "words": 232,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "Thin content (232 words)"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/blogs/lifestyle",
+        "title": "Lifestyle\n – Eggoz",
+        "titleLength": 18,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "Our Blog"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "The Cheese Chilli Omelette Recipe",
+          "Ideas for a healthier everyday",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [
+          "Why Egg Whites Turn Runny in Summer",
+          "How Choline in Eggs Supports Fetal Development",
+          "Are Eggs Good For Your Bone Health?"
+        ],
+        "words": 232,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "Thin content (232 words)"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/blogs/egg-facts",
+        "title": "Egg Facts\n – Eggoz",
+        "titleLength": 18,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "Our Blog"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "The Cheese Chilli Omelette Recipe",
+          "Ideas for a healthier everyday",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [
+          "Why Egg Whites Turn Runny in Summer",
+          "How Choline in Eggs Supports Fetal Development",
+          "Are Eggs Good For Your Bone Health?"
+        ],
+        "words": 232,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "Thin content (232 words)"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/blogs/new-blog-post-home-page-section",
+        "title": "New Blog Post Home Page Section\n – Eggoz",
+        "titleLength": 40,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "Our Blog"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "The Cheese Chilli Omelette Recipe",
+          "Ideas for a healthier everyday",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [
+          "Why Egg Whites Turn Runny in Summer",
+          "How Choline in Eggs Supports Fetal Development",
+          "Are Eggs Good For Your Bone Health?"
+        ],
+        "words": 232,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Missing meta description",
+          "Thin content (232 words)"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/blogs/lifestyle/what-are-the-benefits-of-eating-eggs-for-athletes",
+        "title": "What are the Benefits of Eating Eggs for Athletes?\n – Eggoz",
+        "titleLength": 59,
+        "description": "As human beings, we are endlessly looking for meals that are easy to prepare, high in nutrients, low in calories, and delicious to eat. And also, there are multiple benefits of eating eggs that have been proven. Do you know why, for all such cases, eggs should be a priority? Why? Well, because an egg is known as a ‘pow",
+        "descriptionLength": 320,
+        "h1": [
+          "What are the Benefits of Eating Eggs for Athletes?",
+          "The Rise of Health-Conscious Indians",
+          "Dutee Chand Turns to Eggs to Replenish Her Energy",
+          "How Eggs Helped Boxer Shiva Thapa Maintaining Weight?",
+          "Vijender Singh Credits Eggs with Assisting Him in Losing Weight",
+          "Michael Phelps Eagerly Consumes Three Fried Egg Sandwiches Each Day",
+          "Cristiano Ronaldo Loves to Eat Scrambled Eggs",
+          "But How Many Eggs Are Sufficient for Athletes?",
+          "Why Prefer Eggs Over Protein Supplements?"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 1303,
+        "schemaTypes": [
+          "Organization",
+          "Article"
+        ],
+        "imagesMissingAlt": 3,
+        "issues": [
+          "Meta description too long (320 chars)",
+          "Multiple H1 tags (9)",
+          "No question-shaped headings — poor answer-engine extractability",
+          "3 images missing alt text"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/blogs/recipes/kolhapuri-green-masala-egg-curry",
+        "title": "Kolhapuri Green Masala Egg Curry\n – Eggoz",
+        "titleLength": 41,
+        "description": "If you want to enjoy true Indian flavors but are bored with usual onion tomato gravy then try this Kolhapuri Masala green curry. Boiled egg, marinated in Indian spices and added in delicious spinach gravy, this recipe is a host of all nutrients. Check this recipe's video here: https://youtu.be/LEuD_clLPT4 Ingredients 3",
+        "descriptionLength": 320,
+        "h1": [
+          "Kolhapuri Green Masala Egg Curry"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Ingredients",
+          "Procedure",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 261,
+        "schemaTypes": [
+          "Organization",
+          "Article"
+        ],
+        "imagesMissingAlt": 0,
+        "issues": [
+          "Meta description too long (320 chars)",
+          "Thin content (261 words)",
+          "No question-shaped headings — poor answer-engine extractability"
+        ]
+      }
+    ]
+  },
+  "discovery": {
+    "method": "crawl-derived",
+    "note": "Coverage inferred from the sitemap crawl against tracked keyword buckets. Not search demand — Search Console is the only source for that.",
+    "pagesAnalysed": 59,
+    "coverageGapCount": 21,
+    "coverageGapsByBucket": {
+      "category": 5,
+      "nutrition": 4,
+      "local": 7,
+      "branded": 1,
+      "commerce": 4
+    },
+    "coverageGaps": [
+      {
+        "bucket": "category",
+        "term": "best egg brand in india"
+      },
+      {
+        "bucket": "category",
+        "term": "packaged eggs online"
+      },
+      {
+        "bucket": "category",
+        "term": "branded eggs india"
+      },
+      {
+        "bucket": "category",
+        "term": "antibiotic free eggs"
+      },
+      {
+        "bucket": "category",
+        "term": "cage free eggs india"
+      },
+      {
+        "bucket": "nutrition",
+        "term": "protein in one egg"
+      },
+      {
+        "bucket": "nutrition",
+        "term": "eggs and cholesterol"
+      },
+      {
+        "bucket": "nutrition",
+        "term": "egg nutrition facts"
+      },
+      {
+        "bucket": "nutrition",
+        "term": "boiled egg calories"
+      },
+      {
+        "bucket": "local",
+        "term": "eggs delivery bengaluru"
+      },
+      {
+        "bucket": "local",
+        "term": "eggs delivery gurugram"
+      },
+      {
+        "bucket": "local",
+        "term": "eggs delivery mumbai"
+      },
+      {
+        "bucket": "local",
+        "term": "eggs delivery hyderabad"
+      },
+      {
+        "bucket": "local",
+        "term": "eggs delivery kolkata"
+      },
+      {
+        "bucket": "local",
+        "term": "eggs delivery jaipur"
+      },
+      {
+        "bucket": "local",
+        "term": "egg brands delhi ncr"
+      },
+      {
+        "bucket": "branded",
+        "term": "eggoz price"
+      },
+      {
+        "bucket": "commerce",
+        "term": "eggs on blinkit"
+      },
+      {
+        "bucket": "commerce",
+        "term": "eggs on zepto"
+      },
+      {
+        "bucket": "commerce",
+        "term": "eggs on instamart"
+      },
+      {
+        "bucket": "commerce",
+        "term": "10 minute egg delivery"
+      }
+    ],
+    "extractabilityGapCount": 3,
+    "extractabilityGaps": [
+      {
+        "url": "https://www.eggoz.com/pages/quality-reports",
+        "title": "Egg Quality Lab Reports: Antibiotics & Pesticides – Eggoz",
+        "words": 2600,
+        "schemaTypes": [
+          "Organization"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/pages/copy-of-quality-reports",
+        "title": "Copy of Quality Reports – Eggoz",
+        "words": 2600,
+        "schemaTypes": [
+          "Organization"
+        ]
+      },
+      {
+        "url": "https://www.eggoz.com/blogs/lifestyle/what-are-the-benefits-of-eating-eggs-for-athletes",
+        "title": "What are the Benefits of Eating Eggs for Athletes? – Eggoz",
+        "words": 1303,
+        "schemaTypes": [
+          "Organization",
+          "Article"
+        ]
+      }
+    ]
+  },
+  "aeo": {
+    "enginesUsed": [
+      "claude"
+    ],
+    "promptsRun": 44,
+    "responsesCollected": 0,
+    "errors": 44,
+    "mentionRate": 0,
+    "ownDomainCitationRate": 0,
+    "avgBrandRank": null,
+    "sentimentSplit": {
+      "positive": 0,
+      "neutral": 0,
+      "negative": 0
+    },
+    "byBucket": {},
+    "shareOfVoice": {},
+    "topCitedDomains": [],
+    "citationGap": [],
+    "responses": [
+      {
+        "promptId": "cat-01",
+        "bucket": "category",
+        "prompt": "What is the best egg brand in India?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "cat-02",
+        "bucket": "category",
+        "prompt": "Which packaged egg brands in India are safest to buy?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "cat-03",
+        "bucket": "category",
+        "prompt": "Are branded eggs worth the extra cost over loose eggs in India?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "cat-04",
+        "bucket": "category",
+        "prompt": "Which Indian egg brands are antibiotic-free?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "cat-05",
+        "bucket": "category",
+        "prompt": "Where can I buy cage-free or free-range eggs in India?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "cat-06",
+        "bucket": "category",
+        "prompt": "What should I look for when choosing an egg brand?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "cat-07",
+        "bucket": "category",
+        "prompt": "Which egg brands in India have the freshest supply chain?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "cat-08",
+        "bucket": "category",
+        "prompt": "Best D2C egg companies in India",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "loc-01",
+        "bucket": "local",
+        "prompt": "Where can I order fresh eggs online in Bengaluru?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "loc-02",
+        "bucket": "local",
+        "prompt": "Best egg delivery service in Gurugram or Delhi NCR",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "loc-03",
+        "bucket": "local",
+        "prompt": "Which egg brands are available in Mumbai?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "loc-04",
+        "bucket": "local",
+        "prompt": "Where to buy good quality eggs in Hyderabad",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "loc-05",
+        "bucket": "local",
+        "prompt": "Fresh egg delivery in Kolkata",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "loc-06",
+        "bucket": "local",
+        "prompt": "Egg brands available in Jaipur",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "nut-01",
+        "bucket": "nutrition",
+        "prompt": "How much protein is in one egg?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "nut-02",
+        "bucket": "nutrition",
+        "prompt": "Are brown eggs healthier than white eggs?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "nut-03",
+        "bucket": "nutrition",
+        "prompt": "How many eggs can I eat per day?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "nut-04",
+        "bucket": "nutrition",
+        "prompt": "Do eggs raise cholesterol?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "nut-05",
+        "bucket": "nutrition",
+        "prompt": "What are omega-3 enriched eggs and are they worth buying?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "nut-06",
+        "bucket": "nutrition",
+        "prompt": "Best high-protein breakfast options for Indian families",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "nut-07",
+        "bucket": "nutrition",
+        "prompt": "Are eggs safe for children to eat daily?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "nut-08",
+        "bucket": "nutrition",
+        "prompt": "How do I check if an egg is fresh?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "nut-09",
+        "bucket": "nutrition",
+        "prompt": "What makes an egg yolk dark orange?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "nut-10",
+        "bucket": "nutrition",
+        "prompt": "Protein-rich foods for vegetarians who eat eggs in India",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "cmp-01",
+        "bucket": "comparison",
+        "prompt": "Eggoz vs Licious eggs — which is better?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "cmp-02",
+        "bucket": "comparison",
+        "prompt": "Compare the major branded egg companies in India",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "cmp-03",
+        "bucket": "comparison",
+        "prompt": "Which eggs should I buy on Blinkit?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "cmp-04",
+        "bucket": "comparison",
+        "prompt": "Best eggs available on Zepto or Swiggy Instamart",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "cmp-05",
+        "bucket": "comparison",
+        "prompt": "Is it better to buy eggs from quick commerce apps or local vendors?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "brd-01",
+        "bucket": "branded",
+        "prompt": "What is Eggoz?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "brd-02",
+        "bucket": "branded",
+        "prompt": "Is Eggoz a good egg brand?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "brd-03",
+        "bucket": "branded",
+        "prompt": "Eggoz eggs review — are they worth the price?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "brd-04",
+        "bucket": "branded",
+        "prompt": "Where can I buy Eggoz eggs?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "brd-05",
+        "bucket": "branded",
+        "prompt": "What is Eggoz Protein Plus?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "brd-06",
+        "bucket": "branded",
+        "prompt": "Who founded Eggoz and how does its farming model work?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "brd-07",
+        "bucket": "branded",
+        "prompt": "How much do Eggoz eggs cost?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "trs-01",
+        "bucket": "trust",
+        "prompt": "How do Indian egg brands ensure their eggs are safe?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "trs-02",
+        "bucket": "trust",
+        "prompt": "What certifications should Indian eggs have?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "trs-03",
+        "bucket": "trust",
+        "prompt": "Are supermarket eggs in India tested for antibiotics?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "trs-04",
+        "bucket": "trust",
+        "prompt": "How long do eggs stay fresh and should they be refrigerated in India?",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "use-01",
+        "bucket": "usage",
+        "prompt": "Easy egg recipes for a quick Indian breakfast",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "use-02",
+        "bucket": "usage",
+        "prompt": "How to store eggs properly in Indian summer",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "use-03",
+        "bucket": "usage",
+        "prompt": "Best way to boil eggs so they peel easily",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      },
+      {
+        "promptId": "use-04",
+        "bucket": "usage",
+        "prompt": "High protein egg meal prep ideas for the week",
+        "engine": "claude",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},"
+      }
+    ]
+  },
+  "aeoDate": "2026-10-25",
+  "social": {
+    "threadsFound": 0,
+    "brandMentions": 0,
+    "engagementOpportunities": [],
+    "threads": []
+  },
+  "schema": {
+    "coverage": {
+      "Organization": 58,
+      "WebSite": 1,
+      "Article": 2
+    },
+    "missingTypes": [
+      "FAQPage — no FAQ markup, the highest-leverage AEO schema for your category",
+      "Product — no product markup, so no rich results and no price surfacing",
+      "BreadcrumbList — weaker SERP presentation"
+    ],
+    "pagesWithoutSchema": [
+      "https://www.eggoz.com/agents.md"
+    ],
+    "readyToPaste": {
+      "organization": {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "@id": "https://eggoz.in/#organization",
+        "name": "Eggoz",
+        "legalName": "Nupa Technologies Pvt. Ltd.",
+        "url": "https://eggoz.in",
+        "logo": "https://eggoz.in/logo.png",
+        "description": "Eggoz is a branded egg company in India supplying fresh, traceable eggs across Delhi NCR, Bengaluru, Mumbai, Hyderabad, Kolkata, Jaipur.",
+        "areaServed": [
+          {
+            "@type": "City",
+            "name": "Delhi NCR"
+          },
+          {
+            "@type": "City",
+            "name": "Bengaluru"
+          },
+          {
+            "@type": "City",
+            "name": "Mumbai"
+          },
+          {
+            "@type": "City",
+            "name": "Hyderabad"
+          },
+          {
+            "@type": "City",
+            "name": "Kolkata"
+          },
+          {
+            "@type": "City",
+            "name": "Jaipur"
+          }
+        ],
+        "sameAs": [
+          "https://www.instagram.com/eggoznutrition/",
+          "https://www.linkedin.com/company/eggoz/",
+          "https://www.facebook.com/eggoz/"
+        ],
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "IN"
+        }
+      },
+      "website": {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "@id": "https://eggoz.in/#website",
+        "url": "https://eggoz.in",
+        "name": "Eggoz",
+        "publisher": {
+          "@id": "https://eggoz.in/#organization"
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://eggoz.in/search?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      },
+      "faqExample": {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How much protein is in one Eggoz egg?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A single large egg contains roughly 6 grams of protein, along with vitamin B12, choline, selenium and vitamin D. The protein is split between the white and the yolk, so eating the whole egg gives you the full amount."
+            }
+          }
+        ]
+      }
+    },
+    "suggestedFaqs": [],
+    "llmsTxt": "# Eggoz\n\n> Eggoz (Nupa Technologies Pvt. Ltd.) is a branded egg company in India. It runs a farmer-partner network and supplies fresh, traceable, date-stamped eggs across Delhi NCR, Bengaluru, Mumbai, Hyderabad, Kolkata, Jaipur through quick commerce (Blinkit, Zepto, Instamart), its own site, and modern retail.\n\n## What Eggoz sells\nFresh table eggs in branded, dated packs, including protein-enriched and speciality variants. Products are listed on Blinkit, Zepto, Instamart and at https://eggoz.in.\n\n## How Eggoz is different\n- Farmer-partner network with defined feed and husbandry protocols rather than open-market sourcing\n- Date-stamped packs so buyers can see freshness rather than infer it\n- Cold-chain distribution across 6 metros\n\n## Key pages\n- [Eggoz Nutrition | Farm Fresh Eggs You Can Trace](https://www.eggoz.com/): Eggoz Nutrition brings you farm-fresh eggs, tested with 11 safety checks and traced from farm to pack.\n- [Eggoz - Brown Eggs](https://www.eggoz.com/products/brown-eggs): Eggoz provides a premium range of brown eggs, rigorously tested through 11 safety checks, ensuring the finest quality wi\n- [Eggoz - White Eggs](https://www.eggoz.com/products/white-eggs): Eggoz's white eggs are sourced from hens on 100% herbal hen feed, containing bright orange yolk with multiple nutrients.\n- [Farm & Fable Free Range Brown Eggs\n – Eggoz](https://www.eggoz.com/products/farm-fable-eggs): Enjoy our free range eggs from Farm &amp; Fable, which are sourced from free-roaming hens to deliver exceptional taste, \n- [Protein Plus Eggs\n – Eggoz](https://www.eggoz.com/products/protein-plus-eggs): Fuel your day with Eggoz Protein Plus Eggs, delivering approximately 7 g of quality protein and all 9 essential amino ac\n- [Eggoz Nutrition White Eggs](https://www.eggoz.com/products/eggoz-premium-white-eggs): Power your day with Eggoz Nutrition White Eggs, farm-fresh eggs featuring rich, signature orange yolks and 6.5g of prote\n- [Nutrition Brown Eggs\n – Eggoz](https://www.eggoz.com/products/nutrition-brown-eggs): Fuel your day with farm-fresh brown eggs featuring signature orange yolks &amp; approximately 6.75 g of quality protein \n- [Farm to Plate\n – Eggoz](https://www.eggoz.com/pages/farm-to-plate): Why Choose Eggoz ? Eggoz eggs go through an extensive and thoughtful process straight from our farms so that you receive\n- [Why Choose Eggoz?](https://www.eggoz.com/pages/why-choose-eggoz): Every Eggoz egg is farm-fresh, sourced from hens fed 100% herbal feed, resulting in bright orange yolks. Our range inclu\n- [Terms and Conditions\n – Eggoz](https://www.eggoz.com/pages/terms-and-conditions): TERMS &amp; CONDITION – NUPA technologies Private Limited (Eggoz) 1. WELCOME TO EGGOZ 1.1. Thank you for using www.eggoz\n- [Privacy Policy\n – Eggoz](https://www.eggoz.com/pages/privacy-policy): LEGAL &amp; PRIVACY POLICY Effective date: 2021-11-20 1. Introduction Welcome to NUPA Technologies Private Limited (Eggo\n- [Shipping Policy\n – Eggoz](https://www.eggoz.com/pages/shipping-policy): Shipping Policy Delivery Times When you order products from our website, the delivery of the ordered products depends on\n- [My subscriptions\n – Eggoz](https://www.eggoz.com/pages/spurit-subscriptions): \n- [Subscription cancelled\n – Eggoz](https://www.eggoz.com/pages/spurit-invoices-cancelled): Your subscription has been cancelled We hope to see you soon! Please visit our store again for the valuable gifts and pr\n- [Reminders cancelled\n – Eggoz](https://www.eggoz.com/pages/spurit-reminders-cancelled): Receiving invoice reminders successfully cancelled\n- [Notifications cancelled\n – Eggoz](https://www.eggoz.com/pages/spurit-notifications-cancelled): Receiving these notifications successfully cancelled\n- [Track Your Order\n – Eggoz](https://www.eggoz.com/pages/track-your-order): \n- [Blogs\n – Eggoz](https://www.eggoz.com/pages/blogs): \n- [Contact Us\n – Eggoz](https://www.eggoz.com/pages/contact-us): Call or WhatsApp Eggoz on 011 4119 3222 or email support@eggoz.in, Mon-Sat, 10 AM-7 PM IST. Share feedback or raise a co\n- [About_New\n – Eggoz](https://www.eggoz.com/pages/about_new): \n- [pop-trace\n – Eggoz](https://www.eggoz.com/pages/pop-trace): Your complaint has been successfully submitted. Our team will get back to you as soon as possible.\n- [test-trace\n – Eggoz](https://www.eggoz.com/pages/test-trace): TRACE THE JOURNEY OF YOUR EGGOZ EGG Select Your Batch Number * Select Packed Date (dd/mm/yyyy) Submit Thanks for Purchas\n- [Test trace without date\n – Eggoz](https://www.eggoz.com/pages/test-trace-without-date): TRACE THE JOURNEY OF YOUR EGGOZ EGG Select Your Batch Number * Submit Thanks for Purchasing eggs from us! Your eggs have\n- [Farm Locations\n – Eggoz](https://www.eggoz.com/pages/farm-locations): Welcome to Eggoz! Discover exactly where your eggs come from—check out our farm locations and learn more about our commi\n- [App Privacy Policy\n – Eggoz](https://www.eggoz.com/pages/app-privacy-policy): Privacy PolicyThis privacy policy applies to the Eggoz Sales App (hereby referred to as \"Application\") for mobile device\n\n## Nutrition information\nEggoz publishes nutrition composition for its products. Eggoz does not claim that eggs treat, prevent, cure or manage any medical condition, in line with ASCI's Guidelines for Advertising of Food & Beverage Products, Addendum II.\n\n## Contact\nWebsite: https://eggoz.in\nInstagram: @eggoznutrition\n"
+  },
+  "content": {
+    "generatedAt": "2026-10-25T06:34:18.744Z",
+    "opportunitiesConsidered": 8,
+    "briefsGenerated": 0,
+    "blockedByAsci": 0,
+    "briefs": [
+      {
+        "id": "best egg brand in india",
+        "status": "error",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgNVJi8g2ByRpDJsKK7",
+        "opportunity": {
+          "source": "gap-coverage",
+          "topic": "best egg brand in india",
+          "bucket": "category",
+          "evidence": "No page on the site covers \"best egg brand in india\" in its title, description or headings — a tracked \"category\" term with no content behind it",
+          "score": 240
+        }
+      },
+      {
+        "id": "packaged eggs online",
+        "status": "error",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgNVKB8t7om6jKBPA5V",
+        "opportunity": {
+          "source": "gap-coverage",
+          "topic": "packaged eggs online",
+          "bucket": "category",
+          "evidence": "No page on the site covers \"packaged eggs online\" in its title, description or headings — a tracked \"category\" term with no content behind it",
+          "score": 240
+        }
+      },
+      {
+        "id": "branded eggs india",
+        "status": "error",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgNVKeB5gPuJbCKpShm",
+        "opportunity": {
+          "source": "gap-coverage",
+          "topic": "branded eggs india",
+          "bucket": "category",
+          "evidence": "No page on the site covers \"branded eggs india\" in its title, description or headings — a tracked \"category\" term with no content behind it",
+          "score": 240
+        }
+      },
+      {
+        "id": "antibiotic free eggs",
+        "status": "error",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgNVL7A3ghTZDFetcep",
+        "opportunity": {
+          "source": "gap-coverage",
+          "topic": "antibiotic free eggs",
+          "bucket": "category",
+          "evidence": "No page on the site covers \"antibiotic free eggs\" in its title, description or headings — a tracked \"category\" term with no content behind it",
+          "score": 240
+        }
+      },
+      {
+        "id": "cage free eggs india",
+        "status": "error",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgNVLaDUyzQSUpqcFwg",
+        "opportunity": {
+          "source": "gap-coverage",
+          "topic": "cage free eggs india",
+          "bucket": "category",
+          "evidence": "No page on the site covers \"cage free eggs india\" in its title, description or headings — a tracked \"category\" term with no content behind it",
+          "score": 240
+        }
+      },
+      {
+        "id": "protein in one egg",
+        "status": "error",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgNVM3LtYptcasv2PpM",
+        "opportunity": {
+          "source": "gap-coverage",
+          "topic": "protein in one egg",
+          "bucket": "nutrition",
+          "evidence": "No page on the site covers \"protein in one egg\" in its title, description or headings — a tracked \"nutrition\" term with no content behind it",
+          "score": 240
+        }
+      },
+      {
+        "id": "eggs and cholesterol",
+        "status": "error",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgNVMWS4C87k4qEvjcc",
+        "opportunity": {
+          "source": "gap-coverage",
+          "topic": "eggs and cholesterol",
+          "bucket": "nutrition",
+          "evidence": "No page on the site covers \"eggs and cholesterol\" in its title, description or headings — a tracked \"nutrition\" term with no content behind it",
+          "score": 240
+        }
+      },
+      {
+        "id": "egg nutrition facts",
+        "status": "error",
+        "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CgNVMySW458LF1x7bjm",
+        "opportunity": {
+          "source": "gap-coverage",
+          "topic": "egg nutrition facts",
+          "bucket": "nutrition",
+          "evidence": "No page on the site covers \"egg nutrition facts\" in its title, description or headings — a tracked \"nutrition\" term with no content behind it",
+          "score": 240
+        }
+      }
+    ]
+  },
+  "briefsDate": "2026-10-25",
+  "previous": {
+    "seoTotals": null
+  },
+  "alerts": [
+    {
+      "level": "low",
+      "area": "seo",
+      "message": "Not measured this run — Search Console not connected. Run `npm run auth:gsc` to authorise as yourself — no service account or property owner needed."
+    },
+    {
+      "level": "medium",
+      "area": "technical",
+      "message": "2 priority page(s) over the performance budget — avg 603ms response, 190KB."
+    }
+  ]
+}

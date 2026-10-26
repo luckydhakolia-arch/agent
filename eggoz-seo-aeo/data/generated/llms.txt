@@ -38,6 +38,8 @@ Fresh table eggs in branded, dated packs, including protein-enriched and special
  – Eggoz](https://www.eggoz.com/pages/spurit-reminders-cancelled): Receiving invoice reminders successfully cancelled
 - [Notifications cancelled
  – Eggoz](https://www.eggoz.com/pages/spurit-notifications-cancelled): Receiving these notifications successfully cancelled
+- [Merchant notifications cancelled
+ – Eggoz](https://www.eggoz.com/pages/spurit-merchant-notifications-cancelled): Receiving these notifications successfully cancelled You can resume it anytime in the app
 - [Track Your Order
  – Eggoz](https://www.eggoz.com/pages/track-your-order): 
 - [Blogs
@@ -54,8 +56,6 @@ Fresh table eggs in branded, dated packs, including protein-enriched and special
  – Eggoz](https://www.eggoz.com/pages/test-trace-without-date): TRACE THE JOURNEY OF YOUR EGGOZ EGG Select Your Batch Number * Submit Thanks for Purchasing eggs from us! Your eggs have
 - [Farm Locations
  – Eggoz](https://www.eggoz.com/pages/farm-locations): Welcome to Eggoz! Discover exactly where your eggs come from—check out our farm locations and learn more about our commi
-- [App Privacy Policy
- – Eggoz](https://www.eggoz.com/pages/app-privacy-policy): Privacy PolicyThis privacy policy applies to the Eggoz Sales App (hereby referred to as "Application") for mobile device
 
 ## Nutrition information
 Eggoz publishes nutrition composition for its products. Eggoz does not claim that eggs treat, prevent, cure or manage any medical condition, in line with ASCI's Guidelines for Advertising of Food & Beverage Products, Addendum II.

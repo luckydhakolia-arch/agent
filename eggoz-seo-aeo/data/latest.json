@@ -1,95 +1,58 @@
 {
   "date": "2026-10-31",
-  "kind": "free",
+  "kind": "daily",
   "brand": "Eggoz",
   "seo": {
-    "skipped": true,
-    "reason": "Search Console not connected. Run `npm run auth:gsc` to authorise as yourself — no service account or property owner needed."
+    "error": "GSC_SERVICE_ACCOUNT_JSON is not set"
   },
   "psi": {
-    "method": "http-probe",
-    "note": "Credential-free measurement. Server timing and transferred weight are real; LCP/CLS/INP need a browser and are not measured.",
-    "budget": {
-      "ttfbMs": 800,
-      "htmlKb": 150,
-      "totalKb": 2048,
-      "blockingScripts": 5
-    },
     "pages": [
       {
         "url": "https://eggoz.in/",
-        "ttfbMs": 258,
-        "loadMs": 260,
-        "htmlKb": 177,
-        "totalKb": 213,
-        "weightMeasured": 24,
-        "weightUnknown": 41,
-        "blockingScripts": 0,
-        "scripts": 19,
-        "stylesheets": 15,
-        "images": 31,
-        "imagesNoDims": 29,
-        "imagesNoLazy": 12,
-        "issues": [
-          "Heavy HTML (177KB, budget 150KB)",
-          "29 images without width/height — layout shift risk"
-        ]
+        "strategy": "mobile",
+        "error": "HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"Quota exceeded for quota metric 'Queries' and limit 'Queries per day' of service 'pagespeedonline.googleapis.com' for consumer 'project_number"
       },
       {
         "url": "https://eggoz.in/products",
-        "ttfbMs": 253,
-        "loadMs": 256,
-        "htmlKb": 122,
-        "totalKb": 158,
-        "weightMeasured": 24,
-        "weightUnknown": 24,
-        "blockingScripts": 0,
-        "scripts": 19,
-        "stylesheets": 17,
-        "images": 12,
-        "imagesNoDims": 1,
-        "imagesNoLazy": 1,
-        "issues": [
-          "1 images without width/height — layout shift risk"
-        ]
+        "strategy": "mobile",
+        "error": "HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"Quota exceeded for quota metric 'Queries' and limit 'Queries per day' of service 'pagespeedonline.googleapis.com' for consumer 'project_number"
       },
       {
         "url": "https://eggoz.in/about",
-        "error": "HTTP 404"
+        "strategy": "mobile",
+        "error": "HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"Quota exceeded for quota metric 'Queries' and limit 'Queries per day' of service 'pagespeedonline.googleapis.com' for consumer 'project_number"
       },
       {
         "url": "https://eggoz.in/blog",
-        "error": "HTTP 404"
+        "strategy": "mobile",
+        "error": "HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"Quota exceeded for quota metric 'Queries' and limit 'Queries per day' of service 'pagespeedonline.googleapis.com' for consumer 'project_number"
       }
     ],
-    "avgTtfbMs": 256,
-    "avgTotalKb": 186,
-    "pagesOverBudget": 2,
-    "totalIssues": 3
+    "avgPerformance": null,
+    "avgSeo": null
   },
   "crawl": {
     "pagesCrawled": 60,
     "pagesWithIssues": 60,
-    "totalIssues": 187,
+    "totalIssues": 196,
     "hasLlmsTxt": true,
     "hasRobotsTxt": true,
     "robotsBlocksAiCrawlers": false,
     "issueCounts": {
       "Missing title": 1,
-      "Missing meta description": 28,
-      "No H1": 23,
+      "Missing meta description": 30,
+      "No H1": 25,
       "Missing canonical": 1,
       "Missing Open Graph tags": 1,
       "No structured data (JSON-LD)": 1,
-      "No question-shaped headings — poor answer-engine extractability": 48,
-      "images missing alt text": 14,
-      "Meta description too long": 15,
-      "Thin content": 45,
-      "Page could not be fetched": 4,
+      "No question-shaped headings — poor answer-engine extractability": 52,
+      "images missing alt text": 15,
+      "Meta description too long": 16,
+      "Thin content": 48,
       "Multiple H1 tags": 6
     },
     "schemaCoverage": {
-      "Organization": 55,
+      "Organization": 59,
       "WebSite": 1,
       "Article": 2
     },
@@ -672,9 +635,33 @@
       },
       {
         "url": "https://www.eggoz.com/pages/about_new",
-        "error": "HTTP 503",
+        "title": "About_New\n – Eggoz",
+        "titleLength": 18,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "About us"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Note from our founders",
+          "Our Team & Moments",
+          "Meet Our Farmers",
+          "Production Team",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 320,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 1,
         "issues": [
-          "Page could not be fetched"
+          "Missing meta description",
+          "No question-shaped headings — poor answer-engine extractability",
+          "1 images missing alt text"
         ]
       },
       {
@@ -705,9 +692,29 @@
       },
       {
         "url": "https://www.eggoz.com/pages/test-trace",
-        "error": "HTTP 503",
+        "title": "test-trace\n – Eggoz",
+        "titleLength": 19,
+        "description": "TRACE THE JOURNEY OF YOUR EGGOZ EGG Select Your Batch Number * Select Packed Date (dd/mm/yyyy) Submit Thanks for Purchasing eggs from us! Your eggs have gone through 11 safety checks, and are delivered farm fresh. Here's the journey of your egg. EGGS LAID ON : Place of origin : Location of the farm : , EGGS RECEIVED &a",
+        "descriptionLength": 320,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Get in touch",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 59,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
         "issues": [
-          "Page could not be fetched"
+          "Meta description too long (320 chars)",
+          "No H1",
+          "Thin content (59 words)",
+          "No question-shaped headings — poor answer-engine extractability"
         ]
       },
       {
@@ -739,9 +746,28 @@
       },
       {
         "url": "https://www.eggoz.com/pages/farm-locations",
-        "error": "HTTP 503",
+        "title": "Farm Locations\n – Eggoz",
+        "titleLength": 23,
+        "description": "Welcome to Eggoz! Discover exactly where your eggs come from—check out our farm locations and learn more about our commitment to freshness and traceability.",
+        "descriptionLength": 156,
+        "h1": [],
+        "h2": [
+          "Item added to your cart",
+          "Farm Locations",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 200,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
         "issues": [
-          "Page could not be fetched"
+          "No H1",
+          "Thin content (200 words)",
+          "No question-shaped headings — poor answer-engine extractability"
         ]
       },
       {
@@ -1258,9 +1284,33 @@
       },
       {
         "url": "https://www.eggoz.com/collections/our-bestsellers",
-        "error": "HTTP 503",
+        "title": "Our Bestsellers\n – Eggoz",
+        "titleLength": 24,
+        "description": "",
+        "descriptionLength": 0,
+        "h1": [
+          "Shop the Eggoz range"
+        ],
+        "h2": [
+          "Item added to your cart",
+          "Nutrition Brown Eggs",
+          "Eggoz Nutrition White Eggs",
+          "Protein Plus Eggs",
+          "Farm & Fable Free Range Brown Eggs",
+          "Main Menu",
+          "Legal",
+          "Contact us :"
+        ],
+        "questionHeadings": [],
+        "words": 104,
+        "schemaTypes": [
+          "Organization"
+        ],
+        "imagesMissingAlt": 0,
         "issues": [
-          "Page could not be fetched"
+          "Missing meta description",
+          "Thin content (104 words)",
+          "No question-shaped headings — poor answer-engine extractability"
         ]
       },
       {
@@ -2135,18 +2185,7 @@
   "previous": {
     "seoTotals": null
   },
-  "alerts": [
-    {
-      "level": "low",
-      "area": "seo",
-      "message": "Not measured this run — Search Console not connected. Run `npm run auth:gsc` to authorise as yourself — no service account or property owner needed."
-    },
-    {
-      "level": "medium",
-      "area": "technical",
-      "message": "2 priority page(s) over the performance budget — avg 256ms response, 186KB."
-    }
-  ],
+  "alerts": [],
   "mode": "google-free",
   "discovery": {
     "method": "crawl-derived",

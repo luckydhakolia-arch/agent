@@ -611,6 +611,12 @@
       "totalIssues": 196,
       "pagesWithIssues": 60,
       "pagesCrawled": 60
+    },
+    {
+      "date": "2026-11-22",
+      "totalIssues": 196,
+      "pagesWithIssues": 60,
+      "pagesCrawled": 60
     }
   ],
   "aeo": [
@@ -1159,6 +1165,13 @@
       "ownDomainCitationRate": 0,
       "avgBrandRank": null,
       "responsesCollected": 0
+    },
+    {
+      "date": "2026-11-22",
+      "mentionRate": 0,
+      "ownDomainCitationRate": 0,
+      "avgBrandRank": null,
+      "responsesCollected": 0
     }
   ],
   "perf": [
@@ -1605,6 +1618,12 @@
       "ttfbMs": 201,
       "totalKb": 201,
       "issues": 3
+    },
+    {
+      "date": "2026-11-22",
+      "ttfbMs": 137,
+      "totalKb": 201,
+      "issues": 3
     }
   ],
   "discovery": [
@@ -1975,6 +1994,11 @@
     },
     {
       "date": "2026-11-21",
+      "coverageGaps": 21,
+      "extractabilityGaps": 3
+    },
+    {
+      "date": "2026-11-22",
       "coverageGaps": 21,
       "extractabilityGaps": 3
     }
